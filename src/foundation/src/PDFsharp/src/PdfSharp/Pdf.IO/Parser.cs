@@ -363,6 +363,12 @@ namespace PdfSharp.Pdf.IO
             int streamLength = GetStreamLength(dict, suppressObjectOrderExceptions);
             if (SuppressExceptions.HasError(suppressObjectOrderExceptions))
                 return;
+
+            // Security: /Length comes from the file and cannot be trusted. Never allocate a buffer larger than the
+            // number of bytes left in the file. As before, a wrong length is corrected below by searching 'endstream'.
+            var remainingBytes = _lexer.PdfLength - startPosition;
+            if (streamLength > remainingBytes)
+                streamLength = (int)Math.Max(0, remainingBytes);
             // TODO_OLD What to do if startPosition + streamLength is larger than length of stream? => Better not show "Please send us your PDF file" but another error message.
             int retryCount = 0;
         RetryReadStream:
@@ -447,13 +453,15 @@ namespace PdfSharp.Pdf.IO
             if (lengthItem is PdfInteger pdfInteger)
             {
                 Debug.Assert(Convert.ToInt32(lengthItem) == pdfInteger.Value);
-                return pdfInteger.Value;
+                // A negative length is invalid. It is handled like a missing /Length entry below.
+                if (pdfInteger.Value >= 0)
+                    return pdfInteger.Value;
             }
 
             // Is /Length an indirect object?
             if (lengthItem is PdfReference reference)
             {
-                PdfObject lengthObject;
+                PdfObject? lengthObject = null;
                 if (reference.Position == -1 && reference.Value != null!)
                 {
                     // If somebody came here, please send us your PDF file so that we can fix it (issues (at) pdfsharp.net).
@@ -470,25 +478,46 @@ namespace PdfSharp.Pdf.IO
                     // OMG: The length of a stream is an indirect object in another dictionary that is not yet read.
                     // And this other dictionary can be wrapped in an object stream.
                     // Makes no sense at all, but some producer apps do it this way.
-                    var state = SaveState();
-                    try
+
+                    // Security: /Length may refer to an object whose stream length is being determined right now,
+                    // e.g. '5 0 obj << /Length 5 0 R >> stream ...'. Reading it again would recurse until the process
+                    // crashes with a StackOverflowException. Such a /Length is handled like a missing entry.
+                    var lengthReferencesInProgress = _documentParser._streamLengthReferencesInProgress;
+                    if (lengthReferencesInProgress.Add(reference.ObjectID))
                     {
-                        lengthObject = ReadIndirectObject(reference, suppressObjectOrderExceptions);
-                        if (SuppressExceptions.HasError(suppressObjectOrderExceptions))
-                            return -1;
+                        var state = SaveState();
+                        try
+                        {
+                            lengthObject = ReadIndirectObject(reference, suppressObjectOrderExceptions);
+                            if (SuppressExceptions.HasError(suppressObjectOrderExceptions))
+                                return -1;
+                        }
+                        catch (Exception ex)
+                        {
+                            // If somebody came here, please send us your PDF file so that we can fix it (issues (at) pdfsharp.net).
+                            throw TH.ObjectNotAvailableException_CannotRetrieveStreamLength(_lexer.Position, ex);
+                        }
+                        finally
+                        {
+                            lengthReferencesInProgress.Remove(reference.ObjectID);
+                        }
+                        RestoreState(state);
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        // If somebody came here, please send us your PDF file so that we can fix it (issues (at) pdfsharp.net).
-                        throw TH.ObjectNotAvailableException_CannotRetrieveStreamLength(_lexer.Position, ex);
+                        PdfSharpLogHost.Logger.LogError("The /Length entry of object '{Object}' is a cyclic reference to '{Reference}'.",
+                            dict.ObjectID.ToString(), reference.ObjectID.ToString());
                     }
-                    RestoreState(state);
                 }
 
-                int length = ((PdfIntegerObject)lengthObject).Value;
-                // Reset Length to a direct object.
-                dict.Elements["/Length"] = new PdfInteger(length);
-                return length;
+                // The referenced object must be a non-negative integer. Otherwise, it is handled like a missing /Length entry below.
+                if (lengthObject is PdfIntegerObject { Value: >= 0 } lengthIntegerObject)
+                {
+                    int length = lengthIntegerObject.Value;
+                    // Reset Length to a direct object.
+                    dict.Elements["/Length"] = new PdfInteger(length);
+                    return length;
+                }
             }
 
             // The dictionary obviously has not even the required /Length entry 🤯.
@@ -662,6 +691,30 @@ namespace PdfSharp.Pdf.IO
         /// Parses whatever comes until the specified stop symbol is reached.
         /// </summary>
         List<PdfItem> ParseObject(Symbol stopSymbol)
+        {
+            // Security: ParseObject calls itself through ReadArray and ReadDictionary.
+            // Without a limit, deeply nested arrays or dictionaries in a hostile file would
+            // end in a StackOverflowException, which cannot be caught and kills the process.
+            if (_nestingDepth >= _options.MaxNestingDepth)
+            {
+                ParserDiagnostics.ThrowParserException(
+                    Invariant($"Arrays or dictionaries are nested deeper than {_options.MaxNestingDepth} levels. ") +
+                    "The PDF file may be corrupt or hostile. " +
+                    $"Use {nameof(PdfReaderOptions)}.{nameof(PdfReaderOptions.MaxNestingDepth)} to change the limit.");
+            }
+
+            _nestingDepth++;
+            try
+            {
+                return ParseObjectCore(stopSymbol);
+            }
+            finally
+            {
+                _nestingDepth--;
+            }
+        }
+
+        List<PdfItem> ParseObjectCore(Symbol stopSymbol)
         {
 #if DEBUG_
             ParseObjectCounter++;
@@ -1321,6 +1374,13 @@ namespace PdfSharp.Pdf.IO
             // If the stream is corrupted a lot of things can go wrong here.
             // Does it make sense to do a more detailed error checking?
 
+            // Security: n comes from the file and determines the size of an allocation.
+            // Each entry consists of two integers plus white-space (at least 3 bytes), so a valid header
+            // cannot have more entries than half the length of the object stream. The check is generous on purpose.
+            if (n < 0 || n > _lexer.PdfLength / 2)
+                ParserDiagnostics.ThrowParserException(
+                    Invariant($"The object stream has an invalid /N entry {n}. Its stream length is just {_lexer.PdfLength} bytes."));
+
             // Create n pairs of integers with object number and offset.
             int[][] header = new int[n][];
             for (int idx = 0; idx < n; idx++)
@@ -1387,6 +1447,10 @@ namespace PdfSharp.Pdf.IO
             // Read position behind 'startxref'.
             _lexer.Position = ReadSize();
 
+            // Security: The /Prev entries of a hostile file can form a loop. Remember the positions of all
+            // cross-reference sections already read to avoid an infinite loop.
+            var visitedXRefPositions = new HashSet<SizeType> { _lexer.Position };
+
             // Read all trailers.
             PdfTrailer? newerTrailer = null;
             while (true)
@@ -1406,6 +1470,13 @@ namespace PdfSharp.Pdf.IO
                 int prev = trailer != null ? trailer.Elements.GetInteger(PdfTrailer.Keys.Prev) : 0;
                 if (prev == 0)
                     break;
+
+                if (!visitedXRefPositions.Add(prev))
+                {
+                    PdfSharpLogHost.PdfReadingLogger.LogError(
+                        "The /Prev entries of the cross-reference sections form a loop at position {Position}. The loop is ignored.", prev);
+                    break;
+                }
 
                 // Continue loading previous trailer and cache this one as the newerTrailer to add its previous trailer.
                 _lexer.Position = prev;
@@ -1954,6 +2025,17 @@ namespace PdfSharp.Pdf.IO
         readonly PdfDocument _document;
         readonly PdfReaderOptions _options;
         readonly Lexer _lexer;
+
+        /// <summary>
+        /// The current nesting depth of arrays and dictionaries in ParseObject.
+        /// </summary>
+        int _nestingDepth;
+
+        /// <summary>
+        /// The IDs of indirect /Length objects that are currently being read. Only used in the document parser.
+        /// Protects against cyclic /Length references, which would otherwise recurse infinitely.
+        /// </summary>
+        readonly HashSet<PdfObjectID> _streamLengthReferencesInProgress = [];
 #if true
         // Holds the parser and the offset for each ObjectID residing in an ObjectStream.
         readonly Dictionary<PdfObjectID, (Parser Parser, SizeType Offset)> _objectStreamObjectSources = new();

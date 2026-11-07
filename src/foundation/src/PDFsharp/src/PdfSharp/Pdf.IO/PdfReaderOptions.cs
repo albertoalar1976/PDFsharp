@@ -110,5 +110,29 @@ namespace PdfSharp.Pdf.IO
         /// The default behaviour is to reset the encryption, so that it’s on the user to set an encryption before saving.
         /// </summary>
         public bool DoNotResetEncryption { get; set; }
+
+        /// <summary>
+        /// The default value of <see cref="MaxNestingDepth"/>.
+        /// </summary>
+        public const int DefaultMaxNestingDepth = 256;
+
+        /// <summary>
+        /// Gets or sets the maximum nesting depth of arrays and dictionaries accepted by the parser.
+        /// The parser is recursive. Without a limit, a small hostile PDF file with thousands of nested
+        /// arrays or dictionaries would crash the whole process with a StackOverflowException,
+        /// which cannot be caught. Exceeding the limit throws a <see cref="PdfReaderException"/> instead.
+        /// The default is <see cref="DefaultMaxNestingDepth"/>, far beyond the nesting found in real PDF files.
+        /// </summary>
+        public int MaxNestingDepth
+        {
+            get => _maxNestingDepth;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException(nameof(value), value, "The maximum nesting depth must be greater than zero.");
+                _maxNestingDepth = value;
+            }
+        }
+        int _maxNestingDepth = DefaultMaxNestingDepth;
     }
 }
