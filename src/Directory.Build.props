@@ -13,6 +13,9 @@
 
     <!-- Run the .NET code analyzers (and the trimming/AOT analyzers of trimmable projects) in every build. -->
     <AnalysisLevel>latest</AnalysisLevel>
+
+    <!-- Deterministic builds with normalized source paths in the PDB files when building in GitHub Actions. -->
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <PropertyGroup>
