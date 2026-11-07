@@ -681,9 +681,46 @@ namespace PdfSharp.Internal.OpenType
                     item.GlyphIndex = item.CodePoint < UnicodeHelper.UnicodePlane01Start
                         ? BmpCodepointToGlyphIndex((char)item.CodePoint)
                         : CodepointToGlyphIndex(item.CodePoint);
+
+                    if (item.GlyphIndex == 0)
+                        SubstituteMissingSpace(ref item);
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Many fonts have no glyphs for special space characters. Without a glyph, the 'missing glyph'
+        /// box would be rendered. This matters in practice: with ICU (Linux, macOS), the en-US time format
+        /// contains a narrow no-break space (U+202F) before AM/PM, which e.g. Arial does not have.
+        /// A missing no-break space is rendered as U+00A0, any other missing space separator as U+0020.
+        /// The code point is replaced, too, so that the ToUnicode map of the font stays consistent.
+        /// </summary>
+        void SubstituteMissingSpace(ref CodePointGlyphIndexPair item)
+        {
+            var codePoint = item.CodePoint;
+            if (codePoint is < 0x00A0 or > 0xFFFF
+                || CharUnicodeInfo.GetUnicodeCategory((char)codePoint) != UnicodeCategory.SpaceSeparator)
+                return;
+
+            const char noBreakSpace = (char)0x00A0;
+            if (codePoint is 0x2007 or 0x202F)  // Figure space and narrow no-break space do not allow line breaks.
+            {
+                var glyphIndex = BmpCodepointToGlyphIndex(noBreakSpace);
+                if (glyphIndex != 0)
+                {
+                    item.CodePoint = noBreakSpace;
+                    item.GlyphIndex = glyphIndex;
+                    return;
+                }
+            }
+
+            var spaceGlyphIndex = BmpCodepointToGlyphIndex(' ');
+            if (spaceGlyphIndex != 0)
+            {
+                item.CodePoint = ' ';
+                item.GlyphIndex = spaceGlyphIndex;
+            }
         }
 
         public ColorTable.GlyphRecord?[] GlyphColorRecordsFromGlyphIndices(CodePointGlyphIndexPair[] pairs)
