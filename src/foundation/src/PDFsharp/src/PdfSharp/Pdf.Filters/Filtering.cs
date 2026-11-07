@@ -113,6 +113,40 @@ namespace PdfSharp.Pdf.Filters
     public static class Filtering
     {
         /// <summary>
+        /// The default value of <see cref="MaxDecodedLength"/>, 256 MiB.
+        /// </summary>
+        public const int DefaultMaxDecodedLength = 256 * 1024 * 1024;
+
+        /// <summary>
+        /// Gets or sets the maximum number of bytes that a decompressing filter (FlateDecode, LZWDecode)
+        /// may produce for a single stream. The limit protects applications against 'decompression bombs',
+        /// i.e. small hostile PDF files whose streams expand to gigabytes of memory.
+        /// The default is <see cref="DefaultMaxDecodedLength"/> (256 MiB). Increase it at application startup
+        /// if you have to process legitimate PDF files with larger streams.
+        /// A single call can override the limit with <see cref="FilterParms.MaxDecodedLength"/>.
+        /// </summary>
+        public static int MaxDecodedLength
+        {
+            get => _maxDecodedLength;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException(nameof(value), value, "The maximum decoded length must be greater than zero.");
+                _maxDecodedLength = value;
+            }
+        }
+        static int _maxDecodedLength = DefaultMaxDecodedLength;
+
+        [DoesNotReturn]
+        internal static void ThrowMaxDecodedLengthExceeded(string filterName, int maxDecodedLength)
+        {
+            throw new PdfSharpException(
+                Invariant($"The decoded data of a {filterName} stream exceeds the limit of {maxDecodedLength} bytes. ") +
+                "The PDF file may be corrupt or hostile (decompression bomb). " +
+                $"If the file is trustworthy, increase {nameof(Filtering)}.{nameof(MaxDecodedLength)}.");
+        }
+
+        /// <summary>
         /// Gets the filter specified by the case-sensitive name.
         /// </summary>
         public static Filter GetFilter(string filterName)

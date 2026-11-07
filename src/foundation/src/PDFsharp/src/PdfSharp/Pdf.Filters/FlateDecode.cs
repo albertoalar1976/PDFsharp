@@ -156,7 +156,7 @@ namespace PdfSharp.Pdf.Filters
 #endif
 
             using var zip = new DeflateStream(msInput, CompressionMode.Decompress, true);
-            zip.CopyTo(msOutput);
+            CopyWithLimit(zip, msOutput, parms?.MaxDecodedLength ?? Filtering.MaxDecodedLength);
             msOutput.Flush();
 
             if (msOutput.Length >= 0)
@@ -166,6 +166,23 @@ namespace PdfSharp.Pdf.Filters
                     return StreamDecoder.Decode(msOutput.GetBuffer(), parms.DecodeParms);
             }
             return msOutput.GetBuffer();
+        }
+
+        /// <summary>
+        /// Copies the decompressed data and stops with an exception as soon as more than
+        /// maxLength bytes are produced. Unlike Stream.CopyTo, a decompression bomb cannot
+        /// make the output grow until the process runs out of memory.
+        /// </summary>
+        static void CopyWithLimit(Stream source, MemoryStream destination, int maxLength)
+        {
+            var buffer = new byte[81920];  // Same buffer size as Stream.CopyTo.
+            int bytesRead;
+            while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                if (destination.Length + bytesRead > maxLength)
+                    Filtering.ThrowMaxDecodedLengthExceeded(PdfFilterNames.FlateDecode, maxLength);
+                destination.Write(buffer, 0, bytesRead);
+            }
         }
     }
 }

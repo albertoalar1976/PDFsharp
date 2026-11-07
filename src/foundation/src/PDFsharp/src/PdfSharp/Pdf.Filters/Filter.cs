@@ -24,6 +24,12 @@ namespace PdfSharp.Pdf.Filters
         {
             DecodeParms = decodeParms;
         }
+
+        /// <summary>
+        /// Gets or sets the maximum number of bytes a decoding filter may produce for this call.
+        /// If null, the process-wide limit <see cref="Filtering.MaxDecodedLength"/> is used.
+        /// </summary>
+        public int? MaxDecodedLength { get; init; }
     }
 
     /// <summary>
