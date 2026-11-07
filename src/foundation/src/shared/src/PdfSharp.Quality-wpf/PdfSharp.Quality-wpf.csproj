@@ -14,14 +14,6 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net462|AnyCPU'">
-    <WarningLevel>0</WarningLevel>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
-    <WarningLevel>0</WarningLevel>
-  </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="..\PdfSharp.Quality\AssetsHelper.cs" Link="AssetsHelper.cs" />
     <Compile Include="..\PdfSharp.Quality\FeatureAndSnippetBase.cs" Link="FeatureAndSnippetBase.cs" />
@@ -42,7 +34,6 @@
     <Compile Include="..\PdfSharp.Quality\Testing\TestClassBase.cs" Link="Testing\TestClassBase.cs" />
     <Compile Include="..\PdfSharp.Quality\Testing\TrueOrFalse.cs" Link="Testing\TrueOrFalse.cs" />
     <Compile Include="..\PdfSharp.Quality\WindowsFonts.cs" Link="WindowsFonts.cs" />
-    <Compile Include="..\..\..\shared\src\PdfSharp.Shared\dotnet\GetSubArray.cs" Link="Properties\GetSubArray(included).cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -443,7 +443,6 @@ namespace MigraDoc.DocumentObjectModel.Tests
             {
                 var contentStream = PdfFileHelper.GetPageContentStream(pdfRenderer.PdfDocument, pageIdx);
 
-#if NET8_0_OR_GREATER
                 // Split ContentStream where the "Row" text is rendered.
                 var contentByRows = contentStream.Split("(Row) Tj");
                 contentByRows.Length.Should().Be(3, "as \"Row\" occurs twice per page, the stream should be split into 3 parts");
@@ -452,16 +451,6 @@ namespace MigraDoc.DocumentObjectModel.Tests
                     .Select(r => r.Split(" l\n") // ... and that parts split by drawn lines ...
                         .Select(drawLine => drawLine.Split('\n')).ToArray() // ... and that parts split by line breaks.
                     ).ToArray();
-#else
-                // Split ContentStream where the "Row" text is rendered.
-                var contentByRows = contentStream.Splitter("(Row) Tj");
-                contentByRows.Length.Should().Be(3, "as \"Row\" occurs twice per page, the stream should be split into 3 parts");
-
-                var rowsByDrawLinesByLines = contentByRows // Content split by "Row" text ...
-                    .Select(r => r.Splitter(" l\n") // ... and that parts split by drawn lines ...
-                            .Select(drawLine => drawLine.Split('\n')).ToArray() // ... and that parts split by line breaks.
-                    ).ToArray();
-#endif
 
                 // Heading row.
                 var contentRowDrawLineParts = rowsByDrawLinesByLines[0];

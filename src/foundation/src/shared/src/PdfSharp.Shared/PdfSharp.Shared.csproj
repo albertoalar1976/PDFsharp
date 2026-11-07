@@ -19,7 +19,6 @@
     <!-- This file must be linked in all .NET Framework projects that use range expressions.
          Here it must be excluded because of InternalsVisibleTo.
     -->
-    <Compile Remove="dotnet\GetSubArray.cs" />
   </ItemGroup>
 
   <ItemGroup>

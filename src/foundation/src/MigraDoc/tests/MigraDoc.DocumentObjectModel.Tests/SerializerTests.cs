@@ -804,11 +804,7 @@ namespace MigraDoc.DocumentObjectModel.Tests
             var style = doc.Styles[styleName];
             style.Should().NotBeNull();
 
-#if NET8_0_OR_GREATER
             foreach (var desiredValue in Enum.GetValues<ParagraphAlignment>())
-#else
-            foreach (ParagraphAlignment desiredValue in Enum.GetValues(typeof(ParagraphAlignment)))
-#endif
             {
                 // Set desired value in doc and write MDDDL.
                 style!.ParagraphFormat.Alignment = desiredValue;

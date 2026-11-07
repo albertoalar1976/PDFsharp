@@ -89,7 +89,6 @@ namespace PdfSharp.Tests.Pdf.Signatures
         [Theory]
         [InlineData("test-cert_rsa_1024", PdfMessageDigestType.SHA1, null)]
         [InlineData("test-cert_rsa_1024", PdfMessageDigestType.SHA256, null)]
-#if NET8_0_OR_GREATER
         // Time stamping not implemented for .NET Standard or .NET Framework.
         // Some arbitrarily selected timestamp servers.
         [InlineData("test-cert_rsa_1024", PdfMessageDigestType.SHA256, "http://zeitstempel.dfn.de")]
@@ -98,7 +97,6 @@ namespace PdfSharp.Tests.Pdf.Signatures
 #if DEBUG
         [InlineData("test-cert_rsa_1024", PdfMessageDigestType.SHA256, "http://timestamp.digicert.com")]
         [InlineData("test-cert_rsa_1024", PdfMessageDigestType.SHA256, "http://ts.ssl.com")]
-#endif
 #endif
         [InlineData("test-cert_rsa_1024", PdfMessageDigestType.SHA384, null)]
         [InlineData("test-cert_rsa_1024", PdfMessageDigestType.SHA512, null)]
@@ -157,11 +155,9 @@ namespace PdfSharp.Tests.Pdf.Signatures
             PdfFileUtility.ShowDocumentIfDebugging(filename);
         }
 
-#if NET8_0_OR_GREATER
         [SkippableTheory]
         //[InlineData("test-cert_rsa_1024", PdfMessageDigestType.SHA1, null)]
         //[InlineData("test-cert_rsa_1024", PdfMessageDigestType.SHA256, null)]
-#if NET8_0_OR_GREATER
         // Time stamping not implemented for .NET Standard or .NET Framework.
         // Some arbitrarily selected timestamp servers.
         [InlineData("test-cert_rsa_1024", PdfMessageDigestType.SHA256, "http://zeitstempel.dfn.de")]
@@ -170,7 +166,6 @@ namespace PdfSharp.Tests.Pdf.Signatures
 #if DEBUG
         [InlineData("test-cert_rsa_1024", PdfMessageDigestType.SHA256, "http://timestamp.digicert.com")]
         [InlineData("test-cert_rsa_1024", PdfMessageDigestType.SHA256, "http://ts.ssl.com")]
-#endif
 #endif
         //[InlineData("test-cert_rsa_1024", PdfMessageDigestType.SHA384, null)]
         //[InlineData("test-cert_rsa_1024", PdfMessageDigestType.SHA512, null)]
@@ -244,7 +239,6 @@ namespace PdfSharp.Tests.Pdf.Signatures
                     PdfFileUtility.ShowDocumentIfDebugging(filename);
             }
         }
-#endif
 
         [Fact]
         public void Sign_existing_file_Default()
@@ -341,16 +335,9 @@ namespace PdfSharp.Tests.Pdf.Signatures
             // Do not use password literals for real certificates in source code.
             var certificatePassword = "Seecrit1243";  //@@@???
 
-#if NET9_0_OR_GREATER
             // New API introduced with .NET 9.
             var certificate = X509CertificateLoader.LoadPkcs12(rawData, certificatePassword,
                 X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable);
-#else
-            // Old API, obsolete since .NET 9.
-            var certificate = new X509Certificate2(rawData,
-                certificatePassword,
-                /*X509KeyStorageFlags.MachineKeySet |*/ X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable);
-#endif
 
             return certificate;
         }

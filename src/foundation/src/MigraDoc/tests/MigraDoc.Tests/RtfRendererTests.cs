@@ -20,9 +20,6 @@ using PdfSharp.Snippets.Font;
 #if WPF
 using System.IO;
 #endif
-#if !NET8_0_OR_GREATER
-using PdfSharp.TestHelper;
-#endif
 
 namespace MigraDoc.Tests
 {
@@ -160,24 +157,15 @@ namespace MigraDoc.Tests
             var paragraph = section.AddParagraph("Alignment order");
             paragraph.Style = StyleNames.Heading1;
 
-#if NET8_0_OR_GREATER
             foreach (var alignment in Enum.GetValues<TabAlignment>())
                 section.AddParagraph(alignment.ToString());
-#else
-            foreach (var alignment in Enum.GetValues(typeof(TabAlignment)))
-                section.AddParagraph(alignment.ToString());
-#endif
 
             // 1.1 Single tabs in paragraph: Nothing special - every tabstop needs a tab to be reached.
             paragraph = section.AddParagraph("1.1. Single tabs in paragraph");
             paragraph.Style = StyleNames.Heading1;
 
             TestHelper.DrawHorizontalPosition(section, position1);
-#if NET8_0_OR_GREATER
             foreach (var alignment in Enum.GetValues<TabAlignment>())
-#else
-            foreach (TabAlignment alignment in Enum.GetValues(typeof(TabAlignment)))
-#endif
             {
                 paragraph = section.AddParagraph();
 
@@ -193,11 +181,7 @@ namespace MigraDoc.Tests
             paragraph.Style = StyleNames.Heading1;
 
             TestHelper.DrawHorizontalPosition(section, position1, position2);
-#if NET8_0_OR_GREATER
             foreach (var alignment in Enum.GetValues<TabAlignment>())
-#else
-            foreach (TabAlignment alignment in Enum.GetValues(typeof(TabAlignment)))
-#endif
             {
                 paragraph = section.AddParagraph();
 
@@ -222,11 +206,7 @@ namespace MigraDoc.Tests
             var table = section.AddTable();
             table.AddColumn(Unit.FromCentimeter(16));
 
-#if NET8_0_OR_GREATER
             foreach (var alignment in Enum.GetValues<TabAlignment>())
-#else
-            foreach (TabAlignment alignment in Enum.GetValues(typeof(TabAlignment)))
-#endif
             {
                 var row = table.AddRow();
 
@@ -261,11 +241,7 @@ namespace MigraDoc.Tests
             table.AddColumn(Unit.FromCentimeter(2));
             table.AddColumn(Unit.FromCentimeter(14));
 
-#if NET8_0_OR_GREATER
             foreach (var alignment in Enum.GetValues<TabAlignment>())
-#else
-            foreach (TabAlignment alignment in Enum.GetValues(typeof(TabAlignment)))
-#endif
             {
                 var row = table.AddRow();
 
@@ -299,11 +275,7 @@ namespace MigraDoc.Tests
             table = section.AddTable();
             table.AddColumn(Unit.FromCentimeter(16));
 
-#if NET8_0_OR_GREATER
             foreach (var alignment in Enum.GetValues<TabAlignment>())
-#else
-            foreach (TabAlignment alignment in Enum.GetValues(typeof(TabAlignment)))
-#endif
             {
                 var row = table.AddRow();
 
@@ -331,11 +303,7 @@ namespace MigraDoc.Tests
             table = section.AddTable();
             table.AddColumn(Unit.FromCentimeter(16));
 
-#if NET8_0_OR_GREATER
             foreach (var alignment in Enum.GetValues<TabAlignment>())
-#else
-            foreach (TabAlignment alignment in Enum.GetValues(typeof(TabAlignment)))
-#endif
             {
                 var row = table.AddRow();
 
@@ -379,11 +347,7 @@ namespace MigraDoc.Tests
             table = section.AddTable();
             table.AddColumn(Unit.FromCentimeter(16));
 
-#if NET8_0_OR_GREATER
             foreach (var alignment in Enum.GetValues<TabAlignment>())
-#else
-            foreach (TabAlignment alignment in Enum.GetValues(typeof(TabAlignment)))
-#endif
             {
                 var row = table.AddRow();
 
@@ -417,11 +381,7 @@ namespace MigraDoc.Tests
             table = section.AddTable();
             table.AddColumn(Unit.FromCentimeter(16));
 
-#if NET8_0_OR_GREATER
             foreach (var alignment in Enum.GetValues<TabAlignment>())
-#else
-            foreach (TabAlignment alignment in Enum.GetValues(typeof(TabAlignment)))
-#endif
             {
                 var row = table.AddRow();
 
@@ -811,7 +771,6 @@ VeP/8gP+s//MzMQAAAAASUVORK5CYII=
             // Analyze rendered RTF.
             var rtf = File.ReadAllText(rtfFilename);
 
-#if NET8_0_OR_GREATER
             // Split by row identifier and skip the first part, which is no row.
             var splitByRows = rtf.Split("\\trowd").Skip(1).ToArray();
             splitByRows.Length.Should().Be(5, "as there are 5 rows");
@@ -823,19 +782,6 @@ VeP/8gP+s//MzMQAAAAASUVORK5CYII=
                 ).ToArray();
             foreach (var borders in rowsByBorders)
                 borders.Length.Should().Be(4, "as there are 4 borders defined");
-#else
-            // Split by row identifier and skip the first part, which is no row.
-            var splitByRows = rtf.Splitter("\\trowd").Skip(1).ToArray();
-            splitByRows.Length.Should().Be(5, "as there are 5 rows");
-
-            // Get the part before the padding identifier, split it by border identifier and skip the first part, which is no border.
-            var rowsByBorders = splitByRows
-                .Select(row => row.Splitter("\\clpad").First()
-                    .Splitter("\\clbrdr").Skip(1).ToArray()
-                ).ToArray();
-            foreach (var borders in rowsByBorders)
-                borders.Length.Should().Be(4, "as there are 4 borders defined");
-#endif
 
             // Heading row.
             var rowBorderParts = rowsByBorders[0];

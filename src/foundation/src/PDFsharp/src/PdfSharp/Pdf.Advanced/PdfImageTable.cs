@@ -139,14 +139,10 @@ namespace PdfSharp.Pdf.Advanced
                 // Use full path plus value of interpolate to identify an image.
                 // Path must be at start because '*' identifies pseudo path names.
                 // We assume a case-insensitive filesystem under Windows.
-#if NET462
-                Path = selector.ToLowerInvariant() + '|' + image.Interpolate;
-#else
                 if (Capabilities.OperatingSystem.IsWindows)
                     Path = selector.ToLowerInvariant() + '|' + image.Interpolate;
                 else
                     Path = selector + '|' + image.Interpolate;
-#endif
                 // Path must be set. Leading '*' indicates pseudo-paths.
                 if (image._path == null!)
                     image._path = Path;

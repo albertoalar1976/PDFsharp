@@ -38,11 +38,7 @@ namespace Xunit
         /// <returns>True if slow tests should be skipped.</returns>
         public static bool SkipSlowTestsUnderDotNetFramework()
         {
-#if NET8_0_OR_GREATER
             return false;
-#else
-            return SkipSlowTests();
-#endif
         }
     }
 }

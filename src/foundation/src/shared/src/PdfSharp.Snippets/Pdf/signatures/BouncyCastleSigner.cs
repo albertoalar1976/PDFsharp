@@ -48,11 +48,7 @@ namespace PdfSharp.Snippets.Pdf
 
             var cert = DotNetUtilities.FromX509Certificate(Certificate);
             var key = DotNetUtilities.GetKeyPair(GetAsymmetricAlgorithm(Certificate));
-#if NET8_0_OR_GREATER
             var allCerts = CertificateChain.Select(DotNetUtilities.FromX509Certificate);
-#else
-            var allCerts = CertificateChain.OfType<X509Certificate2>().Select(DotNetUtilities.FromX509Certificate);
-#endif
 
             var store = CollectionUtilities.CreateStore(allCerts);
 
@@ -110,17 +106,13 @@ namespace PdfSharp.Snippets.Pdf
         AsymmetricAlgorithm? GetAsymmetricAlgorithm(X509Certificate2 cert)
         {
             const string RSA = "1.2.840.113549.1.1.1";
-#if NET8_0_OR_GREATER
             const string DSA = "1.2.840.10040.4.1";
-#endif
             const string ECC = "1.2.840.10045.2.1";
 
             return cert.PublicKey.Oid.Value switch
             {
                 RSA => cert.GetRSAPrivateKey(),
-#if NET8_0_OR_GREATER
                 DSA => cert.GetDSAPrivateKey(),
-#endif
                 ECC => cert.GetECDsaPrivateKey(),
 
                 _ => throw new NotImplementedException($"Unexpected OID value '{cert.PublicKey.Oid.Value}' for certificate."),

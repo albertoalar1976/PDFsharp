@@ -1,9 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
-#if NET8_0_OR_GREATER
 using System.Net.Http.Headers;
-#endif
 using System.Security.Cryptography;
 using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
@@ -16,10 +14,8 @@ namespace PdfSharp.Pdf.Signatures
     public class PdfSharpDefaultSigner : IDigitalSigner
     {
         static readonly Oid SignatureTimeStampOid = new("1.2.840.113549.1.9.16.2.14");
-#if NET8_0_OR_GREATER
         const string TimestampQueryContentType = "application/timestamp-query";
         const string TimestampReplyContentType = "application/timestamp-reply";
-#endif
 
         /// <summary>
         /// Creates a new instance of the PdfSharpDefaultSigner class.
@@ -31,14 +27,7 @@ namespace PdfSharp.Pdf.Signatures
         {
             Certificate = certificate;
             DigestType = digestType;
-#if NET8_0_OR_GREATER
             TimeStampAuthorityUri = timeStampAuthorityUri;
-#else
-            // We don’t know how to get a time stamp with .NET Standard.
-            // If you need it you must implement your own signer.
-            if (timeStampAuthorityUri != null)
-                throw new ArgumentException(nameof(timeStampAuthorityUri) + " must be null when using .NET Framework or .NET Standard.");
-#endif
             MustAddTimeStamp = timeStampAuthorityUri is not null;
         }
 
@@ -109,12 +98,7 @@ namespace PdfSharp.Pdf.Signatures
 
             if (TimeStampAuthorityUri is not null)
             {
-#if NET8_0_OR_GREATER
                 await AddTimestampFromTSAAsync(signedCms).ConfigureAwait(false);
-#else
-                // Already checked in constructor.
-                await Task.CompletedTask.ConfigureAwait(false);
-#endif
             }
             var bytes = signedCms.Encode();
 
@@ -129,7 +113,6 @@ namespace PdfSharp.Pdf.Signatures
 
         bool MustAddTimeStamp { get; init; }
 
-#if NET8_0_OR_GREATER
         async Task AddTimestampFromTSAAsync(SignedCms signedCms)
         {
             // Generate our nonce to identify the pair request-response.
@@ -183,6 +166,5 @@ namespace PdfSharp.Pdf.Signatures
             // The RFC3161 sign certificate is separate to the contents that was signed, we need to add it to the unsigned attributes.
             newSignerInfo.AddUnsignedAttribute(new AsnEncodedData(SignatureTimeStampOid, timestampToken.AsSignedCms().Encode()));
         }
-#endif
     }
 }

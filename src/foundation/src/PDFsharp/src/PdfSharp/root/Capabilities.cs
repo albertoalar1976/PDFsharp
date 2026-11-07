@@ -148,28 +148,8 @@ namespace PdfSharp
             public static string Framework
 #if NET11_0_OR_GREATER
                 => "11.0";
-#elif NET10_0_OR_GREATER
-                => "10.0";
-#elif NET9_0_OR_GREATER
-                => "9.0";
-#elif NET8_0_OR_GREATER
-                => "8.0";
-#elif NET7_0_OR_GREATER
-                => "7.0";
-#elif NET8_0_OR_GREATER
-                => "6.0";
-#elif NET481
-                => "4.8";
-#elif NET472
-                => "4.7";
-#elif NET462
-                => "4.6";
-#elif NETSTANDARD2_1
-                => "2.1";
-#elif NETSTANDARD2_0
-                => "2.0";
 #else
-                => "0.0";
+                => "10.0";
 #endif
         }
 
@@ -201,14 +181,12 @@ namespace PdfSharp
                 _isOSX ??= RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
             static bool? _isOSX;
 
-#if NET8_0_OR_GREATER
             /// <summary>
             /// Indicates whether the current application is running on FreeBSD.
             /// </summary>
             public static bool IsFreeBSD =>
                 _isFreeBSD ??= RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD);
             static bool? _isFreeBSD;
-#endif
 
             /// <summary>
             /// Indicates whether the current application is running on WSL2.
@@ -256,10 +234,8 @@ namespace PdfSharp
                         return "LNX";
                     if (IsOSX)
                         return "OSX";
-#if NET8_0_OR_GREATER
                     if (IsFreeBSD)
                         return "BSD";
-#endif
                     return "XXX";
                 }
             }

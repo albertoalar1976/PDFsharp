@@ -56,13 +56,8 @@ namespace Shared.Tests
 
             //var font2 = new XFont("Times New Roman", 20, XFontStyleEx.BoldItalic);
 
-#if NET8_0_OR_GREATER
             gfx.DrawString($"Hello, dotnet {Environment.Version.Major}.{Environment.Version.Minor}!", font, XBrushes.Black,
                 new XRect(0, 0, width, height), XStringFormats.Center);
-#else
-            gfx.DrawString("Hello, World!", font, XBrushes.Black,
-                new XRect(0, 0, width, height), XStringFormats.Center);
-#endif
 
             string filename = PdfFileUtility.GetTempPdfFullFileName(_tempRoot + nameof(Create_Hello_World_BasicTests));
             document.Save(filename);

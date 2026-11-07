@@ -179,20 +179,12 @@ namespace PdfSharp.Fonts
 
             if (_isWindows == null)
             {
-#if NET462
-                _isWindows = true;
-#else
                 _isWindows = Capabilities.OperatingSystem.IsWindows;
-#endif
             }
 
             if (_isLinux == null)
             {
-#if NET462
-                _isLinux = false;
-#else
                 _isLinux = Capabilities.OperatingSystem.IsLinux;
-#endif
             }
 
             if (_isWindows.Value)

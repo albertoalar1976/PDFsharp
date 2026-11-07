@@ -11,7 +11,7 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <NuspecFile>$(MSBuildThisFileDirectory)$(MSBuildProjectName)$(NuGetNuspecTag).nuspec</NuspecFile>
+    <NuspecFile>$(MSBuildThisFileDirectory)$(MSBuildProjectName).nuspec</NuspecFile>
     <NuGetId>PDFsharp-MigraDoc</NuGetId>
     <NuGetId Condition=" '$(Configuration)'=='Debug' ">$(NuGetId)-DEBUG</NuGetId>
     <NuGetTitle>PDFsharp plus MigraDoc for Windows and Linux</NuGetTitle>

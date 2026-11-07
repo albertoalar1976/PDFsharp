@@ -111,13 +111,8 @@ namespace PdfSharp.TestHelper
                 public V4() : this(false)
                 { }
 
-#if NET8_0_OR_GREATER
                 protected V4(bool getSkipped) : base(x => Enum.GetName(x)!.StartsWith("V4", StringComparison.OrdinalIgnoreCase), getSkipped)
                 { }
-#else
-                protected V4(bool getSkipped) : base(x => Enum.GetName(typeof(TestOptionsEnum), x)!.StartsWith("V4", StringComparison.OrdinalIgnoreCase), getSkipped)
-                { }
-#endif
             }
             public class V4Skipped : V4
             {
@@ -130,13 +125,8 @@ namespace PdfSharp.TestHelper
                 public V5() : this(false)
                 { }
 
-#if NET8_0_OR_GREATER
                 protected V5(bool getSkipped) : base(x => Enum.GetName(x)!.StartsWith("V5", StringComparison.OrdinalIgnoreCase), getSkipped)
                 { }
-#else
-                protected V5(bool getSkipped) : base(x => Enum.GetName(typeof(TestOptionsEnum), x)!.StartsWith("V5", StringComparison.OrdinalIgnoreCase), getSkipped)
-                { }
-#endif
             }
             public class V5Skipped : V5
             {
@@ -153,25 +143,11 @@ namespace PdfSharp.TestHelper
 
                 protected TestDataBase(Func<TestOptionsEnum, bool>? condition = null, bool getSkipped = false)
                 {
-#if NET8_0_OR_GREATER
                     _data = Enum.GetValues<TestOptionsEnum>()
                         .Where(x =>
                             SkippedTestOptions.Contains(x) == getSkipped // Get Skipped or not skipped encryption configurations, like desired.
                             && (condition is null || condition(x))) // Get only the encryption configurations matching the desired condition, if given.
                         .Select(x => new object[] { x }).ToList();
-#else
-                    var enums = Enum.GetValues(typeof(TestOptionsEnum));
-                    var list = new List<TestOptionsEnum>();
-                    foreach (TestOptionsEnum e in enums)
-                    {
-                        list.Add(e);
-                    }
-                    _data = list
-                        .Where(x =>
-                            SkippedTestOptions.Contains(x) == getSkipped // Get Skipped or not skipped encryption configurations, like desired.
-                            && (condition is null || condition(x))) // Get only the encryption configurations matching the desired condition, if given.
-                        .Select(x => new object[] { x }).ToList();
-#endif
                 }
 
                 protected TestDataBase(bool excludeNone, bool excludeDefault, bool excludeReadonly, bool getSkipped = false) 
@@ -300,19 +276,11 @@ namespace PdfSharp.TestHelper
             // Prefix for encrypted file.
             else
             {
-#if NET8_0_OR_GREATER
                 prefixSuffix += $"{Enum.GetName(options.Encryption)}"
                     .Replace("Default", "Def")
                     .Replace("Using", "_")
                     .Replace("With", "_")
                     .Replace("Bits", "B");
-#else
-                prefixSuffix += $"{Enum.GetName(typeof(TestEncryptions), options.Encryption)}"
-                    .Replace("Default", "Def")
-                    .Replace("Using", "_")
-                    .Replace("With", "_")
-                    .Replace("Bits", "B");
-#endif
 
                 if (!options.EncryptMetadata)
                     prefixSuffix += "_XMeta";

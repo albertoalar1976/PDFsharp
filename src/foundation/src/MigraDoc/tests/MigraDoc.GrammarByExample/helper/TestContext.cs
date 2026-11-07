@@ -32,28 +32,12 @@ namespace MigraDoc.GrammarByExample
 #elif WPF
             const string tag = "WPF";
 #endif
-#if NET462
-            const string tag2 = "NET462";
-#elif NET12_0
+#if   NET12_0
             const string tag2 = "NET120";
 #elif NET11_0
             const string tag2 = "NET110";
-#elif NET10_0
-            const string tag2 = "NET100";
-#elif NET9_0
-            const string tag2 = "NET90";
-#elif NET8_0
-            const string tag2 = "NET80";
-#elif NET7_0
-            const string tag2 = "NET70";
-#elif NET6_0
-            const string tag2 = "NET60";
-#elif NET5_0
-            const string tag2 = "NET50";
-#elif NETSTANDARD2_0
-            const string tag2 = "NETstandard20";
 #else
-            const string tag2 = "UNKOWN";
+            const string tag2 = "NET100";
 #endif
             var folder = $"Testrun-{tag}-{tag2}-" + now.ToString("yyyy-MM-dd_HH-mm-ss");
             OutputDirectory = folder0 + folder;

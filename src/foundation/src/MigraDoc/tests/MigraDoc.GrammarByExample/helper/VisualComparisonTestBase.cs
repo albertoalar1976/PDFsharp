@@ -68,7 +68,6 @@ namespace GdiGrammarByExample
 
             var document = DdlReaderDocumentFromFile(file);
 
-#if NET8_0_OR_GREATER
 #if CORE
             document.Info.Author += "[.NET 6.0+ Core build]";
 #elif GDI
@@ -77,17 +76,6 @@ namespace GdiGrammarByExample
             document.Info.Author += "[.NET 6.0+ WPF build]";
 #else
             document.Info.Author += "[.NET 6.0+ ??? build]";
-#endif
-#else
-#if CORE
-            document.Info.Author += "[.NET 4.6.2+ Core build]";
-#elif GDI
-            document.Info.Author += "[.NET 4.6.2+ GDI build]";
-#elif WPF
-            document.Info.Author += "[.NET 4.6.2+ WPF build]";
-#else
-            document.Info.Author += "[.NET 4.6.2+ ??? build]";
-#endif
 #endif
 
             return CreatePdfFromDocument(pdfFile, document, testName, mdddlPath, callback);

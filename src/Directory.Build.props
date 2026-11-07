@@ -23,67 +23,30 @@
     <!-- StL: OK, by why does it exist in the first place? -->
     <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
     <!--
-      If you target a framework earlier than .NET 5 (including .NET Framework and .NET Standard),
-      you should set ProduceReferenceAssembly to true in order to speed incremental builds.
-      If you multi-target and any target is before .NET 5, you need this.
-      Even if you target .NET 5 or later, having this property is fine.
-    -->
-    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
-    <!--
       Today SHA makes no sense in AssemblyInformationalVersionAttribute, because it refers to our
       empira internal repository hosted on Azure DevOps. Maybe we change this in the future
       and generate the NuGet packages based on the GitHub repository.
     -->
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 
-    <!-- Building fewer frameworks during development speeds up build and test cycles. -->
-    <!-- This value can be and should be set in the Local.Build.props file to keep it out of the repo. -->
-    <PDFsharpBuildFewerFrameworks>false</PDFsharpBuildFewerFrameworks>
-
     <!-- Build empira nuget packages (custom releases). -->
     <!--<EmpiraIntranet>true</EmpiraIntranet>-->
 
     <LangVersion>latest</LangVersion>
     <DefaultItemExcludes>*.ncrunchproject;*.DotSettings</DefaultItemExcludes>
-    <!-- NuGetNuspecTag allows to choose between different NuSpec files. Leave empty for standard file. -->
-    <NuGetNuspecTag></NuGetNuspecTag>
   </PropertyGroup>
 
   <!-- Allow local settings to overwrite global settings. -->
   <Import Condition="Exists('Local.Build.props')" Project="$([MSBuild]::GetPathOfFileAbove('Local.Build.props', '$(MSBuildThisFileDirectory)'))" />
 
   <PropertyGroup>
-    <!-- Frameworks for DLLs and EXE -->
-    <!-- 8, 9, 10, 4.6.2 -->
-    <!-- We use .NET 4.6.2 here because it has all we need and is still supported.  -->
-    <PDFsharpTargetFrameworks_Library>net8.0;net9.0;net10.0;netstandard2.0</PDFsharpTargetFrameworks_Library>
-    <PDFsharpTargetFrameworks_NetOnly_Library>net8.0;net9.0;net10.0</PDFsharpTargetFrameworks_NetOnly_Library>
-    <PDFsharpTargetFrameworks_Exe>net8.0;net9.0;net10.0;net462</PDFsharpTargetFrameworks_Exe>
-    <PDFsharpTargetFrameworks_NetOnly_Exe>net8.0;net9.0;net10.0</PDFsharpTargetFrameworks_NetOnly_Exe>
-    <PDFsharpTargetFrameworks_Windows>net8.0-windows;net9.0-windows;net10.0-windows;net462</PDFsharpTargetFrameworks_Windows>
-    <PDFsharpTargetFrameworks_NetOnly_Windows>net8.0-windows;net9.0-windows;net10.0-windows</PDFsharpTargetFrameworks_NetOnly_Windows>
-
-    <!-- Frameworks for test projects and EXE -->
-    <!-- 8, 9, 10, 4.7.2 -->
-    <!-- We use .NET 4.7.2 here because XUnit.Runner requires this version.  -->
-    <PDFsharpTargetFrameworks_Tests_Exe>net8.0;net9.0;net10.0;net472</PDFsharpTargetFrameworks_Tests_Exe>
-    <PDFsharpTargetFrameworks_Tests_Windows>net8.0-windows;net9.0-windows;net10.0-windows;net472</PDFsharpTargetFrameworks_Tests_Windows>
-
-    <!-- Frameworks for NuGet -->
-    <PDFsharpTargetFrameworks_NuGet>net8.0;net9.0;net10.0;netstandard2.0</PDFsharpTargetFrameworks_NuGet>
-    <PDFsharpTargetFrameworks_NuGet_Window>net8.0-windows;net9.0-windows;net10.0-windows;net462</PDFsharpTargetFrameworks_NuGet_Window>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(PDFsharpBuildFewerFrameworks)'=='true'">
-    <DefineConstants>$(DefineConstants);FEWER_FRAMEWORKS</DefineConstants>
-
-    <!-- Not needed if targets are .NET 5 or newer only. -->
-    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-
-    <!-- NuGetNuspecTag allows to choose between different NuSpec files. Use ".Fewer" for small NuGet packages. -->
-    <NuGetNuspecTag Condition="'$(NuGetNuspecTag)' == ''">.Fewer</NuGetNuspecTag>
-
-    <!-- Frameworks for DLLs and EXE -->
+    <!--
+      PDFsharp and MigraDoc target .NET 10 only.
+      The Core build (net10.0) runs on Windows, Linux, and macOS.
+      The GDI and WPF builds (net10.0-windows) are for Windows desktop applications.
+      .NET Framework, .NET Standard, and .NET 8/9 (end of support: 2026-11-10) are no longer targeted.
+      The property names are kept so that the project files need not change when targets change again.
+    -->
     <PDFsharpTargetFrameworks_Library>net10.0</PDFsharpTargetFrameworks_Library>
     <PDFsharpTargetFrameworks_NetOnly_Library>net10.0</PDFsharpTargetFrameworks_NetOnly_Library>
     <PDFsharpTargetFrameworks_Exe>net10.0</PDFsharpTargetFrameworks_Exe>
@@ -91,7 +54,7 @@
     <PDFsharpTargetFrameworks_Windows>net10.0-windows</PDFsharpTargetFrameworks_Windows>
     <PDFsharpTargetFrameworks_NetOnly_Windows>net10.0-windows</PDFsharpTargetFrameworks_NetOnly_Windows>
 
-    <!-- Frameworks for test projects and EXE -->
+    <!-- Frameworks for test projects -->
     <PDFsharpTargetFrameworks_Tests_Library>net10.0</PDFsharpTargetFrameworks_Tests_Library>
     <PDFsharpTargetFrameworks_Tests_Exe>net10.0</PDFsharpTargetFrameworks_Tests_Exe>
     <PDFsharpTargetFrameworks_Tests_Windows>net10.0-windows</PDFsharpTargetFrameworks_Tests_Windows>

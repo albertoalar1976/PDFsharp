@@ -159,13 +159,8 @@ namespace PdfSharp.Tests.Basics
 
             results[0].Should().BeGreaterThan(results[1], "File with compressed content streams must be smaller.");
             results[0].Should().BeGreaterThan(results[2], "File with compressed content streams must be smaller.");
-#if NET6_0_OR_GREATER
             // Smaller files with .NET 6 or greater.
             results[1].Should().BeGreaterThan(results[2], "File with best compression must be smaller than file with standard compression.");
-#else
-            // Same results with .NET Framework 4.
-            results[1].Should().BeGreaterThanOrEqualTo(results[2], "File with best compression must not be larger than file with standard compression.");
-#endif
         }
     }
 }

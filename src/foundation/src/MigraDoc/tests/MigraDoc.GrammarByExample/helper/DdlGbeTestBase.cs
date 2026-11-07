@@ -3,9 +3,7 @@
 
 using System;
 using System.Diagnostics;
-#if NET8_0_OR_GREATER
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-#endif
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.GrammarByExample;
 #if CORE
@@ -116,10 +114,6 @@ namespace GdiGrammarByExample
 
         internal static string WslPathHack(string path)
         {
-#if !NET8_0_OR_GREATER
-            // .NET 4.6.2 or .NETStandard 2.0, for Windows only.
-            return path;
-#else
             if (OperatingSystem.IsWindows())
             {
                 return path;
@@ -131,7 +125,6 @@ namespace GdiGrammarByExample
             }
 
             throw new NotSupportedException($"Platform {Environment.OSVersion} not yet supported.");
-#endif
         }
 
         //const string PathSource = @"D:\MigraDocAssets\GBE\GBE-DDL";

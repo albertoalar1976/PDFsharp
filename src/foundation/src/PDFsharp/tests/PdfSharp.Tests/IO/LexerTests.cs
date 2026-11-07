@@ -61,11 +61,7 @@ namespace PdfSharp.Tests.IO
             idx.Should().BeGreaterThan(8);
 
             // Manipulate text to get "\P" instead of "\\P".
-#if NET8_0_OR_GREATER
             var replacementText = text.Replace(creatorWritten, creatorReplaced, StringComparison.InvariantCulture);
-#else
-            var replacementText = text.Replace(creatorWritten, creatorReplaced);
-#endif
             var modifiedBytes = encoding.GetBytes(replacementText);
 
             using var modifiedStream = new MemoryStream(modifiedBytes);

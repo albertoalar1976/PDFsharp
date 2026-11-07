@@ -8,9 +8,7 @@ using System.IO;
 //using Windows.Storage;
 //#endif
 #if CORE || GDI
-#if !NETSTANDARD2_0_OR_GREATER
 using System.Drawing.Imaging;
-#endif
 #endif
 using PdfSharp.Drawing;
 using PdfSharp.Events;

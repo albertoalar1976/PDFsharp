@@ -52,12 +52,7 @@ namespace MigraDoc.DocumentObjectModel
                 // Aqua == Cyan
                 // Fuchsia == Magenta
                 //var key = new Style();  ??? 
-#if NET8_0_OR_GREATER
                 StandardColors.TryAdd(d, c);
-#else
-                if (!StandardColors.ContainsKey(d))
-                    StandardColors.Add(d, c);
-#endif
             }
         }
 

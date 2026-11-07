@@ -18,11 +18,6 @@
 #warning ****************************************************************
 #endif
 
-#if !DEBUG && FEWER_FRAMEWORKS
-#warning ******************************************************************
-#warning ***** ‘FEWER_FRAMEWORKS’ MUST BE UNDEFINED FOR FINAL RELEASE *****
-#warning ******************************************************************
-#endif
 
 #if TEST_CODE_  // ‘’
 // Ensure not to accidentally rename ‘TEST_CODE’ to ‘TEST_CODE_’.

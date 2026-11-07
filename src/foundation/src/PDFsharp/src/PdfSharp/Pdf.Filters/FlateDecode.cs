@@ -33,11 +33,7 @@ namespace PdfSharp.Pdf.Filters
             switch (mode)
             {
                 case PdfFlateEncodeMode.BestCompression:
-#if NET462 || NETSTANDARD2_0
-                    level = CompressionLevel.Optimal;
-#else
                     level = CompressionLevel.SmallestSize;
-#endif
                     break;
                 case PdfFlateEncodeMode.BestSpeed:
                     level = CompressionLevel.Fastest;

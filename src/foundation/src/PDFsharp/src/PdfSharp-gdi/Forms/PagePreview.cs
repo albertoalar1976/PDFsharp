@@ -145,17 +145,6 @@ namespace PdfSharp.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public XGraphicsUnit PageGraphicsUnit { get; set; } = XGraphicsUnit.Point;
 
-#if !NET9_0_OR_GREATER
-        /// <summary>
-        /// This property was renamed. Use new property PageGraphicsUnit.
-        /// </summary>
-        [Obsolete("Property renamed, use PageGraphicsUnit")]
-        public XGraphicsUnit PageUnit
-        {
-            get => PageGraphicsUnit;
-            set => PageGraphicsUnit = value;
-        }
-#endif
 
         /// <summary>
         /// Gets or sets a predefined zoom factor.

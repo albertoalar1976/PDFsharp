@@ -402,7 +402,6 @@ namespace PdfSharp.Tests.Drawing
 
 #endif
 
-#if NET8_0_OR_GREATER
         [Fact]
         public async Task PDF_with_Image_from_http_stream()
         {
@@ -435,6 +434,5 @@ namespace PdfSharp.Tests.Drawing
 
             }
         }
-#endif
     }
 }
