@@ -12,7 +12,7 @@ namespace PdfSharp.Pdf.PdfA
         internal PdfAFormat(int part, char conformanceLevel)
         {
             Part = part;
-            ConformanceLevel = Char.ToUpper(conformanceLevel);
+            ConformanceLevel = Char.ToUpperInvariant(conformanceLevel);
         }
 
         /// <summary>

@@ -1923,7 +1923,7 @@ namespace MigraDoc.Rendering
         string GetDocumentInfo(string name)
         {
             Debug.Assert(_paragraph.Document != null, "_paragraph.Document != null");
-            return name.ToLower() switch
+            return name.ToLowerInvariant() switch
             {
                 "title" => _paragraph.Document.Info.Title,
                 "author" => _paragraph.Document.Info.Author,

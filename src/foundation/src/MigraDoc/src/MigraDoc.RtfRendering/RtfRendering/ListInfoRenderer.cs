@@ -1,6 +1,7 @@
 // MigraDoc - Creating Documents on the Fly
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using MigraDoc.DocumentObjectModel;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -41,7 +42,7 @@ namespace MigraDoc.RtfRendering
             _rtfWriter.WriteControl("listsimple", 1);
             WriteListLevel();
             _rtfWriter.WriteControl("listrestarthdn", 0);
-            _rtfWriter.WriteControl("listid", listID.ToString());
+            _rtfWriter.WriteControl("listid", listID.ToString(CultureInfo.InvariantCulture));
             _rtfWriter.EndContent();
 
             lists.PreviousListInfoID = new KeyValuePair<ListInfo, int>(_listInfo, listID);

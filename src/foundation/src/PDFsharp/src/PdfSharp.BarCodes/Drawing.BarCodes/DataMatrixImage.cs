@@ -2,6 +2,7 @@
 // See the LICENSE file in the solution root for more information.
 
 #if GDI
+using System.Globalization;
 using System.Drawing;
 using System.Drawing.Imaging;
 #endif
@@ -189,7 +190,7 @@ namespace PdfSharp.Drawing.BarCodes
                     enc = 'a';             // auto revert to ASCII
                 // StL: Who wrote this nonsense?
                 //newenc = Char.Parse(encoding[sourceposition].ToString(CultureInfo.InvariantCulture).ToLower());
-                newenc = Char.ToLower(encoding[sourceposition]);
+                newenc = Char.ToLowerInvariant(encoding[sourceposition]);
 
                 switch (newenc)
                 {                         // encode character
@@ -308,7 +309,7 @@ namespace PdfSharp.Drawing.BarCodes
                                 enc = 'a';
                             }
                             while (sourceposition < sourceLength && /*encoding[sourceposition].ToString(CultureInfo.InvariantCulture).ToLower() == "e"*/
-                              Char.ToLower(encoding[sourceposition]) == 'e' && p < 4)
+                              Char.ToLowerInvariant(encoding[sourceposition]) == 'e' && p < 4)
                                 output[p++] = s[sourceposition++];
                             if (p < 4)
                             {
@@ -356,7 +357,7 @@ namespace PdfSharp.Drawing.BarCodes
                             if (encoding != null)
                             {
                                 int p;
-                                for (p = sourceposition; p < sourceLength && /*encoding[p].ToString(CultureInfo.InvariantCulture).ToLower() == "b"*/ Char.ToLower(encoding[p]) == 'b'; p++)
+                                for (p = sourceposition; p < sourceLength && /*encoding[p].ToString(CultureInfo.InvariantCulture).ToLowerInvariant() == "b"*/ Char.ToLowerInvariant(encoding[p]) == 'b'; p++)
                                     l++;
                             }
                             t[targetposition++] = (char)231;      // base256

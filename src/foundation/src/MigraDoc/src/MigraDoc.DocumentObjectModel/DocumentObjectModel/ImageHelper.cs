@@ -71,7 +71,7 @@ namespace MigraDoc.DocumentObjectModel
                         // Must have at least one dot left of number sign to distinguish from e.g. '#123'.
                         if (path.IndexOf('.') != -1)
                         {
-                            pageNumber = Int32.Parse(path[(length + 1)..]);
+                            pageNumber = Int32.Parse(path[(length + 1)..], CultureInfo.InvariantCulture);
                             path = path[..length];
                         }
                     }

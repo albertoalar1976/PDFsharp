@@ -86,7 +86,7 @@ namespace MigraDoc.DocumentObjectModel
             if (_fWriteStamp)
             {
                 WriteComment("Created by empira MigraDoc Document Object Model");
-                WriteComment(String.Format("generated file created {0:d} at {0:t}", DateTimeOffset.Now));
+                WriteComment(String.Format(CultureInfo.InvariantCulture, "generated file created {0:d} at {0:t}", DateTimeOffset.Now));
             }
         }
 
@@ -372,7 +372,7 @@ namespace MigraDoc.DocumentObjectModel
 
             if (value is Unit unit)
             {
-                string strUnit = unit.ToString(); // BUG_OLD Can anything actually return null here? If so, how to write null?
+                string strUnit = unit.ToString(CultureInfo.InvariantCulture); // BUG_OLD Can anything actually return null here? If so, how to write null?
                 if (unit.Type == UnitType.Point)
                     WriteLine(valueName + " = " + strUnit);
                 else
@@ -388,7 +388,7 @@ namespace MigraDoc.DocumentObjectModel
             }
             else if (value is bool b)
             {
-                WriteLine(valueName + " = " + b.ToString().ToLower());
+                WriteLine(valueName + " = " + b.ToString().ToLowerInvariant());
             }
             else if (value is string)
             {

@@ -9,14 +9,21 @@
     <!-- Found no other way to resolve the following warning than disable it -->
     <!--<NoWarn>NU1507</NoWarn> Fixed by Microsoft -->
 
-    <!-- Some warnings related to trimming.  -->
-    <NoWarn>$(NoWarn);0507;2070;2087</NoWarn>
     <WriteVersionInfoToBuildLog>false</WriteVersionInfoToBuildLog>
 
-    <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
-    <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
-    <RunAnalyzers>false</RunAnalyzers>
+    <!-- Run the .NET code analyzers (and the trimming/AOT analyzers of trimmable projects) in every build. -->
+    <AnalysisLevel>latest</AnalysisLevel>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Projects whose code is shipped in the NuGet packages, i.e. projects in foundation/src/*/src/. -->
+    <PDFsharpIsShippedLibrary Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(MSBuildProjectDirectory.Replace('\', '/'))', '/src/foundation/src/[^/]+/src/'))">true</PDFsharpIsShippedLibrary>
+  </PropertyGroup>
+
+  <!-- Stricter rules for shipped code, e.g. culture-independent formatting of PDF and RTF output. -->
+  <ItemGroup Condition="'$(PDFsharpIsShippedLibrary)' == 'true'">
+    <GlobalAnalyzerConfigFiles Include="$(MSBuildThisFileDirectory)Library.globalconfig" />
+  </ItemGroup>
 
   <PropertyGroup>
     <!-- Enable Build Acceleration in Visual Studio. -->

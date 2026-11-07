@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using System.Text;
 using PdfSharp.Internal.OpenType;
 using PdfSharp.Fonts;
@@ -177,7 +178,7 @@ namespace PdfSharp.Pdf.Advanced
                 //TODO_OLD: optimize order of indices
 
                 for (int idx = 0; idx < count; idx++)
-                    w.AppendFormat("{0}[{1}]", glyphIndices[idx], glyphWidths[idx]);
+                    w.AppendFormat(CultureInfo.InvariantCulture, "{0}[{1}]", glyphIndices[idx], glyphWidths[idx]);
                 w.Append("]");
                 _descendantFont.Elements.SetValue(PdfCIDFont.Keys.W, new PdfLiteral(w.ToString()));
             }

@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using PdfSharp.Internal;
@@ -374,7 +375,7 @@ namespace PdfSharp.Pdf.Internal
                     // Case: Hex
                     pdf.Append('<');
                     for (var idx = 0; idx < count; idx++)
-                        pdf.Append($"{bytes[idx]:X2}");
+                        pdf.Append(CultureInfo.InvariantCulture, $"{bytes[idx]:X2}");
                     pdf.Append('>');
                 }
             }
@@ -385,7 +386,7 @@ namespace PdfSharp.Pdf.Internal
                 pdf.Append('<');
                 for (var idx = 0; idx < count; idx += 2)
                 {
-                    pdf.Append($"{bytes[idx]:X2}{bytes[idx + 1]:X2}");
+                    pdf.Append(CultureInfo.InvariantCulture, $"{bytes[idx]:X2}{bytes[idx + 1]:X2}");
                     //if (idx != 0 && (idx % 48) == 0)
                     //    pdf.Append('\n');
                 }

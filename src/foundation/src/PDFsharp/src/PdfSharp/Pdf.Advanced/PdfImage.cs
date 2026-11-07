@@ -2,6 +2,7 @@
 // See the LICENSE file in the solution root for more information.
 
 #if GDI
+using System.Globalization;
 using System.Drawing.Imaging;
 #endif
 #if WPF
@@ -36,7 +37,7 @@ namespace PdfSharp.Pdf.Advanced
             ////// TODO_OLD: identify images used multiple times. If the image already exists use the same XRef.
             ////_defaultName = PdfImageTable.NextImageName;
 
-            switch (_image.Format.Guid.ToString("B").ToUpper())
+            switch (_image.Format.Guid.ToString("B", CultureInfo.InvariantCulture).ToUpperInvariant())
             {
                 // Pdf supports Jpeg, therefore we can write what we’ve read:
                 case "{B96B3CAE-0728-11D3-9D7B-0000F81EF32E}":  //XImageFormat.Jpeg

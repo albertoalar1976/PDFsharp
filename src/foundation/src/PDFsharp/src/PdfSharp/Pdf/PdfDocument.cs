@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using Microsoft.Extensions.Logging;
 using PdfSharp.Internal;
 using PdfSharp.Internal.OpenType;
@@ -1195,7 +1196,7 @@ namespace PdfSharp.Pdf
 
             readonly WeakReference _weakRef = new(document);
 
-            public readonly string ID = document.Guid.ToString("B").ToUpper();
+            public readonly string ID = document.Guid.ToString("B", CultureInfo.InvariantCulture).ToUpperInvariant();
 
 
 

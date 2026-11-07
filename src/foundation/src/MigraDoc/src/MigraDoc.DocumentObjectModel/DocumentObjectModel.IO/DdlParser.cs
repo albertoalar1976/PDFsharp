@@ -869,7 +869,7 @@ namespace MigraDoc.DocumentObjectModel.IO
 
             ReadCode();  // read identifier
             EnsureSymbol(Symbol.Identifier);
-            string fieldType = Token.ToLower();
+            string fieldType = Token.ToLowerInvariant();
 
             ReadCode();  // read ')'
             EnsureSymbol(Symbol.ParenRight);

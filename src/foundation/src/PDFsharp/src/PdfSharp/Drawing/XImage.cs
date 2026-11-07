@@ -17,6 +17,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 #endif
 #if WPF
+using System.Globalization;
 using System.Text;
 using System.Windows.Media.Imaging;
 #endif
@@ -507,7 +508,7 @@ namespace PdfSharp.Drawing
                 try
                 {
                     Locks.EnterGdiPlus();
-                    guid = _gdiImage.RawFormat.Guid.ToString("B").ToUpper();
+                    guid = _gdiImage.RawFormat.Guid.ToString("B").ToUpperInvariant();
                 }
                 finally { Locks.ExitGdiPlus(); }
 
@@ -614,7 +615,7 @@ namespace PdfSharp.Drawing
         /// <param name="bitmapSource">The bitmap source.</param>
         internal static string GetImageFilename(BitmapSource bitmapSource)
         {
-            string filename = bitmapSource.ToString();
+            string filename = bitmapSource.ToString(CultureInfo.InvariantCulture);
             filename = UrlDecodeStringFromStringInternal(filename);
             if (filename.StartsWith("file:///", StringComparison.Ordinal))
                 filename = filename.Substring(8); // Remove all 3 slashes!
@@ -738,7 +739,7 @@ namespace PdfSharp.Drawing
                 }
                 // Test result is maybe.
                 // HACK_OLD: store the file in PDF if extension matches ...
-                string str = filename.ToLower();
+                string str = filename.ToLowerInvariant();
                 if (str.EndsWith(".jpg", StringComparison.Ordinal) || str.EndsWith(".jpeg", StringComparison.Ordinal))
                     return true;
             }

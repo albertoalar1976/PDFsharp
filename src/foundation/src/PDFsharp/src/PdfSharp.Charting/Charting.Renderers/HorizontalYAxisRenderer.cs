@@ -1,6 +1,7 @@
 // PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using PdfSharp.Drawing;
 #if PSGFX
 using PdfSharp.Graphics.Media.MatrixExtensions;
@@ -64,7 +65,7 @@ namespace PdfSharp.Charting.Renderers
                 XSize labelSize = new XSize(0, 0);
                 for (double y = yMin; y <= yMax; y += yMajorTick)
                 {
-                    string str = y.ToString(yari.TickLabelsFormat);
+                    string str = y.ToString(yari.TickLabelsFormat, CultureInfo.CurrentCulture);
                     labelSize = gfx.MeasureString(str, yari.TickLabelsFont);
                     size.Width += labelSize.Width;
                     size.Height = Math.Max(labelSize.Height, size.Height);
@@ -144,7 +145,7 @@ namespace PdfSharp.Charting.Renderers
             for (int idx = 0; idx < countTickLabels; idx++)
             {
                 double y = yMin + yMajorTick * idx;
-                string str = y.ToString(yari.TickLabelsFormat);
+                string str = y.ToString(yari.TickLabelsFormat, CultureInfo.CurrentCulture);
 
                 XSize labelSize = gfx.MeasureString(str, yari.TickLabelsFont);
                 if (yari.MajorTickMark != TickMarkType.None)

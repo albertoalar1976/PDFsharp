@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using Microsoft.Extensions.Logging;
 using PdfSharp.Logging;
 using PdfSharp.Pdf.IO;
@@ -123,12 +124,14 @@ namespace PdfSharp.Pdf
             var result = "";
             if (dateTimeOffset != null)
             {
-                result = $"D:{dateTimeOffset:yyyyMMddHHmmss}";
+                // Always use the invariant culture. With the current culture, e.g. Thai (th-TH) or Arabic (ar-SA),
+                // the year would be written in another calendar (2569 or 1448 instead of 2026).
+                result = Invariant($"D:{dateTimeOffset:yyyyMMddHHmmss}");
                 if (dateTimeOffset.Value.Offset == TimeSpan.Zero)
                     result += "Z";
                 else
                     // We keep trailing ‘'’ if offset is not 0 for maximum compatibility.
-                    result += dateTimeOffset.Value.ToString("zzz").Replace(':', '\'') + '\'';
+                    result += dateTimeOffset.Value.ToString("zzz", CultureInfo.InvariantCulture).Replace(':', '\'') + '\'';
             }
             return result;
         }

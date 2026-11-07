@@ -71,7 +71,7 @@ namespace MigraDoc.DocumentObjectModel
             if (name == "")
                 throw new ArgumentException(nameof(name));
 
-            if (name.ToLower().StartsWith("font", StringComparison.Ordinal))
+            if (name.ToLowerInvariant().StartsWith("font", StringComparison.Ordinal))
                 return ParagraphFormat.GetValue(name);
 
             return base.GetValue(name, flags);

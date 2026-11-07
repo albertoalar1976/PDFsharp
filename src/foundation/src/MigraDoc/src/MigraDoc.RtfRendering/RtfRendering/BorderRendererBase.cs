@@ -1,6 +1,7 @@
 // MigraDoc - Creating Documents on the Fly
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using System.Diagnostics;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
@@ -46,7 +47,7 @@ namespace MigraDoc.RtfRendering
             //Caution: Write width AFTER style to satisfy word.
             Translate("Style", "brdr", RtfUnit.Undefined, "s", false);
             Translate("Width", "brdrw", RtfUnit.Twips, "10", false);
-            Translate("Color", "brdrcf", RtfUnit.Undefined, _docRenderer.GetColorIndex(GetDefaultColor()).ToString(), false);
+            Translate("Color", "brdrcf", RtfUnit.Undefined, _docRenderer.GetColorIndex(GetDefaultColor()).ToString(CultureInfo.InvariantCulture), false);
         }
 
         /// <summary>

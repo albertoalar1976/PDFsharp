@@ -9,6 +9,7 @@
 #define DRAW_BMP_
 #endif
 
+using System.Globalization;
 using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using PdfSharp.Drawing;
@@ -183,7 +184,7 @@ namespace PdfSharp.Forms
             {
                 if (value < (int)Zoom.Minimum || value > (int)Zoom.Maximum)
                     throw new ArgumentOutOfRangeException("value", value,
-                      String.Format("Value must between {0} and {1}.", (int)Zoom.Minimum, (int)Zoom.Maximum));
+                      String.Format(CultureInfo.CurrentCulture, "Value must between {0} and {1}.", (int)Zoom.Minimum, (int)Zoom.Maximum));
 
                 if (value != _zoomPercent)
                 {

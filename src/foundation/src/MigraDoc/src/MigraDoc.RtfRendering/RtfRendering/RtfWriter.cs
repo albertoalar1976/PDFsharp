@@ -1,6 +1,7 @@
 // MigraDoc - Creating Documents on the Fly
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using System.Text;
 
 namespace MigraDoc.RtfRendering
@@ -73,7 +74,7 @@ namespace MigraDoc.RtfRendering
                         else
                         {
                             strBuilder.Append(@"\u");
-                            strBuilder.Append(((int)ch).ToString());
+                            strBuilder.Append(((int)ch).ToString(CultureInfo.InvariantCulture));
                             strBuilder.Append('?');
                         }
                         break;
@@ -138,7 +139,7 @@ namespace MigraDoc.RtfRendering
                 //TODO_OLD: Error message? Debug.Assert?
                 return;
 
-            _textWriter.Write(@"\'" + hex.ToString("x"));
+            _textWriter.Write(@"\'" + hex.ToString("x", CultureInfo.InvariantCulture));
             _lastWasControl = false;
             // No blank allowed after this code.
         }
@@ -187,7 +188,7 @@ namespace MigraDoc.RtfRendering
         /// </summary>
         public void WriteControl(string ctrl, int value, bool withStar)
         {
-            WriteControl(ctrl, value.ToString(), withStar);
+            WriteControl(ctrl, value.ToString(CultureInfo.InvariantCulture), withStar);
         }
 
         /// <summary>
@@ -214,7 +215,7 @@ namespace MigraDoc.RtfRendering
         /// </summary>
         public void WriteControl(string ctrl, int value)
         {
-            WriteControl(ctrl, value.ToString());
+            WriteControl(ctrl, value.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -251,7 +252,7 @@ namespace MigraDoc.RtfRendering
         /// </summary>
         public void WriteControlWithStar(string ctrl, int value)
         {
-            WriteControlWithStar(ctrl, value.ToString());
+            WriteControlWithStar(ctrl, value.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using PdfSharp.Diagnostics;
 using PdfSharp.Drawing;
 
@@ -228,7 +229,7 @@ namespace PdfSharp.Charting.Renderers
                 rendererInfo.XValues = new XValues();
                 XSeries xs = rendererInfo.XValues.AddXSeries();
                 for (double idx = rendererInfo.MinimumScale + 1; idx <= rendererInfo.MaximumScale; idx++)
-                    xs.Add(idx.ToString(rendererInfo.TickLabelsFormat));
+                    xs.Add(idx.ToString(rendererInfo.TickLabelsFormat, CultureInfo.CurrentCulture));
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿// MigraDoc - Creating Documents on the Fly
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using System.Diagnostics;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
@@ -272,7 +273,7 @@ namespace MigraDoc.RtfRendering
         /// </summary>
         protected void Translate(string valueName, string rtfCtrl, RtfUnit unit, Unit val, bool withStar)
         {
-            Translate(valueName, rtfCtrl, unit, ToRtfUnit(val, RtfUnit.Twips).ToString(), withStar);
+            Translate(valueName, rtfCtrl, unit, ToRtfUnit(val, RtfUnit.Twips).ToString(CultureInfo.InvariantCulture), withStar);
         }
 
         /// <summary>

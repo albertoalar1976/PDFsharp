@@ -25,7 +25,7 @@ namespace PdfSharp.Quality
         /// </returns>
         public FontResolverInfo? ResolveTypeface(string familyName, bool isBold, bool isItalic)
         {
-            var name = familyName.ToLower();
+            var name = familyName.ToLowerInvariant();
 
 #if DEBUG
             //if (name == "segoe ui symbol")

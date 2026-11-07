@@ -1,6 +1,7 @@
 // PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using PdfSharp.Drawing;
 
 namespace PdfSharp.Charting.Renderers
@@ -44,10 +45,10 @@ namespace PdfSharp.Charting.Renderers
                     if (sri.DataLabelRendererInfo.Type == DataLabelType.Percent)
                     {
                         double percent = 100 / (sumValues / Math.Abs(sector.Point!.Value));
-                        dleri.Text = percent.ToString(sri.DataLabelRendererInfo.Format) + "%";
+                        dleri.Text = percent.ToString(sri.DataLabelRendererInfo.Format, CultureInfo.CurrentCulture) + "%";
                     }
                     else if (sri.DataLabelRendererInfo.Type == DataLabelType.Value)
-                        dleri.Text = sector.Point!.Value.ToString(sri.DataLabelRendererInfo.Format);
+                        dleri.Text = sector.Point!.Value.ToString(sri.DataLabelRendererInfo.Format, CultureInfo.CurrentCulture);
 
                     if (dleri.Text.Length > 0)
                         dleri.Size = gfx.MeasureString(dleri.Text, sri.DataLabelRendererInfo.Font);

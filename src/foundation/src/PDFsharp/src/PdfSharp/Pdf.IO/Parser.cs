@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using Microsoft.Extensions.Logging;
 using PdfSharp.Internal;
 using PdfSharp.Logging;
@@ -452,7 +453,7 @@ namespace PdfSharp.Pdf.IO
             var lengthItem = dict.Elements["/Length"]; // #US373 References handled below. Should we try GetValue here?
             if (lengthItem is PdfInteger pdfInteger)
             {
-                Debug.Assert(Convert.ToInt32(lengthItem) == pdfInteger.Value);
+                Debug.Assert(Convert.ToInt32(lengthItem, CultureInfo.InvariantCulture) == pdfInteger.Value);
                 // A negative length is invalid. It is handled like a missing /Length entry below.
                 if (pdfInteger.Value >= 0)
                     return pdfInteger.Value;
@@ -1935,20 +1936,20 @@ namespace PdfSharp.Pdf.IO
                     char o = 'Z';
                     if (length >= 10)  // Can read date?
                     {
-                        year = Int32.Parse(pdfDate.Substring(2, 4));
-                        month = Int32.Parse(pdfDate.Substring(6, 2));
-                        day = Int32.Parse(pdfDate.Substring(8, 2));
+                        year = Int32.Parse(pdfDate.Substring(2, 4), CultureInfo.InvariantCulture);
+                        month = Int32.Parse(pdfDate.Substring(6, 2), CultureInfo.InvariantCulture);
+                        day = Int32.Parse(pdfDate.Substring(8, 2), CultureInfo.InvariantCulture);
                         if (length >= 16)  // Can read time?
                         {
-                            hour = Int32.Parse(pdfDate.Substring(10, 2));
-                            minute = Int32.Parse(pdfDate.Substring(12, 2));
-                            second = Int32.Parse(pdfDate.Substring(14, 2));
+                            hour = Int32.Parse(pdfDate.Substring(10, 2), CultureInfo.InvariantCulture);
+                            minute = Int32.Parse(pdfDate.Substring(12, 2), CultureInfo.InvariantCulture);
+                            second = Int32.Parse(pdfDate.Substring(14, 2), CultureInfo.InvariantCulture);
                             if (length >= 22)  // Can read offset? Do not care about trailing ‘'’.
                             {
                                 if ((o = pdfDate[16]) != 'Z')
                                 {
-                                    hh = Int32.Parse(pdfDate.Substring(17, 2));
-                                    mm = Int32.Parse(pdfDate.Substring(20, 2));
+                                    hh = Int32.Parse(pdfDate.Substring(17, 2), CultureInfo.InvariantCulture);
+                                    mm = Int32.Parse(pdfDate.Substring(20, 2), CultureInfo.InvariantCulture);
                                 }
                             }
                         }

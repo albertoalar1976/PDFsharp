@@ -340,7 +340,7 @@ namespace MigraDoc.DocumentObjectModel
                 }
 
                 var numberStyle = NumberStyles.Integer;
-                string number = color.ToLower();
+                string number = color.ToLowerInvariant();
                 if (number.StartsWith("0x", StringComparison.Ordinal))
                 {
                     numberStyle = NumberStyles.HexNumber;
@@ -372,7 +372,7 @@ namespace MigraDoc.DocumentObjectModel
                             throw new ArgumentException(MdDomMsgs.InvalidColorString(color).Message);
                     }
                 }
-                clr = UInt32.Parse(number, numberStyle);
+                clr = UInt32.Parse(number, numberStyle, CultureInfo.InvariantCulture);
                 return new(clr);
             }
             catch (FormatException ex)
@@ -492,7 +492,7 @@ namespace MigraDoc.DocumentObjectModel
                            ((_argb & 0xFF0000) >> 16) + "," +
                            ((_argb & 0x00FF00) >> 8) + "," +
                            (_argb & 0x0000FF) + ")";
-                return "0x" + _argb.ToString("X");
+                return "0x" + _argb.ToString("X", CultureInfo.InvariantCulture);
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using Microsoft.Extensions.Logging;
 using PdfSharp.Logging;
 using PdfSharp.Internal;
@@ -531,7 +532,7 @@ namespace PdfSharp.Drawing
             string faceName = wpfGlyphTypeface.FaceNames[FontHelper.CultureInfoEnUs];
             string familyName = wpfGlyphTypeface.FamilyNames[FontHelper.CultureInfoEnUs];
 
-            string name = familyName.ToLower() + '/' + faceName.ToLowerInvariant();
+            string name = familyName.ToLowerInvariant() + '/' + faceName.ToLowerInvariant();
             string style = wpfGlyphTypeface.Style.ToString();
             string simulations = wpfGlyphTypeface.StyleSimulations.ToString();
 #endif

@@ -391,14 +391,14 @@ $outputSemVerInfo = $templateSemVerInfo `
 # Read old file.
 $oldOutputSemVerInfo = "<empty>"
 try {
-    $oldOutputSemVerInfo = Get-Content -Path "../PdfSharp.Shared/internal/SemVersionInformation-generated.cs" -Raw -ErrorAction Stop
+    $oldOutputSemVerInfo = Get-Content -Path "../PdfSharp.Shared/Internal/SemVersionInformation-generated.cs" -Raw -ErrorAction Stop
 }
 catch {
     $oldOutputSemVerInfo = "<reading failed>"
 }
 # Write SemVersionInformation-generated.cs if contents have changed.
 if ($oldOutputSemVerInfo -eq 0 -or -not $oldOutputSemVerInfo.Contains($outputSemVerInfo)) {
-    $outputSemVerInfo | Out-File -FilePath "../PdfSharp.Shared/internal/SemVersionInformation-generated.cs"
+    $outputSemVerInfo | Out-File -FilePath "../PdfSharp.Shared/Internal/SemVersionInformation-generated.cs"
 }
 else {
     # Write-Output "Skipped writing SemVersionInformation-generated.cs because contents did not change."

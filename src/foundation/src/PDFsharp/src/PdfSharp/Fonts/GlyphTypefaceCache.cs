@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using System.Collections.Concurrent;
 using System.Text;
 using PdfSharp.Internal;
@@ -54,7 +55,7 @@ namespace PdfSharp.Fonts
             familyKeys.CopyTo(keys, 0);
             Array.Sort(keys, StringComparer.OrdinalIgnoreCase);
             foreach (string key in keys)
-                state.AppendFormat("  {0}: {1}\n", key, PsGlobals.Global.Fonts.GlyphTypefacesByKey[key].DebuggerDisplay);
+                state.AppendFormat(CultureInfo.InvariantCulture, "  {0}: {1}\n", key, PsGlobals.Global.Fonts.GlyphTypefacesByKey[key].DebuggerDisplay);
             state.Append("\n");
             return state.ToString();
         }

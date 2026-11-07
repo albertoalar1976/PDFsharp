@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using PdfSharp.Pdf;
 using PdfSharp.Drawing;
 using PdfSharp.Quality;
@@ -70,11 +71,11 @@ namespace PdfSharp.Snippets.Drawing
                 var fontStrikeout = new XFont(facename, 20, XFontStyleEx.Strikeout, options);
                 var fontIUS = new XFont(facename, 20, XFontStyleEx.Italic | XFontStyleEx.Underline | XFontStyleEx.Strikeout, options);
 
-                gfx.DrawString(String.Format("{0} (regular)", facename), fontRegular, XBrushes.DarkSlateGray, 0, 25);
-                gfx.DrawString(String.Format("{0} (italic)", facename), fontItalic, XBrushes.DarkSlateGray, 0, 50);
-                gfx.DrawString(String.Format("{0} (underline)", facename), fontUnderline, XBrushes.DarkSlateGray, 0, 75);
-                gfx.DrawString(String.Format("{0} (strokeout)", facename), fontStrikeout, XBrushes.DarkSlateGray, 0, 100);
-                gfx.DrawString(String.Format("{0} (ita, und, str)", facename), fontIUS, XBrushes.DarkSlateGray, 0, 125);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0} (regular)", facename), fontRegular, XBrushes.DarkSlateGray, 0, 25);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0} (italic)", facename), fontItalic, XBrushes.DarkSlateGray, 0, 50);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0} (underline)", facename), fontUnderline, XBrushes.DarkSlateGray, 0, 75);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0} (strokeout)", facename), fontStrikeout, XBrushes.DarkSlateGray, 0, 100);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0} (ita, und, str)", facename), fontIUS, XBrushes.DarkSlateGray, 0, 125);
             }
             EndBox(gfx);
 

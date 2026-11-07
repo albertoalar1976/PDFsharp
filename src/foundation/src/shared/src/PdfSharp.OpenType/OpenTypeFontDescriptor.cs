@@ -3,6 +3,7 @@
 
 #pragma warning disable CS1591 // TODO_DOC: Missing XML comment for publicly visible type or member
 
+using System.Globalization;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using PdfSharp.Logging;
@@ -719,7 +720,7 @@ namespace PdfSharp.Internal.OpenType
             // 'ch >= 0xf000 && ch <= 0xf0ff' done with one test and branch.
             if (ch > 255 && !((uint)(ch - 0xf000) <= 0xff))
             {
-                var value = ((int)ch).ToString("x4");
+                var value = ((int)ch).ToString("x4", CultureInfo.InvariantCulture);
                 LogHost.Logger./*FontManagementLogger.*/LogError("Character 0u{char} of a symbol font is not in valid range.", value);
             }
 

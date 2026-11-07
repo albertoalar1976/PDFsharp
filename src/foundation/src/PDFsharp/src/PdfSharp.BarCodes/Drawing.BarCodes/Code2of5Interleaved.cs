@@ -1,6 +1,8 @@
 // PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
+
 namespace PdfSharp.Drawing.BarCodes
 {
     /// <summary>
@@ -129,8 +131,8 @@ namespace PdfSharp.Drawing.BarCodes
         /// </summary>
         void RenderNextPair(BarCodeRenderInfo info)
         {
-            int digitForLines = Int32.Parse(Text[info.CurrPosInString].ToString());
-            int digitForGaps = Int32.Parse(Text[info.CurrPosInString + 1].ToString());
+            int digitForLines = Int32.Parse(Text[info.CurrPosInString].ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+            int digitForGaps = Int32.Parse(Text[info.CurrPosInString + 1].ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
             bool[] linesArray = Lines[digitForLines];
             bool[] gapsArray = Lines[digitForGaps];
             for (int idx = 0; idx < 5; idx++)

@@ -2,6 +2,7 @@
 // See the LICENSE file in the solution root for more information.
 
 #if GDI
+using System.Globalization;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -367,7 +368,7 @@ namespace PdfSharp.Drawing
                         // Must have at least one dot left of number sign to distinguish from e.g. '#123'.
                         if (path.IndexOf('.') != -1)
                         {
-                            pageNumber = Int32.Parse(path.Substring(length + 1));
+                            pageNumber = Int32.Parse(path.Substring(length + 1), CultureInfo.InvariantCulture);
                             path = path.Substring(0, length);
                         }
                     }

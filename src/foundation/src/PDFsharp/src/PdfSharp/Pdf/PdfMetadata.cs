@@ -498,7 +498,7 @@ namespace PdfSharp.Pdf
 
             public static byte[] GetBytes(string xml)
             {
-                if (!xml.StartsWith(header))
+                if (!xml.StartsWith(header, StringComparison.Ordinal))
                     throw new InvalidOperationException("An XMP metadata string must start with '" + header + "'.");
 
                 const int leftPartLength = 17;

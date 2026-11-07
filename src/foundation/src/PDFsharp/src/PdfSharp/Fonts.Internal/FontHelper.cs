@@ -1,6 +1,7 @@
 // PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using PdfSharp.Internal.OpenType;
 using PdfSharp.Drawing;
 #if GDI
@@ -97,7 +98,7 @@ namespace PdfSharp.Fonts.Internal
             var gdiFamilyName = font.FontFamily.Name;
 #if true
             // Check for substitution if font is 'Microsoft Sans Serif'.
-            if (gdiFamilyName.Equals("Microsoft Sans Serif"))
+            if (gdiFamilyName.Equals("Microsoft Sans Serif", StringComparison.Ordinal))
             {
                 // Is this the family we indeed requested?
                 if (!gdiFamilyName.Equals(familyName, StringComparison.OrdinalIgnoreCase))

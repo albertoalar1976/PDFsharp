@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using PdfSharp.Pdf.IO;
 using System;
 
@@ -27,7 +28,7 @@ namespace PdfSharp.Pdf.Filters
                 Array.Copy(inData, pos + 1, row, 0, stride);
                 var filterType = inData[pos];
                 if (filterType > 4)
-                    throw new PdfReaderException(string.Format("Unexpected Png-Predictor {0} in Xref Stream. Expected 0 to 4.", filterType));
+                    throw new PdfReaderException(string.Format(CultureInfo.InvariantCulture, "Unexpected Png-Predictor {0} in Xref Stream. Expected 0 to 4.", filterType));
                 switch (filterType)
                 {
                     case 0:         // None
