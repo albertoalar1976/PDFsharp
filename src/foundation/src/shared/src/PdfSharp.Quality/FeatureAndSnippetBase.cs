@@ -7,9 +7,7 @@ using System.IO;
 //using Windows.Foundation;
 //using Windows.Storage;
 //#endif
-#if CORE || GDI
 using System.Drawing.Imaging;
-#endif
 using PdfSharp.Drawing;
 using PdfSharp.Events;
 using PdfSharp.Pdf;
@@ -441,42 +439,6 @@ namespace PdfSharp.Quality
         /// </summary>
         public void BeginImage()
         {
-#if CORE
-#endif
-#if GDI
-            int factor = 5;
-            int width = (int)(WidthInPoint * factor);
-            int height = (int)(HeightInPoint * factor);
-
-            var image = new Bitmap(width, height);
-
-            var gfx = Graphics.FromImage(image);
-            var xgfx = XGraphics.FromGraphics(gfx, new XSize(width, height), XGraphicsUnit.Presentation, new RenderEvents());
-            //xgfx.DrawLine(XPens.Blue, 10, 10, 100, 100);
-            xgfx.ScaleTransform(factor);
-            XGraphics = xgfx;
-            Image = image;
-
-            //this.image = new RenderTargetBitmap(width, height, 72 * factor, 72 * factor, PixelFormats.Default);
-            //this.visual = new DrawingVisual();
-            //this.dc = this.visual.RenderOpen();
-
-            //// Draw a bounding box
-            ////Rect rect = new Rect(0, 0, width - 1, height - 1);
-            //Rect rect = new Rect(0, 0, WidthInPoint * 4 / 3 - 1, HeightInPoint * 4 / 3 - 1);
-            ////this.dc.DrawRectangle(Brushes.WhiteSmoke, new Pen(Brushes.LightGray, 1), rect);
-            //this.dc.DrawRectangle(Brushes.WhiteSmoke, null, rect);
-
-            ////double d = 10;
-            ////Pen pen = new Pen(Brushes.Red, 5);
-            ////this.dc.DrawLine(pen, rect.TopLeft, rect.TopLeft + new Vector(d, d));
-            ////this.dc.DrawLine(pen, rect.TopRight, rect.TopRight + new Vector(-d, d));
-            ////this.dc.DrawLine(pen, rect.BottomLeft, rect.BottomLeft + new Vector(d, -d));
-            ////this.dc.DrawLine(pen, rect.BottomRight, rect.BottomRight + new Vector(-d, -d));
-
-            ////this.dc.PushTransform(new ScaleTransform(factor, factor));
-            //this.imgGfx = XGraphics.FromDrawingContext(this.dc, new XSize(WidthInPoint, HeightInPoint), XGraphicsUnit.Point);
-#endif
             //int factor = 4;
             //int width = (int)(WidthInPoint * factor);
             //int height = (int)(HeightInPoint * factor);
@@ -506,22 +468,6 @@ namespace PdfSharp.Quality
         /// </summary>
         public void EndPngImage()
         {
-#if CORE
-#endif
-#if GDI
-
-            var stream = new MemoryStream();
-            _image.Save(stream, ImageFormat.Png);
-
-            var bytes = stream.ToArray();
-
-            //_gfx.Dispose();
-            //_image.Dispose();
-            //_gfx = null;
-            //_image = null;
-
-            PngBytes = bytes;
-#endif
         }
 
         /// <summary>
@@ -534,9 +480,6 @@ namespace PdfSharp.Quality
             {
                 _document = value;
                 //_page = null;
-#if GDI
-                _gfx = null!;
-#endif
                 _pdfBytes = [];
             }
         }
@@ -551,9 +494,6 @@ namespace PdfSharp.Quality
             private set
             {
                 _page = value;
-#if GDI
-                _gfx = null!;
-#endif
             }
         }
         PdfPage? _page;
@@ -568,33 +508,6 @@ namespace PdfSharp.Quality
         }
         XGraphics? _xgfx;
 
-#if CORE
-#endif
-#if GDI
-        /// <summary>
-        /// Gets the current GDI+ graphics object.
-        /// </summary>
-        public Graphics Graphics
-        {
-            get { return _gfx; }
-            private set
-            {
-                _gfx = value;
-                _image = null!;
-            }
-        }
-        Graphics _gfx = default!;
-
-        /// <summary>
-        /// Gets the current GDI+ image object.
-        /// </summary>
-        public Image Image
-        {
-            get { return _image; }
-            private set { _image = value; }
-        }
-        Image _image = default!;
-#endif
 
         /// <summary>
         /// Gets the bytes of a PDF document.
@@ -606,9 +519,6 @@ namespace PdfSharp.Quality
             {
                 _pdfBytes = value ?? [];
                 _document = null;
-#if GDI
-                _gfx = null!;
-#endif
                 _page = null;
             }
         }
@@ -623,10 +533,6 @@ namespace PdfSharp.Quality
             private set
             {
                 _pngBytes = [];
-#if GDI
-                _gfx = null!;
-                _image = null!;
-#endif
             }
         }
         byte[] _pngBytes = [];

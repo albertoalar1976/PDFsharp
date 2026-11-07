@@ -1,17 +1,12 @@
 // MigraDoc - Creating Documents on the Fly
 // See the LICENSE file in the solution root for more information.
 
-#if WPF
-using System.IO;
-#endif
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering;
 using MigraDoc.RtfRendering;
 using PdfSharp.Diagnostics;
-#if CORE
 using PdfSharp.Fonts;
 using PdfSharp.Quality;
-#endif
 using Xunit;
 using FluentAssertions;
 
@@ -27,9 +22,7 @@ namespace MigraDoc.Tests
         public ConcurrentRenderingTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

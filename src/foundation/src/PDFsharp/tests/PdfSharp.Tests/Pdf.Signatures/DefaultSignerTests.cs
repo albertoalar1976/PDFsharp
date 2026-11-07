@@ -2,9 +2,6 @@
 // See the LICENSE file in the solution root for more information.
 
 using System.Globalization;
-#if WPF
-using System.IO;
-#endif
 using System.Security.Cryptography.X509Certificates;
 using PdfSharp.Diagnostics;
 using PdfSharp.Drawing;
@@ -26,9 +23,7 @@ namespace PdfSharp.Tests.Pdf.Signatures
         public DefaultSignerTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

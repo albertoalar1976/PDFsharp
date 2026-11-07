@@ -262,11 +262,7 @@ namespace PdfSharp.Tests.Drawing
             // Get an XGraphics object for drawing on this page.
             var gfx = XGraphics.FromPdfPage(page);
 
-#if CORE
             var fontName = "Times New Roman";
-#else
-            var fontName = "Georgia";
-#endif
 
             int pos = 10;
             const string text = "Infinite off inflammable official offline off; IJsselmeer ijsvrij";
@@ -290,26 +286,6 @@ namespace PdfSharp.Tests.Drawing
             enableLigatures = false;
             pos += 30;
 
-#if !CORE
-            font = new XFont("Times New Roman", 12, XFontStyleEx.Regular, options);
-            gfx.DrawString(text, font, XBrushes.Black, new XRect(50, pos, page.Width.Point, page.Height.Point),
-                XStringFormats.TopLeft);
-            enableLigatures = true;
-            gfx.DrawString(text, font, XBrushes.Black, new XRect(50, pos + 12, page.Width.Point, page.Height.Point),
-                XStringFormats.TopLeft);
-            enableLigatures = false;
-            pos += 30;
-
-            // Comic Sans MS is an interesting test because there are no ligatures for "ff", "ffi", and "ffl".
-            font = new XFont("Comic Sans MS", 12, XFontStyleEx.Regular, options);
-            gfx.DrawString(text, font, XBrushes.Black, new XRect(50, pos, page.Width.Point, page.Height.Point),
-                XStringFormats.TopLeft);
-            enableLigatures = true;
-            gfx.DrawString(text, font, XBrushes.Black, new XRect(50, pos + 12, page.Width.Point, page.Height.Point),
-                XStringFormats.TopLeft);
-            enableLigatures = false;
-            pos += 30;
-#endif
 
             font = new XFont(fontName, 12, XFontStyleEx.Bold, options);
             gfx.DrawString(text, font, XBrushes.Black, new XRect(50, pos, page.Width.Point, page.Height.Point),
@@ -329,26 +305,6 @@ namespace PdfSharp.Tests.Drawing
             enableLigatures = false;
             pos += 30;
 
-#if !CORE
-            font = new XFont("Times New Roman", 12, XFontStyleEx.Bold, options);
-            gfx.DrawString(text, font, XBrushes.Black, new XRect(50, pos, page.Width.Point, page.Height.Point),
-                XStringFormats.TopLeft);
-            enableLigatures = true;
-            gfx.DrawString(text, font, XBrushes.Black, new XRect(50, pos + 12, page.Width.Point, page.Height.Point),
-                XStringFormats.TopLeft);
-            enableLigatures = false;
-            pos += 30;
-
-            // Comic Sans MS is an interesting test because there are no ligatures for "ff", "ffi", and "ffl".
-            font = new XFont("Comic Sans MS", 12, XFontStyleEx.Bold, options);
-            gfx.DrawString(text, font, XBrushes.Black, new XRect(50, pos, page.Width.Point, page.Height.Point),
-                XStringFormats.TopLeft);
-            enableLigatures = true;
-            gfx.DrawString(text, font, XBrushes.Black, new XRect(50, pos + 12, page.Width.Point, page.Height.Point),
-                XStringFormats.TopLeft);
-            enableLigatures = false;
-            pos += 30;
-#endif
 
             // Save the document…
             var filename = PdfFileUtility.GetTempPdfFullFileName("unittests/pdfsharp/drawing/text/PdfLigatureTest-TextEvent");
@@ -456,11 +412,7 @@ namespace PdfSharp.Tests.Drawing
             // Get an XGraphics object for drawing on this page.
             var gfx = XGraphics.FromPdfPage(page);
 
-#if CORE
             var fontName = "Times New Roman";
-#else
-            var fontName = "Georgia";
-#endif
             const string text = "Infinite inflammable official offline";
             var options = new XPdfFontOptions(PdfFontEncoding.Unicode);
             //var font = new XFont("Times New Roman", 12, XFontStyleEx.Bold, options);

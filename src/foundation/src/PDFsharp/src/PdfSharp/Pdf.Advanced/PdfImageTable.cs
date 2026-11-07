@@ -4,9 +4,7 @@
 using System.Globalization;
 using System.Runtime.InteropServices;
 using PdfSharp.Drawing;
-#if CORE
 using PdfSharp.Internal.Imaging;
-#endif
 using System.Security.Cryptography;
 using System.Text;
 
@@ -46,7 +44,6 @@ namespace PdfSharp.Pdf.Advanced
             return pdfImage;
         }
 
-#if CORE
         public PdfImage GetImage(ImportedImage importedImage)
         {
             byte[] bytes = importedImage.ImageData;
@@ -61,7 +58,6 @@ namespace PdfSharp.Pdf.Advanced
             }
             return pdfImage;
         }
-#endif
 
         /// <summary>
         /// Map from ImageSelector to PdfImage.
@@ -108,28 +104,6 @@ namespace PdfSharp.Pdf.Advanced
                             selector = "*" + Guid.NewGuid().ToString("B");
                         }
                     }
-#if GDI
-                    else if (image._gdiImage != null!)
-                    {
-                        // TODO_OLD Use hash code.
-                        selector = "*" + Guid.NewGuid().ToString("B");
-                    }
-#endif
-#if WPF
-                    else if (image.Memory != null)
-                    {
-                        // We have a MemoryStream with the image data.
-                        var hashCreator = GetHashCreator();
-                        image.Memory.Position = 0; // Set stream position before calculating the hash.
-                        var hash = hashCreator.ComputeHash(image.Memory);
-                        selector = GetHashSelectorPrefix(image) + HashToString(hash);
-                    }
-                    else if (image._wpfImage != null!)
-                    {
-                        // TODO_OLD Use hash code.
-                        selector = "*" + Guid.NewGuid().ToString("B");
-                    }
-#endif
                     else
                     {
                         // TODO_OLD Use hash code.

@@ -97,9 +97,6 @@ namespace HelloWorld
 
         static void AddImage(Document document)
         {
-#if GDI
-            MigraDoc.DocumentObjectModel.Shapes.
-#endif
             Image image = document.LastSection.AddImage(IOUtility.GetAssetsPath("migradoc/images/MigraDoc-landscape.png")!);
 
             // Width of A4 page is 21cm. Left and right margin is 2.5cm each.

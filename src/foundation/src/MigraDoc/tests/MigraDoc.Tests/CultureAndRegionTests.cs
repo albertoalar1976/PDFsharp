@@ -10,8 +10,6 @@ using MigraDoc.Rendering;
 using PdfSharp.Fonts;
 using PdfSharp.Quality;
 using PdfSharp.Snippets.Font;
-#if CORE
-#endif
 using Xunit;
 using System.Text.RegularExpressions;
 using FluentAssertions;
@@ -25,9 +23,7 @@ namespace MigraDoc.Tests
         public CultureAndRegionTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

@@ -89,11 +89,6 @@ namespace PdfSharp.Snippets.Drawing
 
             BeginBox(gfx, 2, BoxOptions.Tile);
             {
-#if WPF || GDI
-                // TIFF test.
-                var img = ImageHelper.GetTiffImage(ImageHelper.TiffImages.Balloons_CMYK);
-                gfx.DrawImage(img, 28, 18, 114 * 350 / 263d, 114);
-#endif
             }
             EndBox(gfx);
 
@@ -107,11 +102,6 @@ namespace PdfSharp.Snippets.Drawing
 
             BeginBox(gfx, 4, BoxOptions.Tile);
             {
-#if WPF || GDI
-                // TIFF test.
-                var img = ImageHelper.GetTiffImage(ImageHelper.TiffImages.Rose_CMYK);
-                gfx.DrawImage(img, 28, 18, 114 * 269 / 215d, 114);
-#endif
             }
             EndBox(gfx);
 

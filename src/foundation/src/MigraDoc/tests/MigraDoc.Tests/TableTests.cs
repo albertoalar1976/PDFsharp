@@ -8,8 +8,6 @@ using PdfSharp.Fonts;
 using PdfSharp.Quality;
 using PdfSharp.Snippets.Font;
 using PdfSharp.TestHelper;
-#if CORE
-#endif
 using Xunit;
 
 namespace MigraDoc.Tests
@@ -20,9 +18,7 @@ namespace MigraDoc.Tests
         public TableTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

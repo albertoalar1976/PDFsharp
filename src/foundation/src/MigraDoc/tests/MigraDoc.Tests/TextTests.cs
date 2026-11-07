@@ -23,9 +23,7 @@ namespace MigraDoc.Tests
         public TextTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

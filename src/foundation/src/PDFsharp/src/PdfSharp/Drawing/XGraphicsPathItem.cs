@@ -1,13 +1,6 @@
 // PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
-#if GDI
-using System.Drawing;
-using System.Drawing.Drawing2D;
-#endif
-#if WPF
-using System.Windows.Media;
-#endif
 
 namespace PdfSharp.Drawing
 {
@@ -23,13 +16,6 @@ namespace PdfSharp.Drawing
             Points = null;
         }
 
-#if GDI
-        public XGraphicsPathItem(XGraphicsPathItemType type, params PointF[] points)
-        {
-            Type = type;
-            Points = XGraphics.MakeXPointArray(points, 0, points.Length);
-        }
-#endif
 
         public XGraphicsPathItem(XGraphicsPathItemType type, params XPoint[] points)
         {

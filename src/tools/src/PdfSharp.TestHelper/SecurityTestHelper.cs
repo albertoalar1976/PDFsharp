@@ -5,9 +5,6 @@ using System.Collections;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.Security;
 using PdfSharp.Quality;
-#if WPF
-using System.IO;
-#endif
 
 namespace PdfSharp.TestHelper
 {

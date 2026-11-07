@@ -52,8 +52,8 @@
   <PropertyGroup>
     <!--
       PDFsharp and MigraDoc target .NET 10 only.
-      The Core build (net10.0) runs on Windows, Linux, and macOS.
-      The GDI and WPF builds (net10.0-windows) are for Windows desktop applications.
+      There is one code base for Windows, Linux, and macOS: all projects target net10.0.
+      The former Windows-only GDI and WPF builds (System.Drawing, WPF) are no longer part of this fork.
       .NET Framework, .NET Standard, and .NET 8/9 (end of support: 2026-11-10) are no longer targeted.
       The property names are kept so that the project files need not change when targets change again.
     -->
@@ -61,17 +61,13 @@
     <PDFsharpTargetFrameworks_NetOnly_Library>net10.0</PDFsharpTargetFrameworks_NetOnly_Library>
     <PDFsharpTargetFrameworks_Exe>net10.0</PDFsharpTargetFrameworks_Exe>
     <PDFsharpTargetFrameworks_NetOnly_Exe>net10.0</PDFsharpTargetFrameworks_NetOnly_Exe>
-    <PDFsharpTargetFrameworks_Windows>net10.0-windows</PDFsharpTargetFrameworks_Windows>
-    <PDFsharpTargetFrameworks_NetOnly_Windows>net10.0-windows</PDFsharpTargetFrameworks_NetOnly_Windows>
 
     <!-- Frameworks for test projects -->
     <PDFsharpTargetFrameworks_Tests_Library>net10.0</PDFsharpTargetFrameworks_Tests_Library>
     <PDFsharpTargetFrameworks_Tests_Exe>net10.0</PDFsharpTargetFrameworks_Tests_Exe>
-    <PDFsharpTargetFrameworks_Tests_Windows>net10.0-windows</PDFsharpTargetFrameworks_Tests_Windows>
 
     <!-- Frameworks for NuGet -->
     <PDFsharpTargetFrameworks_NuGet>net10.0</PDFsharpTargetFrameworks_NuGet>
-    <PDFsharpTargetFrameworks_NuGet_Window>net10.0-windows</PDFsharpTargetFrameworks_NuGet_Window>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(PDFsharpRunSlowTests)'=='true'">

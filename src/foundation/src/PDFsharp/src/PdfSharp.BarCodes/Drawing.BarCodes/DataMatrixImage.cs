@@ -1,14 +1,6 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
-#if GDI
-using System.Globalization;
-using System.Drawing;
-using System.Drawing.Imaging;
-#endif
-#if WPF
-using System.Windows;
-#endif
 
 #nullable disable  // This code is a port of C++ code made by David in ~2003. We keep it untouched in the first instance.
 
@@ -704,32 +696,7 @@ namespace PdfSharp.Drawing.BarCodes
         /// </summary>
         public XImage CreateImage(char[] code, int rows, int columns, int pixelSize)
         {
-#if GDI
-            Bitmap bm = new Bitmap(columns * pixelSize, rows * pixelSize);
-            using (Graphics gfx = Graphics.FromImage(bm))
-            {
-                gfx.FillRectangle(System.Drawing.Brushes.White, new Rectangle(0, 0, columns * pixelSize, rows * pixelSize));
-
-                for (int i = rows - 1; i >= 0; i--)
-                {
-                    for (int j = 0; j < columns; j++)
-                    {
-                        if (code[((rows - 1) - i) * columns + j] == (char)1)
-                            gfx.FillRectangle(_brush.RealizeGdiBrush()/*System.Drawing.Brushes.Black*/, j * pixelSize, i * pixelSize, pixelSize, pixelSize);
-                    }
-                }
-            }
-            XImage image = XImage.FromGdiPlusImage(bm);
-            image.Interpolate = false;
-            return image;
-#endif
-#if WPF
-            // WPFHACK
             return null;
-#endif
-#if CORE || WUI
-            return null;
-#endif
         }
 
         struct Ecc200Block

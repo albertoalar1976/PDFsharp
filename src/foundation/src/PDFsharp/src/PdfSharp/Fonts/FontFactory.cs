@@ -11,19 +11,6 @@ using Microsoft.Extensions.Logging;
 using PdfSharp.Logging;
 using PdfSharp.Drawing;
 using PdfSharp.Fonts.Internal;
-#if GDI
-using System.Drawing;
-using GdiFontFamily = System.Drawing.FontFamily;
-using GdiFont = System.Drawing.Font;
-#endif
-#if WPF
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Resources;
-using WpfFontFamily = System.Windows.Media.FontFamily;
-using WpfGlyphTypeface = System.Windows.Media.GlyphTypeface;
-using WpfTypeface = System.Windows.Media.Typeface;
-#endif
 
 namespace PdfSharp.Fonts
 {
@@ -134,7 +121,7 @@ namespace PdfSharp.Fonts
         internal static void RegisterResolverResult(IFontResolver fontResolver, string familyName, FontResolvingOptions fontResolvingOptions,
             FontResolverInfo fontResolverInfo, string typefaceKey)
         {
-#if CORE && DEBUG
+#if DEBUG
             // Should be true in one of the following cases.
             // a) Core build and no custom font resolver is set.
             // b) Core build and custom font resolver is set and CFR calls PFR as fallback.
@@ -279,10 +266,8 @@ namespace PdfSharp.Fonts
                 PsGlobals.Global.Fonts.FontResolverInfosByName.Clear();
                 PsGlobals.Global.Fonts.FontSourcesByName.Clear();
                 PsGlobals.Global.Fonts.FontSourcesByKey.Clear();
-#if CORE
                 // Also requires a reset.
                 PlatformFontResolver.Reset();
-#endif
             }
             finally { Locks.ExitFontManagement(); }
         }

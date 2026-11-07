@@ -7,9 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PdfSharp.Diagnostics;
-#if CORE
 using PdfSharp.Quality;
-#endif
 using PdfSharp.Fonts;
 
 namespace MigraDoc.GrammarByExample
@@ -19,9 +17,7 @@ namespace MigraDoc.GrammarByExample
         public GbeFixture()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         /// <summary>

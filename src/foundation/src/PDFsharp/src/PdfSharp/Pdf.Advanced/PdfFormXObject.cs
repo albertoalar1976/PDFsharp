@@ -4,13 +4,6 @@
 using PdfSharp.Internal;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf.IO;
-#if GDI
-using System.Drawing;
-using System.Drawing.Imaging;
-#endif
-#if WPF
-using System.Windows.Media;
-#endif
 
 // v7.0.0 REVIEW
 

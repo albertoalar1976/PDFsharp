@@ -1,9 +1,6 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
-#if WPF
-using System.IO;
-#endif
 using System.Reflection;
 using PdfSharp.Pdf;
 
@@ -39,7 +36,7 @@ namespace PdfSharp.Quality
         }
 #endif
 
-#if true_ && (CORE || GDI || WPF)
+#if true_
         protected async Task<string> SaveAndShowDocumentAsync(PdfDocument document, string filenameTag)
         {
             // Save the PDF document...

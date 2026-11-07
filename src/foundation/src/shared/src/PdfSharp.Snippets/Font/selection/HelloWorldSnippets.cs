@@ -24,16 +24,6 @@ using System;
 using System.Diagnostics;
 using System.Reflection;
 //#if CORE || GDI
-#if GDI
-using System.Drawing;
-#endif
-#if WPF
-using System.Windows;
-using System.Windows.Media;
-#endif
-#if WUI
-using Windows.UI.Xaml.Media;
-#endif
 using PdfSharp.Drawing;
 using PdfSharp.Fonts;
 using PdfSharp.Internal;

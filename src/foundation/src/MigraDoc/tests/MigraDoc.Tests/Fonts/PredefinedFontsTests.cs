@@ -23,7 +23,6 @@ namespace MigraDoc.Tests.Fonts
             PredefinedFontsAndChars.Reset();
             try
             {
-#if CORE
                 // The error font is fixed and is created initially when rendering starts. This lets rendering fail if the font is not available.
                 // Otherwise, rendering would only fail if an error message is tried to be rendered to the document.
                 // Due to this, rendering any document in Core build without an appropriate FontResolver for the error font
@@ -35,19 +34,6 @@ namespace MigraDoc.Tests.Fonts
 
                 // Even without error message RenderDocument() must fail as the font is missing.
                 RenderDocumentShouldFail(document);
-#elif GDI || WPF
-                // In GDI and WPF builds rendering a document must succeed if the error font is available - even is an error message is rendered.
-                var document = CreateDocumentWithErrorMessage();
-
-                var filename = PdfFileUtility.GetTempPdfFullFileName("unittests/migradoc/fonts/Use_default_error_font");
-
-                // Even with error message the document must be successfully created.
-                var pdfDocument = RenderDocumentShouldSucceed(document, filename);
-
-                CheckErrorFont(pdfDocument, "Courier New");
-#else
-                throw new NotSupportedException("Unknown flavor.");
-#endif
             }
             finally
             {
@@ -64,7 +50,6 @@ namespace MigraDoc.Tests.Fonts
             {
                 PredefinedFontsAndChars.ErrorFontName = "Segoe UI";
 
-#if CORE
                 // The error font is fixed and is created initially when rendering starts. This lets rendering fail if the font is not available.
                 // Otherwise, rendering would only fail if an error message is tried to be rendered to the document.
                 // Due to this, rendering any document in Core build without an appropriate FontResolver for the error font
@@ -73,19 +58,6 @@ namespace MigraDoc.Tests.Fonts
                 
                 // Even without error message RenderDocument() must fail as the font is missing.
                 RenderDocumentShouldFail(document);
-#elif GDI || WPF
-                // In GDI and WPF builds rendering a document must succeed if the error font is available - even is an error message is rendered.
-                var document = CreateDocumentWithErrorMessage();
-
-                var filename = PdfFileUtility.GetTempPdfFullFileName("unittests/migradoc/fonts/Use_alternate_error_font");
-
-                // Even with error message the document must be successfully created.
-                var pdfDocument = RenderDocumentShouldSucceed(document, filename);
-
-                CheckErrorFont(pdfDocument, "Segoe UI");
-#else
-                throw new NotSupportedException("Unknown flavor.");
-#endif
             }
             finally
             {
@@ -121,7 +93,6 @@ namespace MigraDoc.Tests.Fonts
             PredefinedFontsAndChars.Reset();
             try
             {
-#if CORE
                 // Unlike the error font, bullet fonts are not fixed as their style depends on the context.
                 // For that reason there is no bullet font created when rendering starts and only documents with bullet lists may fail if a font is not available.
                 // Rendering a document with a bullet list in Core build without an appropriate FontResolver for the bullet fonts
@@ -133,19 +104,6 @@ namespace MigraDoc.Tests.Fonts
 
                 // RenderDocument() must fail as the font is missing.
                 RenderDocumentShouldFail(document);
-#elif GDI || WPF
-                // In GDI and WPF builds rendering a document with bullet lists must succeed if the bullet fonts are available.
-                var document = CreateDocumentWithBulletList();
-
-                var filename = PdfFileUtility.GetTempPdfFullFileName("unittests/migradoc/fonts/Use_default_bullets_font");
-
-                // The document must be successfully created.
-                var pdfDocument = RenderDocumentShouldSucceed(document, filename);
-
-                CheckBulletFonts(pdfDocument, "Courier New", "Courier New", "Courier New");
-#else
-                throw new NotSupportedException("Unknown flavor.");
-#endif
             }
             finally
             {
@@ -162,7 +120,6 @@ namespace MigraDoc.Tests.Fonts
                 PredefinedFontsAndChars.Bullets.Level1FontName = "Arial";
                 PredefinedFontsAndChars.Bullets.Level2FontName = "Times new roman";
                 PredefinedFontsAndChars.Bullets.Level3FontName = "Verdana";
-#if CORE
                 // Unlike the error font, bullet fonts are not fixed as their style depends on the context.
                 // For that reason there is no bullet font created when rendering starts and only documents with bullet lists may fail if a font is not available.
                 // Rendering a document with a bullet list in Core build without an appropriate FontResolver for the bullet fonts
@@ -171,19 +128,6 @@ namespace MigraDoc.Tests.Fonts
 
                 // RenderDocument() must fail as the fonts are missing.
                 RenderDocumentShouldFail(document);
-#elif GDI || WPF
-                // In GDI and WPF builds rendering a document with bullet lists must succeed if the bullet fonts are available.
-                var document = CreateDocumentWithBulletList();
-
-                var filename = PdfFileUtility.GetTempPdfFullFileName("unittests/migradoc/fonts/Use_alternate_bullets_font");
-
-                // The document must be successfully created.
-                var pdfDocument = RenderDocumentShouldSucceed(document, filename);
-
-                CheckBulletFonts(pdfDocument, "Arial", "Times new roman", "Verdana");
-#else
-                throw new NotSupportedException("Unknown flavor.");
-#endif
             }
             finally
             {
@@ -238,75 +182,6 @@ namespace MigraDoc.Tests.Fonts
             exception.Should().NotBeNull();
         }
 
-#if GDI || WPF
-        PdfDocument RenderDocumentShouldSucceed(Document document, string filename)
-        {
-            // Create a renderer for the MigraDoc document.
-            var pdfRenderer = new PdfDocumentRenderer()
-            {
-                // Associate the MigraDoc document with a renderer.
-                Document = document,
-                PdfDocument = { Options = { CompressContentStreams = false } }
-            };
-
-            // Layout and render document to PDF.
-            pdfRenderer.RenderDocument();
-
-            var pdfDocument = pdfRenderer.PdfDocument;
-
-            // Save the document…
-            pdfRenderer.PdfDocument.Save(filename);
-            // … and start a viewer.
-            PdfFileUtility.ShowDocumentIfDebugging(filename);
-
-            return pdfDocument;
-        }
-
-        void CheckErrorFont(PdfDocument pdfDocument, string expectedFontName)
-        {
-            // Check font of the error message.
-            var fontName = PdfFileHelper.GetCurrentFontName(0, pdfDocument, streamEnumerator =>
-            {
-                // Move to "Image '<filename>' not found.".
-                // Move to "Image 'c:/not-existing-image' not found.".
-                streamEnumerator.Text.MoveAndGetNext(x => x.Text == "Image 'c:/not-existing-image' not found.", true, out _).Should().BeTrue();
-            });
-            fontName.ToLower().Should().Be(expectedFontName.ToLower());
-        }
-
-        void CheckBulletFonts(PdfDocument pdfDocument, string expectedBulletLevel1FontName, string expectedBulletLevel2FontName, string expectedBulletLevel3FontName)
-        {
-            // Check font of the bullet level 1.
-            var bulletLevel1FontName = PdfFileHelper.GetCurrentFontName(0, pdfDocument, streamEnumerator =>
-            {
-                // Move to text "Level1".
-                streamEnumerator.Text.MoveAndGetNext(x => x.Text == "Level1", true, out _).Should().BeTrue();
-                // The bullet is the previous hex text.
-                streamEnumerator.Text.MoveAndGetPrevious(x => x.IsHex, true, out _).Should().BeTrue();
-            });
-            bulletLevel1FontName.ToLower().Should().Be(expectedBulletLevel1FontName.ToLower());
-
-            // Check font of the bullet level 2.
-            var bulletLevel2FontName = PdfFileHelper.GetCurrentFontName(0, pdfDocument, streamEnumerator =>
-            {
-                // Move to text "Level2".
-                streamEnumerator.Text.MoveAndGetNext(x => x.Text == "Level2", true, out _).Should().BeTrue();
-                // The bullet is the previous hex text.
-                streamEnumerator.Text.MoveAndGetPrevious(x => x.IsHex, true, out _).Should().BeTrue();
-            });
-            bulletLevel2FontName.ToLower().Should().Be(expectedBulletLevel2FontName.ToLower());
-
-            // Check font of the bullet level 3.
-            var bulletLevel3FontName = PdfFileHelper.GetCurrentFontName(0, pdfDocument, streamEnumerator =>
-            {
-                // Move to text "Level3".
-                streamEnumerator.Text.MoveAndGetNext(x => x.Text == "Level3", true, out _).Should().BeTrue();
-                // The bullet is the previous hex text.
-                streamEnumerator.Text.MoveAndGetPrevious(x => x.IsHex, true, out _).Should().BeTrue();
-            });
-            bulletLevel3FontName.ToLower().Should().Be(expectedBulletLevel3FontName.ToLower());
-        }
-#endif
 
         /// <summary>
         /// Creates an absolutely minimalistic document.
@@ -326,26 +201,6 @@ namespace MigraDoc.Tests.Fonts
             return document;
         }
 
-#if GDI || WPF
-        /// <summary>
-        /// Creates a document with an error message.
-        /// Not necessary in Core build as any document without an appropriate FontResolver for the error font
-        /// and without UseWindowsFontsUnderWindows or UseWindowsFontsUnderWsl2 set must fail.
-        /// </summary>
-        static Document CreateDocumentWithErrorMessage()
-        {
-            // Create a new MigraDoc document.
-            var document = new Document();
-
-            // Add a section to the document.
-            var section = document.AddSection();
-
-            // Add a not existing image to force error message.
-            section.AddImage("c:/not-existing-image");
-
-            return document;
-        }
-#endif
 
         /// <summary>
         /// Creates a document with bullet list.

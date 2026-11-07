@@ -2,17 +2,12 @@
 // See the LICENSE file in the solution root for more information.
 
 using System.Globalization;
-#if WPF
-using System.IO;
-#endif
 using FluentAssertions;
 using PdfSharp.Diagnostics;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
-#if CORE
 using PdfSharp.Fonts;
 using PdfSharp.Quality;
-#endif
 using Xunit;
 
 namespace PdfSharp.Tests.Basics
@@ -26,9 +21,7 @@ namespace PdfSharp.Tests.Basics
         public CultureIndependenceTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

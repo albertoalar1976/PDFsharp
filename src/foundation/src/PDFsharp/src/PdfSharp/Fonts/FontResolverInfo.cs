@@ -2,15 +2,7 @@
 // See the LICENSE file in the solution root for more information.
 
 using PdfSharp.Drawing;
-#if CORE
 //using System.Drawing;
-#endif
-#if GDI
-//using System.Drawing;
-#endif
-#if WPF
-//using System.Windows.Media;
-#endif
 
 namespace PdfSharp.Fonts
 {

@@ -217,22 +217,7 @@ namespace PdfSharp
         /// -wrt : Windows RunTime -- deprecated
         /// -uwp : Universal Windows Platform -- not used anymore
         /// </summary>
-#if CORE
         // .NET 6.0 without GDI+ and WPF
         public const string Technology = "";  // no tag
-#elif GDI && !WPF
-        // GDI+ - Windows Forms (System.Drawing)
-        public const string Technology = "-gdi";
-#elif WPF && !GDI
-        // WPF - Windows Presentation Foundation
-        public const string Technology = "-wpf";
-#elif WPF && GDI
-        // Hybrid - for testing only
-        public const string Technology = "-h";
-#error Should not come here anymore. May be revived in the future.
-#elif WUI
-        // WUI - Universal Windows Platform
-        public const string Technology = "-uwp";
-#endif
     }
 }

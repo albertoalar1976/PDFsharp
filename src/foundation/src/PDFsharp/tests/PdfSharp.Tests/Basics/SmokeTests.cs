@@ -21,9 +21,7 @@ namespace PdfSharp.Tests.Basics
         public SmokeTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

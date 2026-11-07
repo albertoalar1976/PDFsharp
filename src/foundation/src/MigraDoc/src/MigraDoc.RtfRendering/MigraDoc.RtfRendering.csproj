@@ -11,17 +11,6 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Rendering.Forms\**" />
-    <Compile Remove="Rendering.Printing\**" />
-    <Compile Remove="Rendering.Windows\**" />
-    <EmbeddedResource Remove="Rendering.Forms\**" />
-    <EmbeddedResource Remove="Rendering.Printing\**" />
-    <EmbeddedResource Remove="Rendering.Windows\**" />
-    <None Remove="Rendering.Forms\**" />
-    <None Remove="Rendering.Printing\**" />
-    <None Remove="Rendering.Windows\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\shared\src\PdfSharp.Shared\PdfSharp.Shared.csproj" />

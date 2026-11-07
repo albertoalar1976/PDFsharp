@@ -5,9 +5,7 @@ using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Fields;
 using MigraDoc.Rendering;
 using PdfSharp.Diagnostics;
-#if CORE
 using PdfSharp.Fonts;
-#endif
 using PdfSharp.Pdf;
 using PdfSharp.Quality;
 using Xunit;
@@ -21,9 +19,7 @@ namespace MigraDoc.Tests
         public MemoryTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

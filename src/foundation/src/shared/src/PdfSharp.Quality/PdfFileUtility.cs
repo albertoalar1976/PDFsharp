@@ -1,9 +1,6 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
-#if WPF
-using System.IO;
-#endif
 using PdfSharp.Pdf;
 
 #pragma warning disable CS1591 // TODO_DOC: Missing XML comment for publicly visible type or member

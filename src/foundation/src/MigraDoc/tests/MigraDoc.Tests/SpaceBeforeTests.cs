@@ -9,8 +9,6 @@ using PdfSharp.Diagnostics;
 using PdfSharp.Fonts;
 using PdfSharp.Quality;
 using PdfSharp.Snippets.Font;
-#if CORE
-#endif
 using Xunit;
 
 namespace MigraDoc.Tests
@@ -21,9 +19,7 @@ namespace MigraDoc.Tests
         public SpaceBeforeTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

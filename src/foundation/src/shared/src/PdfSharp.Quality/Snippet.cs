@@ -166,12 +166,6 @@ namespace PdfSharp.Quality
         /// </summary>
         public void RenderSnippetAsPng()
         {
-#if !CORE && !WPF
-            BeginImage();
-            RenderSnippet();
-            DrawPngHeader();
-            EndPngImage();
-#endif
         }
 
         /// <summary>

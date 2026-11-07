@@ -39,22 +39,5 @@
 #warning *********************************************************
 #endif
 
-#if GDI && WPF
-// PDFsharp based on both System.Drawing and System.Windows classes
-// This is for developing and cross testing only
-
-#elif GDI
-// PDFsharp based on System.Drawing classes
-
-#elif WPF
-// PDFsharp based on Windows Presentation Foundation.
-
-#elif CORE
 // PDFsharp independent of any particular .NET library.
 
-#elif WUI
-// PDFsharp based on 'Windows Universal Platform'.
-#error WUI is not supported anymore
-#else
-#error Either 'CORE', 'GDI', or 'WPF' must be defined.
-#endif

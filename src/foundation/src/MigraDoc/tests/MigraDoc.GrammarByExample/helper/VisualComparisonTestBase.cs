@@ -68,15 +68,7 @@ namespace GdiGrammarByExample
 
             var document = DdlReaderDocumentFromFile(file);
 
-#if CORE
             document.Info.Author += "[.NET 6.0+ Core build]";
-#elif GDI
-            document.Info.Author += "[.NET 6.0+ GDI build]";
-#elif WPF
-            document.Info.Author += "[.NET 6.0+ WPF build]";
-#else
-            document.Info.Author += "[.NET 6.0+ ??? build]";
-#endif
 
             return CreatePdfFromDocument(pdfFile, document, testName, mdddlPath, callback);
         }
@@ -130,16 +122,7 @@ namespace GdiGrammarByExample
             else
             {
                 pdfResultDocument = new PdfDocument();
-#if CORE
                 pdfResultDocument.Info.Title = "PDFsharp Unit Tests based on Core build";
-#elif GDI
-                pdfResultDocument.Info.Title = "PDFsharp Unit Tests based on GDI+";
-#elif WPF
-                pdfResultDocument.Info.Title = "PDFsharp Unit Tests based on WPF";
-#else
-                pdfResultDocument.Info.Title = "PDFsharp Unit Tests";
-#warning Unsupported platform.
-#endif
                 pdfResultDocument.Info.Author = "Stefan Lange";
             }
             return pdfResultDocument;

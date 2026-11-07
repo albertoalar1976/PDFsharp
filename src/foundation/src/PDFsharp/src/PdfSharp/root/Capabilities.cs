@@ -84,47 +84,25 @@ namespace PdfSharp
             /// Can be 'CORE', 'GDI', or 'WPF'
             /// </summary>
             public static string BuildName
-#if CORE
                 => "CORE";
-#elif GDI
-                => "GDI";
-#elif WPF
-                => "WPF";
-            //#elif MAUI
-            //                => "MAUI";
-#else
-                => "<unknown>";  // Cannot happen.
-#endif
 
             /// <summary>
             /// Gets a value indicating whether this instance is PDFsharp Core build.
             /// </summary>
             public static bool IsCoreBuild
-#if CORE
                 => true;
-#else
-                => false;
-#endif
 
             /// <summary>
             /// Gets a value indicating whether this instance is PDFsharp GDI+ build.
             /// </summary>
             public static bool IsGdiBuild
-#if GDI
-                => true;
-#else
                 => false;
-#endif
 
             /// <summary>
             /// Gets a value indicating whether this instance is PDFsharp WPF build.
             /// </summary>
             public static bool IsWpfBuild
-#if WPF
-                => true;
-#else
                 => false;
-#endif
 
             /// <summary>
             /// Gets an up to 4-character abbreviation preceded with a dash of the current
@@ -133,15 +111,7 @@ namespace PdfSharp
             /// if the platform is not known.
             /// </summary>
             public static string BuildTag
-#if CORE
                 => "-core";
-#elif GDI
-                => "-gdi";
-#elif WPF
-                => "-wpf";
-#else
-                => "-xxx";
-#endif
             /// <summary>
             /// Gets the .NET version number PDFsharp was built with.
             /// </summary>
@@ -264,13 +234,7 @@ namespace PdfSharp
             /// <param name="family">The font family.</param>
             public static bool GlyphsToPathFrom(XFontFamily family)
             {
-#if CORE
                 return false;
-#elif GDI
-                return family.GdiFamily != null!;
-#elif WPF
-                return family.WpfFamily != null!;
-#endif
             }
 
             // - Create XGraphics from image

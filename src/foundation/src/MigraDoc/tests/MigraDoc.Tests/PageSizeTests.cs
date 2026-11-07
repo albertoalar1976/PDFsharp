@@ -12,8 +12,6 @@ using MigraDoc.Rendering;
 using PdfSharp.Diagnostics;
 using PdfSharp.Fonts;
 using PdfSharp.Quality;
-#if CORE
-#endif
 using Xunit;
 
 namespace MigraDoc.Tests
@@ -24,9 +22,7 @@ namespace MigraDoc.Tests
         public PageSizeTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

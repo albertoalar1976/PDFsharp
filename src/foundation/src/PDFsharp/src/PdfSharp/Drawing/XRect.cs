@@ -2,21 +2,6 @@
 // See the LICENSE file in the solution root for more information.
 
 using System.Runtime.InteropServices;
-#if CORE
-#endif
-#if GDI
-#endif
-#if WPF
-using SysPoint = System.Windows.Point;
-using SysSize = System.Windows.Size;
-using SysRect = System.Windows.Rect;
-#endif
-#if WUI
-using Windows.UI.Xaml.Media;
-using SysPoint = Windows.Foundation.Point;
-using SysSize = Windows.Foundation.Size;
-using SysRect = Windows.Foundation.Rect;
-#endif
 using PdfSharp.Internal;
 
 namespace PdfSharp.Drawing
@@ -90,44 +75,8 @@ namespace PdfSharp.Drawing
             }
         }
 
-#if GDI
-        /// <summary>
-        /// Initializes a new instance of the XRect class.
-        /// </summary>
-        public XRect(PointF location, SizeF size)
-        {
-            _x = location.X;
-            _y = location.Y;
-            _width = size.Width;
-            _height = size.Height;
-        }
-#endif
 
-#if GDI
-        /// <summary>
-        /// Initializes a new instance of the XRect class.
-        /// </summary>
-        public XRect(RectangleF rect)
-        {
-            _x = rect.X;
-            _y = rect.Y;
-            _width = rect.Width;
-            _height = rect.Height;
-        }
-#endif
 
-#if WPF || WUI
-        /// <summary>
-        /// Initializes a new instance of the XRect class.
-        /// </summary>
-        public XRect(SysRect rect)
-        {
-            _x = rect.X;
-            _y = rect.Y;
-            _width = rect.Width;
-            _height = rect.Height;
-        }
-#endif
 
         /// <summary>
         /// Creates a rectangle from four straight lines.
@@ -656,35 +605,8 @@ namespace PdfSharp.Drawing
             }
         }
 
-#if GDI
-        /// <summary>
-        /// Converts this instance to a System.Drawing.RectangleF.
-        /// </summary>
-        public RectangleF ToRectangleF()
-            => new((float)_x, (float)_y, (float)_width, (float)_height);
-#endif
 
-#if GDI
-        /// <summary>
-        /// Performs an implicit  conversion from a System.Drawing.Rectangle to an XRect.
-        /// </summary>
-        public static implicit operator XRect(Rectangle rect)
-            => new(rect.X, rect.Y, rect.Width, rect.Height);
 
-        /// <summary>
-        /// Performs an implicit  conversion from a System.Drawing.RectangleF to an XRect.
-        /// </summary>
-        public static implicit operator XRect(RectangleF rect)
-            => new(rect.X, rect.Y, rect.Width, rect.Height);
-#endif
-
-#if WPF || WUI
-        /// <summary>
-        /// Performs an implicit conversion from System.Windows.Rect to XRect.
-        /// </summary>
-        public static implicit operator XRect(SysRect rect) 
-            => new(rect.X, rect.Y, rect.Width, rect.Height);
-#endif
 
         bool ContainsInternal(double x, double y)
             => x >= _x && x - _width <= _x && y >= _y && y - _height <= _y;

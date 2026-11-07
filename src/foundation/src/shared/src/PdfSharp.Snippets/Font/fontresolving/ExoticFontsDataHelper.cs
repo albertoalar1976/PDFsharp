@@ -5,10 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-#if WPF
-using System.Windows;
-using System.Windows.Resources;
-#endif
 using PdfSharp.Quality;
 
 // ReSharper disable InconsistentNaming

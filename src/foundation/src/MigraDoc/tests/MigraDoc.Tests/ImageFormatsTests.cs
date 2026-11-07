@@ -11,13 +11,8 @@ using MigraDoc.DocumentObjectModel.Fields;
 using MigraDoc.Rendering;
 using PdfSharp.Diagnostics;
 using Xunit;
-#if CORE
 using PdfSharp.Fonts;
 using PdfSharp.Snippets.Font;
-#endif
-#if WPF
-using System.IO;
-#endif
 using SecurityTestHelper = PdfSharp.TestHelper.SecurityTestHelper;
 using SecurityTestHelperMD = MigraDoc.Tests.Helper.SecurityTestHelper;
 
@@ -29,9 +24,7 @@ namespace MigraDoc.Tests
         public ImageFormatsTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()
@@ -40,13 +33,7 @@ namespace MigraDoc.Tests
         }
 
         [Fact]
-#if WPF
-        public void Test_Image_Formats_Wpf()
-#elif GDI
-        public void Test_Image_Formats_Gdi()
-#else
         public void Test_Image_Formats()
-#endif
         {
             // Create a MigraDoc document.
             var document = CreateDocument(true);
@@ -69,13 +56,7 @@ namespace MigraDoc.Tests
         }
 
         [Fact]
-#if WPF
-        public void Test_Image_BASE64_Wpf()
-#elif GDI
-        public void Test_Image_BASE64_Gdi()
-#else
         public void Test_Image_BASE64()
-#endif
         {
             // Create a MigraDoc document.
             var document = CreateDocument(false);
@@ -108,13 +89,7 @@ namespace MigraDoc.Tests
         }
 
         [Fact]
-#if WPF
-        public void Test_Image_Interpolate_Wpf()
-#elif GDI
-        public void Test_Image_Interpolate_Gdi()
-#else
         public void Test_Image_Interpolate()
-#endif
         {
             // Create a MigraDoc document.
             var document = CreateDocument(false);
@@ -195,13 +170,7 @@ namespace MigraDoc.Tests
         [Theory]
         [InlineData(SecurityTestHelper.TestOptionsEnum.None)]
         [InlineData(SecurityTestHelper.TestOptionsEnum.V5)] // We only want to ensure image filters are not affected by crypt filters, so testing encryption version 5 should do it.
-#if WPF
-        public void Test_Image_Formats_Encrypted_Wpf(SecurityTestHelper.TestOptionsEnum optionsEnum)
-#elif GDI
-        public void Test_Image_Formats_Encrypted_Gdi(SecurityTestHelper.TestOptionsEnum optionsEnum)
-#else
         public void Test_Image_Formats_Encrypted(SecurityTestHelper.TestOptionsEnum optionsEnum)
-#endif
         {
             // Attempt to avoid "image file locked" under .NET 4.6.2.
             GC.Collect();

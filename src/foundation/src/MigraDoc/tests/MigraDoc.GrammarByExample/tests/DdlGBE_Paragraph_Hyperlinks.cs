@@ -25,13 +25,7 @@ namespace GdiGrammarByExample
 
         //[SkippableFact]
         [Fact(Skip = "Disabled until /Annots bug is fixed")]
-#if CORE
         public void DDL_Grammar_By_Example_Paragraph_Hyperlinks()
-#elif GDI
-        public void GDI_DDL_Grammar_By_Example_Paragraph_Hyperlinks()
-#elif WPF
-        public void WPF_DDL_Grammar_By_Example_Paragraph_Hyperlinks()
-#endif
         {
             Skip.If(SkippableTests.SkipSlowTests());
             RunTest();

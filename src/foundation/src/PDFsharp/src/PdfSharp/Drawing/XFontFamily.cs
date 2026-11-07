@@ -4,16 +4,6 @@
 using PdfSharp.Internal.OpenType;
 using PdfSharp.Fonts;
 using PdfSharp.Internal;
-#if GDI
-using GdiFont = System.Drawing.Font;
-using GdiFontFamily = System.Drawing.FontFamily;
-using GdiFontStyle = System.Drawing.FontStyle;
-#endif
-#if WPF
-using PdfSharp.Fonts.Internal;
-using WpfFontFamily = System.Windows.Media.FontFamily;
-using WpfFontStyle = System.Windows.FontStyle;
-#endif
 
 namespace PdfSharp.Drawing
 {
@@ -44,24 +34,11 @@ namespace PdfSharp.Drawing
             FamilyInternal = fontFamilyInternal;
         }
 
-#if CORE || GDI
         //public XFontFamily(GdiFontFamily gdiFontFamily)
         //{
         //    FamilyInternal = FontFamilyInternal.GetOrCreateFromGdi(gdiFontFamily);
         //}
-#endif
 
-#if WPF
-        //public XFontFamily(WpfFontFamily wpfFontFamily)
-        //{
-        //    FamilyInternal = FontFamilyInternal.GetOrCreateFromWpf(wpfFontFamily);
-        //    //// HA/CK
-        //    //int idxHash = _name.LastIndexOf('#', StringComparison.Ordinal);
-        //    //if (idxHash > 0)
-        //    //    _name = _name.Substring(idxHash + 1);
-        //    //_wpfFamily = family;
-        //}
-#endif
 
 ////        internal static XFontFamily CreateFromName_not_used(string name, bool createPlatformFamily)
 ////        {
@@ -97,21 +74,7 @@ namespace PdfSharp.Drawing
             return new(fontFamilyInternal);
         }
 
-#if GDI
-        internal static XFontFamily GetOrCreateFromGdi(GdiFont font)
-        {
-            var fontFamilyInternal = FontFamilyInternal.GetOrCreateFromGdi(font.FontFamily);
-            return new XFontFamily(fontFamilyInternal);
-        }
-#endif
 
-#if WPF
-        internal static XFontFamily GetOrCreateFromWpf(WpfFontFamily wpfFontFamily)
-        {
-            FontFamilyInternal fontFamilyInternal = FontFamilyInternal.GetOrCreateFromWpf(wpfFontFamily);
-            return new(fontFamilyInternal);
-        }
-#endif
 
         /// <summary>
         /// Gets the name of the font family.
@@ -138,10 +101,6 @@ namespace PdfSharp.Drawing
             OpenTypeFontDescriptor descriptor = (OpenTypeFontDescriptor)fontDescriptorCache.GetOrCreateDescriptor(Name, style);
 
             int result = descriptor.Ascender;
-#if DEBUG_ && GDI
-            int gdiValue = _gdiFamily.GetCellAscent((FontStyle)style);
-            Debug.Assert(gdiValue == result);
-#endif
             return result;
         }
 
@@ -153,10 +112,6 @@ namespace PdfSharp.Drawing
             var fontDescriptorCache = PsGlobals.Global.Fonts.FontDescriptorCache;
             OpenTypeFontDescriptor descriptor = (OpenTypeFontDescriptor)fontDescriptorCache.GetOrCreateDescriptor(Name, style);
             int result = descriptor.Descender;
-#if DEBUG_ && GDI
-            int gdiValue = _gdiFamily.GetCellDescent((FontStyle)style);
-            Debug.Assert(gdiValue == result);
-#endif
             return result;
         }
 
@@ -168,10 +123,6 @@ namespace PdfSharp.Drawing
             var fontDescriptorCache = PsGlobals.Global.Fonts.FontDescriptorCache;
             OpenTypeFontDescriptor descriptor = (OpenTypeFontDescriptor)fontDescriptorCache.GetOrCreateDescriptor(Name, style);
             int result = descriptor.UnitsPerEm;
-#if DEBUG_ && GDI
-            int gdiValue = _gdiFamily.GetEmHeight((FontStyle)style);
-            Debug.Assert(gdiValue == result);
-#endif
 #if DEBUG_
             int headValue = descriptor.FontFace.head.unitsPerEm;
             Debug.Assert(headValue == result);
@@ -188,14 +139,6 @@ namespace PdfSharp.Drawing
             var fontDescriptorCache = PsGlobals.Global.Fonts.FontDescriptorCache;
             OpenTypeFontDescriptor descriptor = (OpenTypeFontDescriptor)fontDescriptorCache.GetOrCreateDescriptor(Name, style);
             int result = descriptor.LineSpacing;
-#if DEBUG_ && GDI
-            int gdiValue = _gdiFamily.GetLineSpacing((FontStyle)style);
-            Debug.Assert(gdiValue == result);
-#endif
-#if DEBUG_ && WPF
-            int wpfValue = (int)Math.Round(_wpfFamily.LineSpacing * GetEmHeight(style));
-            Debug.Assert(wpfValue == result);
-#endif
             return result;
         }
 
@@ -207,31 +150,7 @@ namespace PdfSharp.Drawing
         public bool IsStyleAvailable(XFontStyleEx style)
         {
             XFontStyleEx xStyle = style & XFontStyleEx.BoldItalic;
-#if CORE
             throw new InvalidOperationException("In Core build it is the responsibility of the developer to provide all required font faces.");
-#endif
-#if GDI && !WPF
-            if (GdiFamily != null!)
-                return GdiFamily.IsStyleAvailable((GdiFontStyle)xStyle);
-            return false;
-#endif
-#if WPF && !GDI
-            if (WpfFamily != null!)
-                return FontHelper.IsStyleAvailable(this, xStyle);
-            return false;
-#endif
-#if WPF && GDI
-#if DEBUG
-            //bool gdiResult = _gdiFamily.IsStyle Available((FontStyle)style);
-            //bool wpfResult = FontHelper.IsStyle Available(this, style);
-            //// TODOWPF: check when fails
-            //Debug.Assert(gdiResult == wpfResult, "GDI+ and WPF provide different values.");
-#endif
-            return FontHelper.IsStyleAvailable(this, xStyle);
-#endif
-#if WUI
-            throw new InvalidOperationException("In WUI build it is the responsibility of the developer to provide all required font faces.");
-#endif
         }
 
         /// <summary>
@@ -250,23 +169,7 @@ namespace PdfSharp.Drawing
             throw new InvalidOperationException("Obsolete and not implemented anymore.");
         }
 
-#if GDI
-        /// <summary>
-        /// Gets the underlying GDI+ font family object.
-        /// Is null if the font was created by a font resolver.
-        /// </summary>
-        internal GdiFontFamily? GdiFamily
-            => FamilyInternal.GdiFamily;
-#endif
 
-#if WPF
-        /// <summary>
-        /// Gets the underlying WPF font family object.
-        /// Is null if the font was created by a font resolver.
-        /// </summary>
-        internal WpfFontFamily WpfFamily 
-            => FamilyInternal.WpfFamily;
-#endif
 
         /// <summary>
         /// The implementation singleton of font family;

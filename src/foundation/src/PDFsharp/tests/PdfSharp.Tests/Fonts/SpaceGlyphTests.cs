@@ -6,9 +6,7 @@ using FluentAssertions;
 using PdfSharp.Diagnostics;
 using PdfSharp.Drawing;
 using PdfSharp.Fonts;
-#if CORE
 using PdfSharp.Quality;
-#endif
 using Xunit;
 
 namespace PdfSharp.Tests.Fonts
@@ -19,9 +17,7 @@ namespace PdfSharp.Tests.Fonts
         public SpaceGlyphTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

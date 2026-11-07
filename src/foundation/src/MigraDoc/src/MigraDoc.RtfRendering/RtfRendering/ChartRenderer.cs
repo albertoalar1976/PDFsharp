@@ -11,15 +11,6 @@ using System.Drawing.Imaging;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Shapes.Charts;
 using MigraDoc.Logging;
-#if GDI
-using PdfSharp.Drawing;
-using PdfSharp.Events;
-using MigraDoc.Rendering;
-#endif
-#if WPF
-using PdfSharp.Drawing;
-using MigraDoc.Rendering;
-#endif
 
 namespace MigraDoc.RtfRendering
 {
@@ -154,7 +145,6 @@ namespace MigraDoc.RtfRendering
 
         bool StoreTempImage(string fileName)
         {
-#if !GDI
             // ReviewSTLA THHO4STLA
             // EXPERIMENTAL
             switch (Capabilities.Compatibility.ChartsCannotBeRendered)
@@ -183,34 +173,6 @@ namespace MigraDoc.RtfRendering
             //    throw new InvalidOperationException("This version of MigraDoc cannot render charts to RTF. Use the WPF build under Windows to create RTF files with charts.");
 
             return false;
-#else // GDI case here.
-            try
-            {
-                const float resolution = 96;
-                int horzPixels = (int)(GetShapeWidth().Inch * resolution);
-                int vertPixels = (int)(GetShapeHeight().Inch * resolution);
-#if false
-                XGraphics gfx =
-                    XGraphics.CreateMeasureContext(new XSize(horzPixels, vertPixels), XGraphicsUnit.Point, XPageDirection.Downwards, new RenderEvents());
-#else
-                Bitmap bmp = new Bitmap(horzPixels, vertPixels);
-                XGraphics gfx = XGraphics.FromGraphics(Graphics.FromImage(bmp), new XSize(horzPixels, vertPixels), new RenderEvents());
-#endif
-                //REM: Should not be necessary:
-                gfx.ScaleTransform(resolution / 72);
-                //gfx.PageUnit = XGraphicsUnit.Point;
-
-                DocumentRenderer renderer = new MigraDoc.Rendering.DocumentRenderer(_chart.Document!);
-                renderer.RenderObject(gfx, 0, 0, GetShapeWidth().Point, _chart);
-                bmp.SetResolution(resolution, resolution);
-                bmp.Save(fileName, System.Drawing.Imaging.ImageFormat.Png);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
-#endif
             }
         //-/*private void CalculateImageDimensions()
         //{

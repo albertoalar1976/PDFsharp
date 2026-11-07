@@ -7,15 +7,6 @@ using System.Diagnostics;
 using System.Resources;
 using PdfSharp.Drawing;
 using PdfSharp.Quality;
-#if GDI
-using System.Drawing;
-using System.Drawing.Text;
-using GdiFont = System.Drawing.Font;
-#endif
-#if WPF
-using System.Windows.Markup;
-using System.Windows.Media;
-#endif
 
 namespace PdfSharp.Snippets.Font
 {
@@ -28,31 +19,6 @@ namespace PdfSharp.Snippets.Font
             var skippedFonts = new List<string>();
 
             // Load all system fonts.
-#if GDI
-            var installedFontCollection = new InstalledFontCollection();
-            foreach (var fontFamily in installedFontCollection.Families)
-                systemFonts.Add(fontFamily.Name);
-#endif
-#if WPF
-            var systemFontFamilies = System.Windows.Media.Fonts.SystemFontFamilies;
-            foreach (var fontFamily in systemFontFamilies)
-            {
-                fontFamily.FamilyNames.TryGetValue(XmlLanguage.GetLanguage("de-de"), out var german);
-                fontFamily.FamilyNames.TryGetValue(XmlLanguage.GetLanguage("en-us"), out var english);
-                var en = fontFamily.FamilyNames.Values.GetEnumerator();
-                en.MoveNext();
-                var first = en.Current;
-                en.Dispose();
-                var name = !String.IsNullOrEmpty(german)
-                    ? german
-                    : !String.IsNullOrEmpty(english)
-                        ? english
-                        : first;
-                if (String.IsNullOrEmpty(name))
-                    continue;
-                systemFonts.Add(name);
-            }
-#endif
 
             // Check fonts.
 #if true // Check all system fonts.
@@ -135,36 +101,6 @@ namespace PdfSharp.Snippets.Font
                 // xFont.GetHeight should match the calculated line spacing in pixels.
                 Debug.Assert(Math.Abs(xLineSpacingPix - xGetLineSpacingPix) < 0.00001);
 
-#if !WPF && GDI
-                // GDI+ comparision.
-                var font = new GdiFont(fontName, 16);
-
-                // basic GDI+ metrics from font.FontFamily methods.
-                var fEmHeight = font.FontFamily.GetEmHeight(FontStyle.Regular);
-                var fAscent = font.FontFamily.GetCellAscent(FontStyle.Regular);
-                var fDescent = font.FontFamily.GetCellDescent(FontStyle.Regular);
-                var fLineSpacing = font.FontFamily.GetLineSpacing(FontStyle.Regular);
-
-                // GDI+ font.Size is the fonts EmHeight in pixels.
-                var fEmHeightPix = font.Size;
-
-                // PdfSharp values should match GDI+ values
-                // Known divergences:
-                // Aldhabi, DokChampa, Gabriola: Fonts whose line spacings are calculated by Typo Metrics. The TypoGap is not added here (in difference to WPF).
-                // Helvetica Neue: Ascender is 967 instead of 952 for unknown reason.
-                Debug.Assert(fEmHeight == xEmHeight);
-                Debug.Assert(fAscent == xAscent);
-                Debug.Assert(fDescent == xDescent);
-                Debug.Assert(fLineSpacing == xLineSpacing);
-                Debug.Assert(Math.Abs(fEmHeightPix - xEmHeightPix) < 0.00001);
-#endif
-#if WPF
-                // WPF comparison. No divergences should occur here.
-                var fontFamily = new FontFamily(fontName);
-                var wLineSpacing = (int)Math.Round(fontFamily.LineSpacing * xEmHeight);
-
-                Debug.Assert(Math.Abs(wLineSpacing - xLineSpacing) < 0.00001);
-#endif
             }
 
             Debug.Assert(skippedFonts.Count == 0);

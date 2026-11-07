@@ -3,9 +3,7 @@
 
 using Microsoft.Extensions.Logging;
 using PdfSharp.Drawing;
-#if CORE
 using PdfSharp.Internal.Imaging;
-#endif
 using PdfSharp.Logging;
 using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf.Annotations;
@@ -802,7 +800,6 @@ namespace PdfSharp.Pdf
             return name;
         }
 
-#if CORE
         internal string GetImageName(PdfSharp.Internal.Imaging.ImportedImage importedImage)
         {
             var pdfImage = Document.ImageTable.GetImage(importedImage);
@@ -810,7 +807,6 @@ namespace PdfSharp.Pdf
             string name = Resources.AddImage(pdfImage);
             return name;
         }
-#endif
 
         /// <summary>
         /// Implements the interface because the primary function is internal.

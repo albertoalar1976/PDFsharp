@@ -74,16 +74,7 @@ namespace MigraDocTests.Helpers
             else
             {
                 pdfResultDocument = new PdfDocument();
-#if CORE
                 pdfResultDocument.Info.Title = "PDFsharp Unit Tests based on Core build";
-#elif GDI
-                pdfResultDocument.Info.Title = "PDFsharp Unit Tests based on GDI+";
-#elif WPF
-                pdfResultDocument.Info.Title = "PDFsharp Unit Tests based on WPF";
-#else
-                pdfResultDocument.Info.Title = "PDFsharp Unit Tests";
-#warning Unsupported platform.
-#endif
                 pdfResultDocument.Info.Author = "Stefan Lange";
             }
             return pdfResultDocument;

@@ -16,14 +16,6 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Forms\**" />
-    <Compile Remove="Windows\**" />
-    <EmbeddedResource Remove="Forms\**" />
-    <EmbeddedResource Remove="Windows\**" />
-    <None Remove="Forms\**" />
-    <None Remove="Windows\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Resources\sRGB2014.icc" />

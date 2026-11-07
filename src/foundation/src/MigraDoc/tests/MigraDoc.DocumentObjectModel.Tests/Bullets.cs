@@ -8,8 +8,6 @@ using PdfSharp.TestHelper;
 using MigraDoc.DocumentObjectModel.Fields;
 using MigraDoc.Rendering;
 using PdfSharp.Quality;
-#if CORE
-#endif
 using Xunit;
 
 namespace MigraDoc.DocumentObjectModel.Tests
@@ -20,9 +18,7 @@ namespace MigraDoc.DocumentObjectModel.Tests
         public Bullets()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

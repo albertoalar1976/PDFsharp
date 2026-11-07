@@ -17,9 +17,7 @@ namespace PdfSharp.Features
     {
         static void Main(string[] args)
         {
-#if CORE
             GlobalFontSettings.UseWindowsFontsUnderWindows = true;
-#endif
             Memory<byte> m = null;
             ReadOnlyMemory<byte> rom = null;
             Span<byte> s = null;

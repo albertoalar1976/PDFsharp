@@ -27,7 +27,5 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="PdfSharp,     PublicKey=$(PDFsharpStronNamePublicKey)" />
-    <InternalsVisibleTo Include="PdfSharp-gdi, PublicKey=$(PDFsharpStronNamePublicKey)" />
-    <InternalsVisibleTo Include="PdfSharp-wpf, PublicKey=$(PDFsharpStronNamePublicKey)" />
   </ItemGroup>
 </Project>

@@ -4,9 +4,6 @@
 using System.Globalization;
 using System.Runtime.ConstrainedExecution;
 
-#if WPF
-using System.IO;
-#endif
 using System.Security.Cryptography.X509Certificates;
 using PdfSharp.Diagnostics;
 using PdfSharp.Drawing;
@@ -18,8 +15,6 @@ using PdfSharp.Pdf.IO;
 using PdfSharp.Pdf.Signatures;
 using PdfSharp.Quality;
 using PdfSharp.Snippets.Pdf;
-#if CORE
-#endif
 using Xunit;
 
 namespace PdfSharp.Tests.Pdf
@@ -30,9 +25,7 @@ namespace PdfSharp.Tests.Pdf
         public BouncyCastleSignerTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

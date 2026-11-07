@@ -30,7 +30,6 @@ namespace PdfSharp.Snippets.Drawing
             Cleanroom = true;
             IOUtility.EnsureAssets("fonts/Noto/Noto_Sans_TC/static/NotoSansTC-Regular.ttf");
 
-#if !GDI && !WPF
             var fontSourceEmoji = XFontSource.CreateFromFile("c:/Windows/Fonts/seguiemj.ttf");
             var glyphTypefaceEmoji = new XGlyphTypeface(fontSourceEmoji);
             var fontEmoji = new XFont(glyphTypefaceEmoji, 10);
@@ -43,11 +42,6 @@ namespace PdfSharp.Snippets.Drawing
             //var fontSourceSimSun = XFontSource.CreateFromFile(IOUtility.GetAssetsPath("fonts/Noto/Noto_Sans_TC/static/NotoSansTC-Regular.ttf")!);
             var glyphTypefaceSimSun = new XGlyphTypeface(fontSourceSimSun);
             var fontSimSun = new XFont(glyphTypefaceSimSun, 10);
-#else
-            var fontEmoji = new XFont("Segoe UI Emoji", 10);
-            //var fontGothic = new XFont("MS Gothic", 10);
-            var fontSimSun = new XFont("SimSun", 10);
-#endif
 
             //// Text Styles (resulting in own Type Faces).
             //BeginBox(gfx, 1, BoxOptions.Fill, "Segoe UI Emoji");

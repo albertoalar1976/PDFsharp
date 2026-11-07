@@ -5,10 +5,8 @@ using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering;
 using MigraDoc.RtfRendering;
 using PdfSharp.Diagnostics;
-#if CORE
 using PdfSharp.Fonts;
 using PdfSharp.Quality;
-#endif
 using Xunit;
 using FluentAssertions;
 
@@ -20,9 +18,7 @@ namespace MigraDoc.Tests
         public CloneAndRtfTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

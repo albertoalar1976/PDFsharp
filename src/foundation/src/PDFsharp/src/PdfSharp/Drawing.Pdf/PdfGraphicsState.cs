@@ -5,12 +5,6 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
-#if GDI
-using System.Drawing;
-using System.Drawing.Drawing2D;
-#endif
-#if WPF
-#endif
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf.Internal;
@@ -510,33 +504,9 @@ namespace PdfSharp.Drawing.Pdf
 #if CORE_  // It should work in Core build.
             DiagnosticsHelper.HandleNotImplemented("RealizeClipPath");
 #endif
-#if GDI
-            // Do not render an empty path.
-            if (clipPath.GdipPath.PointCount < 0)
-                return;
-#endif
-#if WPF
-            // Do not render an empty path.
-            if (clipPath.PathGeometry.Bounds.IsEmpty)
-                return;
-#endif
             renderer.BeginGraphicMode();
             RealizeCtm();
-#if CORE
             renderer.AppendPath(clipPath.CorePath);
-#endif
-#if GDI && !WPF
-            renderer.AppendPath(clipPath.GdipPath);
-#endif
-#if WPF && !GDI
-            renderer.AppendPath(clipPath.PathGeometry);
-#endif
-#if WPF && GDI
-            if (renderer.Gfx.TargetContext == XGraphicTargetContext.GDI)
-                renderer.AppendPath(clipPath._gdipPath);
-            else
-                renderer.AppendPath(clipPath._pathGeometry);
-#endif
             renderer.Append(clipPath.FillMode == XFillMode.Winding ? "W n\n" : "W* n\n");
         }
 

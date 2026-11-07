@@ -18,9 +18,7 @@ namespace PdfSharp.Tests.Pdf.Attachments
         public EmbeddedFilesTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

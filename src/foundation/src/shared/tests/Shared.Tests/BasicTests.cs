@@ -18,9 +18,7 @@ namespace Shared.Tests
         public BasicTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         protected override void Dispose(bool disposing)

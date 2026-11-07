@@ -185,7 +185,6 @@ namespace PdfSharp.Fonts
             }
         }
 
-#if CORE
         /// <summary>
         /// Gets or sets a value that defines what to do if the Core build of PDFsharp runs under Windows.
         /// If true, PDFsharp uses the build-in WindowsPlatformFontResolver to resolve some standards fonts like Arial or Times New Roman if
@@ -254,35 +253,6 @@ namespace PdfSharp.Fonts
             }
         }
 
-#elif GDI || WPF
-        /// <summary>
-        /// This property has no effect under a GDI or WPF build of PDFsharp.
-        /// </summary>
-        public static bool UseWindowsFontsUnderWindows
-        {
-            get => true;
-            set
-            {
-                if (value == false)
-                    PdfSharpLogHost.Logger.LogWarning("Setting UseWindowsFontsUnderWindows to false makes no sense and is ignored.");
-            }
-        }
-
-        /// <summary>
-        /// This property has no effect under a GDI or WPF build of PDFsharp.
-        /// </summary>
-        public static bool UseWindowsFontsUnderWsl2
-        {
-            get => false; // We are always under Windows.
-            set
-            {
-                if (value)
-                    PdfSharpLogHost.Logger.LogWarning("Setting UseWindowsFontsUnderWsl2 to true makes no sense under Windows and is ignored.");
-            }
-        }
-#else
-#error Should not come here
-#endif
 
         /// <summary>
         /// Shortcut for PdfSharpCore.ResetFontManagement.

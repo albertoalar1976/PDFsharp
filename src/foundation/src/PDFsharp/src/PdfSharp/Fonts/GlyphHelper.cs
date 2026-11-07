@@ -6,13 +6,6 @@ using PdfSharp.Pdf.Internal;
 using PdfSharp.Drawing;
 using PdfSharp.Fonts.Internal;
 using PdfSharp.Internal.OpenType;
-#if GDI
-using System.Drawing;
-using System.Drawing.Text;
-#endif
-#if WPF
-using System.Windows.Media;
-#endif
 
 namespace PdfSharp.Fonts
 {

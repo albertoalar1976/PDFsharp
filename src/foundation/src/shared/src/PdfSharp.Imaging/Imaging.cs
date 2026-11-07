@@ -794,19 +794,15 @@ namespace PdfSharp.Internal.Imaging
         /// </summary>
         public int Length { get; }
 
-#if CORE || GDI || WPF
         /// <summary>
         /// Gets the owned memory stream. Can be null if no MemoryStream was created.
         /// </summary>
         public MemoryStream? OwnedMemoryStream { get; private set; }
-#endif
 
         public void Dispose()
         {
-#if CORE || GDI || WPF
             OwnedMemoryStream?.Dispose();
             OwnedMemoryStream = null;
-#endif
         }
     }
 }

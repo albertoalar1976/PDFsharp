@@ -2,15 +2,6 @@
 // See the LICENSE file in the solution root for more information.
 
 using System;
-#if CORE
-#endif
-#if GDI
-using System.Drawing;
-using System.Drawing.Drawing2D;
-#endif
-#if WPF
-using System.Windows.Media;
-#endif
 
 namespace PdfSharp.Drawing
 {
@@ -69,13 +60,6 @@ namespace PdfSharp.Drawing
             set
             {
                 _alignment = value;
-#if GDI
-                // Update StringFormat if it exists.
-                if (_stringFormat != null)
-                {
-                    _stringFormat.Alignment = (StringAlignment)value;
-                }
-#endif
             }
         }
         XStringAlignment _alignment;
@@ -96,17 +80,6 @@ namespace PdfSharp.Drawing
             set
             {
                 _lineAlignment = value;
-#if GDI
-                // Update StringFormat if it exists.
-                if (_stringFormat != null)
-                {
-                    // BaseLine is specific to PDFsharp.
-                    if (value == XLineAlignment.BaseLine)
-                        _stringFormat.LineAlignment = StringAlignment.Near;
-                    else
-                        _stringFormat.LineAlignment = (StringAlignment)value;
-                }
-#endif
             }
         }
         XLineAlignment _lineAlignment;
@@ -143,30 +116,5 @@ namespace PdfSharp.Drawing
         [Obsolete("Use XStringFormats.BottomCenter. (Note plural in class name.)")]
         public static XStringFormat BottomCenter => XStringFormats.BottomCenter;
 
-#if GDI
-        internal StringFormat RealizeGdiStringFormat()
-        {
-            if (_stringFormat == null)
-            {
-                // It seems that StringFormat.GenericTypographic is a global object and we need "Clone()" to avoid side effects.
-                _stringFormat = (StringFormat)StringFormat.GenericTypographic.Clone();
-                _stringFormat.Alignment = (StringAlignment)_alignment;
-
-                // BaseLine is specific to PDFsharp.
-                if (_lineAlignment == XLineAlignment.BaseLine)
-                    _stringFormat.LineAlignment = StringAlignment.Near;
-                else
-                    _stringFormat.LineAlignment = (StringAlignment)_lineAlignment;
-
-                //_stringFormat.FormatFlags = (StringFormatFlags)_formatFlags;
-
-                // Bugfix: Set MeasureTrailingSpaces to get the correct width with Graphics.MeasureString().
-                // Before, MeasureString() didn’t include blanks in width calculation, which could result in text overflowing table or page border before wrapping. $MaOs
-                _stringFormat.FormatFlags = _stringFormat.FormatFlags | StringFormatFlags.MeasureTrailingSpaces;
-            }
-            return _stringFormat;
-        }
-        StringFormat? _stringFormat;
-#endif
     }
 }

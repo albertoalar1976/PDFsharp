@@ -22,9 +22,7 @@ namespace PdfSharp.Tests.Pdf.Objects
         public PdfPageTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         protected override void Dispose(bool _)

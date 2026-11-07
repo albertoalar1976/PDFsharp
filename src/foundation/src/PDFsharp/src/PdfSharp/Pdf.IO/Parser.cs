@@ -1761,7 +1761,7 @@ namespace PdfSharp.Pdf.IO
 #endif
             // BUG_OLD: This assertion fails with original PDF 2.0 documentation (ISO_32000-2_2020(en).pdf)
             //Debug.Assert(wsum * subsectionEntryCount == bytes.Length, "Check implementation here.");
-#if DEBUG_ && CORE
+#if DEBUG_
             if (PdfDiagnostics.TraceXrefStreams)
             {
                 int testcount = subsections[0][1];

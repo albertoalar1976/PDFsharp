@@ -3,27 +3,6 @@
 
 using System.ComponentModel;
 using PdfSharp.Internal;
-#if GDI
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using GdiPoint = System.Drawing.Point;
-using GdiLinearGradientBrush = System.Drawing.Drawing2D.LinearGradientBrush;
-#endif
-#if WPF
-using System.Windows;
-using System.Windows.Media;
-using SysPoint = System.Windows.Point;
-using SysSize = System.Windows.Size;
-using SysRect = System.Windows.Rect;
-using WpfBrush = System.Windows.Media.Brush;
-using WpfRadialGradientBrush = System.Windows.Media.RadialGradientBrush;
-#endif
-#if WUI
-using Windows.UI;
-using Windows.UI.Xaml.Media;
-using Microsoft.Graphics.Canvas;
-using Microsoft.Graphics.Canvas.Brushes;
-#endif
 
 // ReSharper disable RedundantNameQualifier because it is required for hybrid build
 
@@ -34,31 +13,7 @@ namespace PdfSharp.Drawing
     /// </summary>
     public sealed class XRadialGradientBrush : XGradientBrush
     {
-#if GDI
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XRadialGradientBrush"/> class.
-        /// </summary>
-        public XRadialGradientBrush(GdiPoint point1, GdiPoint point2, double innerRadius, double outerRadius, XColor color1, XColor color2)
-          : this(new XPoint(point1), new XPoint(point2), innerRadius, outerRadius, color1, color2)
-        { }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XRadialGradientBrush"/> class.
-        /// </summary>
-        public XRadialGradientBrush(PointF point1, PointF point2, double innerRadius, double outerRadius, XColor color1, XColor color2)
-          : this(new XPoint(point1), new XPoint(point2), innerRadius, outerRadius, color1, color2)
-        { }
-#endif
-
-#if WPF
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XRadialGradientBrush"/> class.
-        /// </summary>
-        public XRadialGradientBrush(System.Windows.Point point1, System.Windows.Point point2, double innerRadius,
-            double outerRadius, XColor color1, XColor color2)
-            : this(new XPoint(point1), new XPoint(point2), innerRadius, outerRadius, color1, color2)
-        { }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XRadialGradientBrush"/> class.
@@ -178,113 +133,8 @@ namespace PdfSharp.Drawing
         //public void SetSigmaBellShape(double focus);
         //public void SetSigmaBellShape(double focus, double scale);
 
-#if GDI
-        //TODO_OLD: Change from LinearGradient to RadialGradient
-        internal override System.Drawing.Brush RealizeGdiBrush()
-        {
-            //if (dirty)
-            //{
-            //  if (brush == null)
-            //    brush = new SolidBrush(color.ToGdiColor());
-            //  else
-            //  {
-            //    brush.Color = color.ToGdiColor();
-            //  }
-            //  dirty = false;
-            //}
 
-#if not_implemented
-            // TODO_OLD: use dirty to optimize code
-            GdiLinearGradientBrush brush;
-            try
-            {
-                Lock.EnterGdiPlus();
-                if (_useRect)
-                {
-                    brush = new GdiLinearGradientBrush(_rect.ToRectangleF(),
-                        _color1.ToGdiColor(), _color2.ToGdiColor(), (LinearGradientMode)_linearGradientMode);
-                }
-                else
-                {
-                    brush = new GdiLinearGradientBrush(
-                        _point1.ToPointF(), _point2.ToPointF(),
-                        _color1.ToGdiColor(), _color2.ToGdiColor());
-                }
-                if (!_matrix.IsIdentity)
-                    brush.Transform = _matrix.ToGdiMatrix();
-                //brush.WrapMode = WrapMode.Clamp;
-            }
-            finally { Lock.ExitGdiPlus(); }
-            return brush;
-#else
-            return null!;
-#endif
-        }
-#endif
 
-#if WPF
-        internal override WpfBrush RealizeWpfBrush()
-        {
-            //if (this.dirty)
-            //{
-            //  if (this.brush == null)
-            //    this.brush = new SolidBrush(this.color.ToGdiColor());
-            //  else
-            //  {
-            //    this.brush.Color = this.color.ToGdiColor();
-            //  }
-            //  this.dirty = false;
-            //}
-
-            WpfRadialGradientBrush brush;
-#if true
-            brush = new WpfRadialGradientBrush(_color1.ToWpfColor(), _color2.ToWpfColor());
-            brush.RadiusX = OuterRadius;
-            brush.RadiusY = OuterRadius;
-            //brush = new System.Drawing.Drawing2D.LinearGradientBrush(
-            //  this.point1.ToPointF(), this.point2.ToPointF(),
-            //  this.color1.ToGdiColor(), this.color2.ToGdiColor());
-#else
-            GradientStop gs1 = new GradientStop();
-            gs1.Color = _color1.ToWpfColor();
-            gs1.Offset = 0;
-
-            GradientStop gs2 = new GradientStop();
-            gs2.Color = _color2.ToWpfColor();
-            gs2.Offset = 1;
-
-            GradientStopCollection gsc = new GradientStopCollection();
-            gsc.Add(gs1);
-            gsc.Add(gs2);
-
-            brush = new WpfRadialGradientBrush(_color1.ToWpfColor(), _color2.ToWpfColor());
-            brush.RadiusX = OuterRadius;
-            brush.RadiusY = OuterRadius;
-#endif
-            if (!_matrix.IsIdentity)
-            {
-#if true
-                brush.Transform = new MatrixTransform(_matrix.ToWpfMatrix());
-#else
-                MatrixTransform transform = new MatrixTransform();
-                transform.Matrix = _matrix.ToWpfMatrix();
-                brush.Transform = transform;
-#endif
-            }
-            return brush;
-        }
-#endif
-
-#if WUI
-        internal override ICanvasBrush RealizeCanvasBrush()
-        {
-            ICanvasBrush brush;
-
-            brush = new CanvasSolidColorBrush(CanvasDevice.GetSharedDevice(), Colors.RoyalBlue);
-
-            return brush;
-        }
-#endif
 
         internal XPoint _point1, _point2;
         internal XColor _color1, _color2;

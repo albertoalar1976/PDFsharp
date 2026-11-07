@@ -3,17 +3,12 @@
 
 using System.Diagnostics;
 using System.Globalization;
-#if WPF
-using System.IO;
-#endif
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf.IO;
 using PdfSharp.Quality;
-#if CORE
 using PdfSharp.Fonts;
-#endif
 using Xunit;
 using FluentAssertions;
 using PdfSharp.Diagnostics;
@@ -30,9 +25,7 @@ namespace PdfSharp.Tests.IO
         public ReaderTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()
