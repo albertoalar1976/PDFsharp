@@ -18,7 +18,7 @@ using PdfSharp.Quality;
 PdfSharpLicense.SetAgplLicense();
 GlobalFontSettings.FontResolver = new UnitTestFontResolver();
 
-byte[] created = null;
+byte[] created = [];
 var results = new List<string>();
 Run("PDFsharp: create 200 pages", 5, () => created = CreatePdf(200));
 Run("PDFsharp: open + save (Modify)", 5, () => OpenAndSave(created));
