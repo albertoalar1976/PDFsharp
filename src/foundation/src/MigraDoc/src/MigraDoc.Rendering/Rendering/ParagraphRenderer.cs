@@ -1491,17 +1491,17 @@ namespace MigraDoc.Rendering
 
                         case ListType.NumberList1:
                             symbol = _documentRenderer.NextListNumber(listInfo) + ".";
-                            font = FontHandler.FontToXFont(format.Font);
+                            font = FontHandler.FontToXFont(format.Font, _documentRenderer);
                             break;
 
                         case ListType.NumberList2:
                             symbol = NumberFormatter.Format(_documentRenderer.NextListNumber(listInfo), "alphabetic") + ".";
-                            font = FontHandler.FontToXFont(format.Font);
+                            font = FontHandler.FontToXFont(format.Font, _documentRenderer);
                             break;
 
                         case ListType.NumberList3:
                             symbol = NumberFormatter.Format(_documentRenderer.NextListNumber(listInfo), "roman") + ".";
-                            font = FontHandler.FontToXFont(format.Font);
+                            font = FontHandler.FontToXFont(format.Font, _documentRenderer);
                             break;
                         default:
                             throw new InvalidOperationException("Invalid list type.");
@@ -2520,7 +2520,7 @@ namespace MigraDoc.Rendering
                 // Like in word, we have a fixed baseline position this way, even if the line contains FormattedTests with a bigger descents.
                 if (_currentVerticalInfo.Descent == XUnitPt.Zero)
                 {
-                    var paragraphFont = FontHandler.FontToXFont(_paragraph.Format.Font);
+                    var paragraphFont = FontHandler.FontToXFont(_paragraph.Format.Font, _documentRenderer);
                     descent = FontHandler.GetDescent(paragraphFont);
 
                     // In word, the baseline position seems to be scaled to the set line spacing. Same here with the descent for text positioning. 
@@ -2546,7 +2546,7 @@ namespace MigraDoc.Rendering
         /// <summary>
         /// The font used for the current paragraph element.
         /// </summary>
-        XFont CurrentFont => FontHandler.FontToXFont(CurrentDomFont);
+        XFont CurrentFont => FontHandler.FontToXFont(CurrentDomFont, _documentRenderer);
 
         Font CurrentDomFont
         {
@@ -2628,7 +2628,7 @@ namespace MigraDoc.Rendering
         internal static XUnitPt GetLineHeight(ParagraphFormat format, XGraphics gfx, DocumentRenderer renderer)
 #pragma warning restore IDE0060
         {
-            var font = FontHandler.FontToXFont(format.Font);
+            var font = FontHandler.FontToXFont(format.Font, renderer);
             XUnitPt singleLineSpace = font.GetHeight();
             return format.LineSpacingRule switch
             {

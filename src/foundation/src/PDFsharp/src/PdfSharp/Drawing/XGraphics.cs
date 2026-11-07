@@ -3725,7 +3725,8 @@ namespace PdfSharp.Drawing
                 throw new ArgumentNullException(nameof(stringFormat));
 #if true
             var renderEvents = RenderEvents ?? Owner?.RenderEvents;
-            if (renderEvents != null)
+            // Allocate event arguments only if somebody listens. Formerly, every measured string allocated them.
+            if (renderEvents is { HasPrepareTextHandlers: true })
             {
                 // Invoke PrepareTextEvent.
                 var args = new PrepareTextEventArgs(Owner!, font, text); // Owner may be null here.
@@ -3741,7 +3742,7 @@ namespace PdfSharp.Drawing
             var otDescriptor = font.OpenTypeDescriptor;
             var codePointsWithGlyphIndices = otDescriptor.GlyphIndicesFromCodePoints(codePoints);
 
-            if (renderEvents != null)
+            if (renderEvents is { HasRenderTextHandlers: true })
             {
                 // Invoke RenderTextEvent.
                 var args = new RenderTextEventArgs(Owner!, font, codePointsWithGlyphIndices); // Owner may be null here.

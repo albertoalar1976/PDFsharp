@@ -22,13 +22,9 @@ namespace PdfSharp.Fonts
 
         public bool TryGetGlyphTypeface(string key, [MaybeNullWhen(false)] out XGlyphTypeface glyphTypeface)
         {
-            try
-            {
-                Locks.EnterFontManagement();
-                bool result = _storage.GlyphTypefacesByKey.TryGetValue(key, out glyphTypeface);
-                return result;
-            }
-            finally { Locks.ExitFontManagement(); }
+            // GlyphTypefacesByKey is a ConcurrentDictionary, so reading needs no lock. Callers that must check
+            // and add atomically, like XGlyphTypeface.GetOrCreateFrom, hold the font management lock themselves.
+            return _storage.GlyphTypefacesByKey.TryGetValue(key, out glyphTypeface);
         }
 
         public void AddGlyphTypeface(XGlyphTypeface glyphTypeface)

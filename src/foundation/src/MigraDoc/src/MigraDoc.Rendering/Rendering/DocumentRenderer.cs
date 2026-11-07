@@ -299,6 +299,25 @@ namespace MigraDoc.Rendering
 
         ListInfo? _previousListInfo;
         readonly Dictionary<ListType, int> _previousListNumbers = new(3);
+
+        /// <summary>
+        /// Gets the XFont for a MigraDoc font. XFonts are cached by name, size, and style for the lifetime of this renderer.
+        /// MigraDoc copies the font of the style into each paragraph, so a cache by font object, as before, missed for nearly
+        /// every paragraph and created a new XFont each time. The cache belongs to this renderer, so documents rendered
+        /// in parallel do not share it.
+        /// </summary>
+        internal XFont GetXFont(Font font)
+        {
+            var key = (font.Name, font.Size.Point, FontHandler.GetXStyle(font));
+            if (!_xFonts.TryGetValue(key, out var xFont))
+            {
+                xFont = new XFont(key.Name, key.Point, key.Item3);
+                _xFonts.Add(key, xFont);
+            }
+            return xFont;
+        }
+
+        readonly Dictionary<(string Name, double Point, XFontStyleEx), XFont> _xFonts = new();
         readonly Document _document = document;
 
         /// <summary>

@@ -40,6 +40,7 @@
       "src\\samples\\src\\PDFsharp\\src\\HelloWorld\\HelloWorld,PDFsharp.csproj",
       "src\\tools\\src\\NRT-Tests\\NRT-Tests.csproj",
       "src\\tools\\src\\PdfFileViewer\\PdfFileViewer.csproj",
+      "src\\tools\\src\\PdfSharp.Benchmarks\\PdfSharp.Benchmarks.csproj",
       "src\\tools\\src\\PdfSharp.TestHelper\\PdfSharp.TestHelper.csproj"
     ]
   }

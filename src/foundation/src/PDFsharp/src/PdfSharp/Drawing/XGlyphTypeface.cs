@@ -122,6 +122,11 @@ namespace PdfSharp.Drawing
             // Check cache for requested type face.
             string typefaceKey = ComputeGtfKey(familyName, fontResolvingOptions);
             XGlyphTypeface? glyphTypeface;
+
+            // Fast path without the global font lock for typefaces that already exist.
+            if (PsGlobals.Global.Fonts.GlyphTypefaceCache.TryGetGlyphTypeface(typefaceKey, out glyphTypeface))
+                return glyphTypeface;
+
             try
             {
                 // Lock around TryGetGlyphTypeface and AddGlyphTypeface.

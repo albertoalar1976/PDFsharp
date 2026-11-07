@@ -19,7 +19,7 @@ namespace MigraDoc.Rendering
         {
             _rootNode = rootNode;
             _current = rootNode;
-            //_positionIndices = new List<int>();
+
         }
 
         /// <summary>
@@ -27,11 +27,11 @@ namespace MigraDoc.Rendering
         /// </summary>
         /// <param name="rootNode">The node the position indices relate to.</param>
         /// <param name="current">The element the iterator shall point to.</param>
-        /// <param name="indices">The position of the paragraph iterator in terms of element indices.</param>
-        ParagraphIterator(ParagraphElements rootNode, DocumentObject current, List<int> indices)
+        /// <param name="path">The indices of the elements from the root to the current element, or null for the root.</param>
+        ParagraphIterator(ParagraphElements rootNode, DocumentObject current, IndexPath? path)
         {
             _rootNode = rootNode;
-            _positionIndices = indices;
+            _path = path;
             _current = current;
         }
 
@@ -123,7 +123,7 @@ namespace MigraDoc.Rendering
             if (newIndex >= parEls.Count)
                 return null;
 
-            var indices = new List<int>(parIterator._positionIndices) { newIndex }; //(Array_List)parIterator.positionIndices.Clone();
+            var indices = new IndexPath(parIterator._path, newIndex);
             var obj = GetNodeObject(parEls[newIndex] ?? NRT.ThrowOnNull<DocumentObject>());
             var iterator = new ParagraphIterator(_rootNode, obj, indices);
             return iterator.SeekFirstLeaf();
@@ -173,8 +173,7 @@ namespace MigraDoc.Rendering
             if (newIndex < 0)
                 return null;
 
-            //List<int> indices = new(parIterator._positionIndices) { newIndex };
-            List<int> indices = [..parIterator._positionIndices, newIndex];
+            var indices = new IndexPath(parIterator._path, newIndex);
 
             var obj = GetNodeObject(parEls[newIndex] ?? NRT.ThrowOnNull<DocumentObject>());
             var iterator = new ParagraphIterator(_rootNode, obj, indices);
@@ -183,41 +182,21 @@ namespace MigraDoc.Rendering
 
         ParagraphIterator SeekLastLeaf()  // TODO_OLD NOTE ReSharper has a bug here (use original code). Introducing pattern variable breaks the code. Should report that to JetBrains.
         {
-#if true
             var obj = Current;
             if (obj is not ParagraphElements)
                 return this;
 
-            var indices = new List<int>(_positionIndices);
+            var indices = _path;
             while (obj is ParagraphElements elements)
             {
                 if (elements.Count == 0)
                     return new ParagraphIterator(_rootNode, elements, indices);
 
                 int idx = elements.Count - 1;
-                indices.Add(idx);
+                indices = new IndexPath(indices, idx);
                 obj = GetNodeObject(elements[idx] ?? NRT.ThrowOnNull<DocumentObject>());
             }
             return new ParagraphIterator(_rootNode, obj, indices);
-#else  // Keep as reference
-            DocumentObject obj = Current;
-            if (!(obj is ParagraphElements))
-                return this;
-
-            List<int> indices = new List<int>(_positionIndices);
-
-            while (obj is ParagraphElements)
-            {
-                ParagraphElements parEls = (ParagraphElements)obj;
-                if (((ParagraphElements)obj).Count == 0)
-                    return new ParagraphIterator(_rootNode, obj, indices);
-
-                int idx = ((ParagraphElements)obj).Count - 1;
-                indices.Add(idx);
-                obj = GetNodeObject(parEls[idx]);
-            }
-            return new ParagraphIterator(_rootNode, obj, indices);
-#endif
         }
 
         /// <summary>
@@ -226,64 +205,58 @@ namespace MigraDoc.Rendering
         /// <returns>The searched leaf.</returns>
         ParagraphIterator SeekFirstLeaf() // TODO_OLD NOTE ReSharper has a bug here (see above).
         {
-#if true
             var obj = Current;
             if (obj is not ParagraphElements)
                 return this;
 
-            var indices = new List<int>(_positionIndices);
+            var indices = _path;
             while (obj is ParagraphElements parEls)
             {
                 if (parEls.Count == 0)
                     return new ParagraphIterator(_rootNode, obj, indices);
 
-                indices.Add(0);
+                indices = new IndexPath(indices, 0);
                 obj = GetNodeObject(parEls[0] ?? NRT.ThrowOnNull<DocumentObject>());
             }
             return new ParagraphIterator(_rootNode, obj, indices);
-#else  // Keep as reference
-            DocumentObject obj = Current;
-            if (!(obj is ParagraphElements))
-                return this;
-            List<int> indices = new List<int>(_positionIndices);
-
-            while (obj is ParagraphElements)
-            {
-                ParagraphElements parEls = (ParagraphElements)obj;
-                if (parEls.Count == 0)
-                    return new ParagraphIterator(_rootNode, obj, indices);
-
-                indices.Add(0);
-                obj = GetNodeObject(parEls[0]);
-            }
-            return new ParagraphIterator(_rootNode, obj, indices);
-#endif
         }
 
         ParagraphIterator? GetParentIterator()
         {
-            if (_positionIndices.Count == 0)
+            if (_path == null)
                 return null;
 
-            var indices = new List<int>(_positionIndices);
-            indices.RemoveAt(indices.Count - 1);
             var parent = DocumentRelations.GetParentOfType(_current, typeof(ParagraphElements))
                 ?? NRT.ThrowOnNull<DocumentObject>();
-            return new ParagraphIterator(_rootNode, parent, indices);
+            return new ParagraphIterator(_rootNode, parent, _path.Parent);
         }
 
         int LastIndex
         {
             get
             {
-                if (_positionIndices.Count != 0)
-                    return _positionIndices[^1];
-                return -1;
+                return _path?.Index ?? -1;
             }
         }
 
         readonly ParagraphElements _rootNode;
-        readonly List<int> _positionIndices = new();
+
+        /// <summary>
+        /// The indices of the elements from the root to the current element, or null for the root.
+        /// </summary>
+        readonly IndexPath? _path;
+
         readonly DocumentObject _current;
+
+        /// <summary>
+        /// An immutable path of element indices. Each step shares the path of its parent. Formerly, every
+        /// iterator step copied a List&lt;int&gt; of all indices, which was the largest source of allocations
+        /// when rendering large tables.
+        /// </summary>
+        sealed class IndexPath(IndexPath? parent, int index)
+        {
+            public IndexPath? Parent { get; } = parent;
+            public int Index { get; } = index;
+        }
     }
 }

@@ -19,54 +19,12 @@ namespace MigraDoc.Rendering
         internal static int CreateFontCounter;
 #endif
         /// <summary>
-        /// Converts a DOM Font to an XFont.
+        /// Converts a DOM Font to an XFont, using the XFont cache of the document renderer.
+        /// Formerly, this class cached the last conversion in static fields shared by all renderers.
         /// </summary>
-        internal static XFont FontToXFont(Font font)
-        {
-            // The cache holds the last conversion. Read the entry only once, because another thread
-            // may replace it at any time while it renders another document.
-            var lastEntry = _lastEntry;
-
-            // Check if both WeakReferences are still valid and point to the font we need.
-            if (lastEntry != null &&
-                lastEntry.Font.TryGetTarget(out var lastFont) && font == lastFont &&
-                lastEntry.XFont.TryGetTarget(out var lastXFont))
-                return lastXFont;
-
-            XFontStyleEx style = GetXStyle(font);
-#if DEBUG_
-            if (StringComparer.OrdinalIgnoreCase.Compare(font.Name, "Segoe UI Semilight") == 0
-                && (style & XFontStyleEx.BoldItalic) == XFontStyleEx.Italic)
-                _ = typeof(int);
-#endif
-            var xFont = new XFont(font.Name, font.Size.Point, style);
-#if DEBUG_
-            CreateFontCounter++;
-#endif
-            // Publish font and XFont together in one immutable object with a single write.
-            // The former implementation stored them in two static fields written one after the other.
-            // A thread reading between both writes got the DOM font of one thread and the XFont of
-            // another, i.e. text of a document rendered in parallel came out with a wrong font.
-            _lastEntry = new FontCacheEntry(new(font), new(xFont));
-#if FORCE_MEMORYLEAK
-            _lastFont2 = font;
-#endif
-            return xFont;
-        }
-
-        /// <summary>
-        /// An immutable pair of a DOM font and the XFont created for it.
-        /// </summary>
-        sealed class FontCacheEntry(WeakReference<Font> font, WeakReference<XFont> xFont)
-        {
-            public WeakReference<Font> Font { get; } = font;
-            public WeakReference<XFont> XFont { get; } = xFont;
-        }
-
-        static volatile FontCacheEntry? _lastEntry;
-#if FORCE_MEMORYLEAK
-        static Font? _lastFont2;
-#endif
+        internal static XFont FontToXFont(Font font, DocumentRenderer? documentRenderer)
+            // Renderers that are not (yet) attached to a document renderer create the XFont directly.
+            => documentRenderer?.GetXFont(font) ?? new XFont(font.Name, font.Size.Point, GetXStyle(font));
 
         internal static XFontStyleEx GetXStyle(Font font)
         {
@@ -85,9 +43,11 @@ namespace MigraDoc.Rendering
             var descent = (font.FontFace.Height - font.FontFace.Baseline) * font.Size;
             return new(descent);
 #else
+            // Use the units per em of the font itself. FontFamily.GetEmHeight looked up the font descriptor by
+            // family name in a global cache on every call, which took a global lock for every word.
             XUnitPt descent = font.Metrics.Descent;
             descent *= font.Size;
-            descent /= font.FontFamily.GetEmHeight(font.Style);
+            descent /= font.Metrics.UnitsPerEm;
             return descent;
 #endif
         }
@@ -100,7 +60,7 @@ namespace MigraDoc.Rendering
 #else
             XUnitPt ascent = font.Metrics.Ascent;
             ascent *= font.Size;
-            ascent /= font.FontFamily.GetEmHeight(font.Style);
+            ascent /= font.Metrics.UnitsPerEm;
             return ascent;
 #endif
         }

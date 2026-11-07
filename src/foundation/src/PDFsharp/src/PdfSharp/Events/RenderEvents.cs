@@ -89,6 +89,12 @@ namespace PdfSharp.Events
         public event PrepareTextEventHandler? PrepareTextEvent;
 
         /// <summary>
+        /// Gets a value indicating whether PrepareTextEvent has handlers. Text is measured and drawn very often,
+        /// so callers check this before they allocate event arguments.
+        /// </summary>
+        internal bool HasPrepareTextHandlers => PrepareTextEvent != null;
+
+        /// <summary>
         /// An event raised whenever text is drawn or measured in a PDF document.
         /// </summary>
         /// <param name="sender">The sender of the event.</param>
@@ -102,5 +108,10 @@ namespace PdfSharp.Events
         /// EventHandler for RenderTextEvent.
         /// </summary>
         public event RenderTextEventHandler? RenderTextEvent;
+
+        /// <summary>
+        /// Gets a value indicating whether RenderTextEvent has handlers.
+        /// </summary>
+        internal bool HasRenderTextHandlers => RenderTextEvent != null;
     }
 }
