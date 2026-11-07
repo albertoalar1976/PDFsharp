@@ -504,24 +504,23 @@ namespace PdfSharp.UniversalAccessibility
 
         internal ContentWriter Content => new(UaManager.CurrentGraphics);
 
-#pragma warning disable CS0618 // Type or member is obsolete
 
         string TagToString(PdfGroupingElementTag tag)
         {
             return tag switch
             {
-                PdfGroupingElementTag.Document => nameof(PdfGroupingElementTag.Document),
-                PdfGroupingElementTag.Part => nameof(PdfGroupingElementTag.Part),
-                PdfGroupingElementTag.Art or PdfGroupingElementTag.Article => nameof(PdfGroupingElementTag.Art),
-                PdfGroupingElementTag.Sect or PdfGroupingElementTag.Section => nameof(PdfGroupingElementTag.Sect),
-                PdfGroupingElementTag.Div or PdfGroupingElementTag.Division => nameof(PdfGroupingElementTag.Div),
-                PdfGroupingElementTag.BlockQuote or PdfGroupingElementTag.BlockQuotation => nameof(PdfGroupingElementTag.BlockQuote),
-                PdfGroupingElementTag.Caption => nameof(PdfGroupingElementTag.Caption),
-                PdfGroupingElementTag.TOC or PdfGroupingElementTag.TableOfContents => nameof(PdfGroupingElementTag.TOC),
-                PdfGroupingElementTag.TOCI or PdfGroupingElementTag.TableOfContentsItem => nameof(PdfGroupingElementTag.TOCI),
-                PdfGroupingElementTag.Index => nameof(PdfGroupingElementTag.Index),
-                PdfGroupingElementTag.NonStruct or PdfGroupingElementTag.NonstructuralElement => nameof(PdfGroupingElementTag.NonStruct),
-                PdfGroupingElementTag.Private or PdfGroupingElementTag.PrivateElement => nameof(PdfGroupingElementTag.Private),
+                PdfGroupingElementTag.Document => "Document",
+                PdfGroupingElementTag.Part => "Part",
+                PdfGroupingElementTag.Article => "Art",
+                PdfGroupingElementTag.Section => "Sect",
+                PdfGroupingElementTag.Division => "Div",
+                PdfGroupingElementTag.BlockQuotation => "BlockQuote",
+                PdfGroupingElementTag.Caption => "Caption",
+                PdfGroupingElementTag.TableOfContents => "TOC",
+                PdfGroupingElementTag.TableOfContentsItem => "TOCI",
+                PdfGroupingElementTag.Index => "Index",
+                PdfGroupingElementTag.NonstructuralElement => "NonStruct",
+                PdfGroupingElementTag.PrivateElement => "Private",
                 _ => throw new InvalidOperationException($"Invalid tag value '{(int)tag}'")
             };
         }
@@ -530,25 +529,25 @@ namespace PdfSharp.UniversalAccessibility
         {
             return tag switch
             {
-                PdfBlockLevelElementTag.P or PdfBlockLevelElementTag.Paragraph => nameof(PdfBlockLevelElementTag.P),
-                PdfBlockLevelElementTag.H or PdfBlockLevelElementTag.Heading => nameof(PdfBlockLevelElementTag.H),
-                PdfBlockLevelElementTag.H1 or PdfBlockLevelElementTag.Heading1 => nameof(PdfBlockLevelElementTag.H1),
-                PdfBlockLevelElementTag.H2 or PdfBlockLevelElementTag.Heading2 => nameof(PdfBlockLevelElementTag.H2),
-                PdfBlockLevelElementTag.H3 or PdfBlockLevelElementTag.Heading3 => nameof(PdfBlockLevelElementTag.H3),
-                PdfBlockLevelElementTag.H4 or PdfBlockLevelElementTag.Heading4 => nameof(PdfBlockLevelElementTag.H4),
-                PdfBlockLevelElementTag.H5 or PdfBlockLevelElementTag.Heading5 => nameof(PdfBlockLevelElementTag.H5),
-                PdfBlockLevelElementTag.H6 or PdfBlockLevelElementTag.Heading6 => nameof(PdfBlockLevelElementTag.H6),
-                PdfBlockLevelElementTag.L or PdfBlockLevelElementTag.List => nameof(PdfBlockLevelElementTag.L),
-                PdfBlockLevelElementTag.Lbl or PdfBlockLevelElementTag.Label => nameof(PdfBlockLevelElementTag.Lbl),
-                PdfBlockLevelElementTag.LI or PdfBlockLevelElementTag.ListItem => nameof(PdfBlockLevelElementTag.LI),
-                PdfBlockLevelElementTag.LBody or PdfBlockLevelElementTag.ListBody => nameof(PdfBlockLevelElementTag.LBody),
-                PdfBlockLevelElementTag.Table => nameof(PdfBlockLevelElementTag.Table),
-                PdfBlockLevelElementTag.TR or PdfBlockLevelElementTag.TableRow => nameof(PdfBlockLevelElementTag.TR),
-                PdfBlockLevelElementTag.TH or PdfBlockLevelElementTag.TableHeaderCell => nameof(PdfBlockLevelElementTag.TH),
-                PdfBlockLevelElementTag.TD or PdfBlockLevelElementTag.TableDataCell => nameof(PdfBlockLevelElementTag.TD),
-                PdfBlockLevelElementTag.THead or PdfBlockLevelElementTag.TableHeadRowGroup => nameof(PdfBlockLevelElementTag.THead),
-                PdfBlockLevelElementTag.TBody or PdfBlockLevelElementTag.TableBodyRowGroup => nameof(PdfBlockLevelElementTag.TBody),
-                PdfBlockLevelElementTag.TFoot or PdfBlockLevelElementTag.TableFooterRowGroup => nameof(PdfBlockLevelElementTag.TFoot),
+                PdfBlockLevelElementTag.Paragraph => "P",
+                PdfBlockLevelElementTag.Heading => "H",
+                PdfBlockLevelElementTag.Heading1 => "H1",
+                PdfBlockLevelElementTag.Heading2 => "H2",
+                PdfBlockLevelElementTag.Heading3 => "H3",
+                PdfBlockLevelElementTag.Heading4 => "H4",
+                PdfBlockLevelElementTag.Heading5 => "H5",
+                PdfBlockLevelElementTag.Heading6 => "H6",
+                PdfBlockLevelElementTag.List => "L",
+                PdfBlockLevelElementTag.Label => "Lbl",
+                PdfBlockLevelElementTag.ListItem => "LI",
+                PdfBlockLevelElementTag.ListBody => "LBody",
+                PdfBlockLevelElementTag.Table => "Table",
+                PdfBlockLevelElementTag.TableRow => "TR",
+                PdfBlockLevelElementTag.TableHeaderCell => "TH",
+                PdfBlockLevelElementTag.TableDataCell => "TD",
+                PdfBlockLevelElementTag.TableHeadRowGroup => "THead",
+                PdfBlockLevelElementTag.TableBodyRowGroup => "TBody",
+                PdfBlockLevelElementTag.TableFooterRowGroup => "TFoot",
                 _ => throw new InvalidOperationException($"Invalid tag value '{(int)tag}'")
             };
         }
@@ -557,16 +556,16 @@ namespace PdfSharp.UniversalAccessibility
         {
             return tag switch
             {
-                PdfInlineLevelElementTag.Span => nameof(PdfInlineLevelElementTag.Span),
-                PdfInlineLevelElementTag.Quote or PdfInlineLevelElementTag.Quotation => nameof(PdfInlineLevelElementTag.Quote),
-                PdfInlineLevelElementTag.Note => nameof(PdfInlineLevelElementTag.Note),
-                PdfInlineLevelElementTag.Reference => nameof(PdfInlineLevelElementTag.Reference),
-                PdfInlineLevelElementTag.BibEntry or PdfInlineLevelElementTag.BibliographyEntry => nameof(PdfInlineLevelElementTag.BibEntry),
-                PdfInlineLevelElementTag.Code => nameof(PdfInlineLevelElementTag.Code),
-                PdfInlineLevelElementTag.Link => nameof(PdfInlineLevelElementTag.Link),
-                PdfInlineLevelElementTag.Annot or PdfInlineLevelElementTag.Annotation => nameof(PdfInlineLevelElementTag.Annot),
-                PdfInlineLevelElementTag.Ruby => nameof(PdfInlineLevelElementTag.Ruby),
-                PdfInlineLevelElementTag.Warichu => nameof(PdfInlineLevelElementTag.Warichu),
+                PdfInlineLevelElementTag.Span => "Span",
+                PdfInlineLevelElementTag.Quotation => "Quote",
+                PdfInlineLevelElementTag.Note => "Note",
+                PdfInlineLevelElementTag.Reference => "Reference",
+                PdfInlineLevelElementTag.BibliographyEntry => "BibEntry",
+                PdfInlineLevelElementTag.Code => "Code",
+                PdfInlineLevelElementTag.Link => "Link",
+                PdfInlineLevelElementTag.Annotation => "Annot",
+                PdfInlineLevelElementTag.Ruby => "Ruby",
+                PdfInlineLevelElementTag.Warichu => "Warichu",
                 _ => throw new InvalidOperationException($"Invalid tag value '{(int)tag}'")
             };
         }
@@ -575,14 +574,13 @@ namespace PdfSharp.UniversalAccessibility
         {
             return tag switch
             {
-                PdfIllustrationElementTag.Figure => nameof(PdfIllustrationElementTag.Figure),
-                PdfIllustrationElementTag.Formula => nameof(PdfIllustrationElementTag.Formula),
-                PdfIllustrationElementTag.Form => nameof(PdfIllustrationElementTag.Form),
+                PdfIllustrationElementTag.Figure => "Figure",
+                PdfIllustrationElementTag.Formula => "Formula",
+                PdfIllustrationElementTag.Form => "Form",
                 _ => throw new InvalidOperationException($"Invalid tag value '{(int)tag}'")
             };
         }
 
-#pragma warning restore CS0618 // Type or member is obsolete
 
         /// <summary>
         /// Used to write text directly to the content stream.

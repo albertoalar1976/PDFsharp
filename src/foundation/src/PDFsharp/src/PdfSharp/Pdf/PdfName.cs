@@ -95,20 +95,6 @@ namespace PdfSharp.Pdf
         static PdfName? _empty;
 
         /// <summary>
-        /// Adds the slash that is needed at the beginning of a PDFName.
-        /// </summary>
-        [Obsolete("Use Name.MakeName")]
-        public static string AddSlash(string value)
-            => Name.MakeName(value);
-
-        /// <summary>
-        /// Removes the slash that is needed at the beginning of a PDFName.
-        /// </summary>
-        [Obsolete("Use Name.RemoveSlash")]
-        public static string RemoveSlash(string value) 
-            => Name.RemoveSlash(value);
-
-        /// <summary>
         /// Gets a PdfName from a string. The string must not start with a slash.
         /// </summary>
         public static PdfName FromString(string value)

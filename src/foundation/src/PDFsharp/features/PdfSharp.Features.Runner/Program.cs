@@ -37,7 +37,6 @@ namespace PdfSharp.Features
             //features[PdfSharpFeatures.Names.Drawing_paths_Paths__PathWpf].Run();
 
             // Drawing/graphics
-            //features[PdfSharpFeatures.Names.Drawing_graphics_GraphicsUnit__Upwards].Run();
 
             //features[PdfSharpFeatures.Names.Drawing_graphics_GraphicsUnit__Downwards].Run();
 

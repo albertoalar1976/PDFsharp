@@ -23,7 +23,6 @@ namespace PdfSharp.Features
             
             // Drawing/graphics
             public const string Drawing_graphics_GraphicsUnit__Downwards = "Drawing/graphics/GraphicsUnit:Downwards";
-            public const string Drawing_graphics_GraphicsUnit__Upwards = "Drawing/graphics/GraphicsUnit:Upwards";
 
             // Drawing/text
             public const string Drawing_text_SurrogateChars__Surrogates = "Drawing/text/SurrogateChars:Surrogates";
@@ -55,7 +54,6 @@ namespace PdfSharp.Features
             
             // Drawing/graphics
             { Names.Drawing_graphics_GraphicsUnit__Downwards,       new(Names.Drawing_graphics_GraphicsUnit__Downwards, () => new Drawing.GraphicsUnit().Downwards()) },
-            { Names.Drawing_graphics_GraphicsUnit__Upwards,         new(Names.Drawing_graphics_GraphicsUnit__Upwards, () => new Drawing.GraphicsUnit().Upwards()) },
             
             // Drawing/text
             { Names.Drawing_text_SurrogateChars__Surrogates,        new(Names.Drawing_text_SurrogateChars__Surrogates, () => new Drawing.SurrogateChars().Surrogates()) },

@@ -533,20 +533,6 @@ namespace MigraDoc.DocumentObjectModel
         }
 
         /// <summary>
-        /// Returns a double value as point.
-        /// </summary>
-        [Obsolete("Implicit conversion to double is obsolete, because it led to misunderstandings and unexpected behavior. Use e. g. the Point property instead.")]
-        public static implicit operator double(Unit value)
-            => value.Point;
-
-        /// <summary>
-        /// Returns a float value as point.
-        /// </summary>
-        [Obsolete("Implicit conversion to float is obsolete, because it led to misunderstandings and unexpected behavior. Use e. g. the Point property instead.")]
-        public static implicit operator float(Unit value)
-            => (float)value.Point;
-
-        /// <summary>
         /// Memberwise comparison checking exact value and unit.
         /// To compare by value tolerating rounding errors, use IsSameValue() or code like Math.Abs(a.Point - b.Point) &lt; 1e-5.
         /// </summary>

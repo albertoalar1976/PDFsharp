@@ -139,22 +139,6 @@ namespace PdfSharp.Drawing
             throw new InvalidOperationException("In Core build it is the responsibility of the developer to provide all required font faces.");
         }
 
-        /// <summary>
-        /// Returns an array that contains all the FontFamily objects associated with the current graphics context.
-        /// </summary>
-        [Obsolete("Use platform API directly.")]
-        public static XFontFamily[] Families => throw new InvalidOperationException("Obsolete and not implemented anymore.");
-
-        /// <summary>
-        /// Returns an array that contains all the FontFamily objects available for the specified 
-        /// graphics context.
-        /// </summary>
-        [Obsolete("Use platform API directly.")]
-        public static XFontFamily[] GetFamilies(XGraphics graphics)
-        {
-            throw new InvalidOperationException("Obsolete and not implemented anymore.");
-        }
-
 
 
         /// <summary>

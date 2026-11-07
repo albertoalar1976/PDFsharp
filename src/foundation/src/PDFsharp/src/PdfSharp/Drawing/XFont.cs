@@ -76,40 +76,6 @@ namespace PdfSharp.Drawing
         /// Initializes a new instance of the <see cref="XFont"/> class.
         /// Not yet implemented.
         /// </summary>
-        /// <param name="familyName">Name of the family.</param>
-        /// <param name="emSize">The em size.</param>
-        /// <param name="style">The style.</param>
-        /// <param name="weight">The weight.</param>
-        /// <param name="fontStretch">The font stretch.</param>
-        /// <param name="pdfOptions">The PDF options.</param>
-        /// <param name="styleSimulations">The style simulations.</param>
-        /// <exception cref="System.NotImplementedException">XFont</exception>
-        [Obsolete("Not yet implemented.")]
-        public XFont(string familyName, double emSize, XFontStyle style, XFontWeight weight, XFontStretch fontStretch,
-            XPdfFontOptions? pdfOptions = null, XStyleSimulations? styleSimulations = null)
-        {
-            throw new NotImplementedException(nameof(XFont));
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XFont"/> class.
-        /// Not yet implemented.
-        /// </summary>
-        /// <param name="typeface">The typeface.</param>
-        /// <param name="emSize">The em size.</param>
-        /// <param name="pdfOptions">The PDF options.</param>
-        /// <param name="styleSimulations">The style simulations.</param>
-        /// <exception cref="System.NotImplementedException">XFont</exception>
-        [Obsolete("Not yet implemented.")]
-        public XFont(XTypeface typeface, double emSize, XPdfFontOptions? pdfOptions = null, XStyleSimulations? styleSimulations = null)
-        {
-            throw new NotImplementedException(nameof(XFont));
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XFont"/> class.
-        /// Not yet implemented.
-        /// </summary>
         /// <param name="glyphTypeface">The typeface.</param>
         /// <param name="emSize">The em size.</param>
         /// <param name="pdfOptions">The PDF options.</param>
@@ -218,9 +184,6 @@ namespace PdfSharp.Drawing
         /// </summary>
         [Browsable(false)]
         public XFontFamily FontFamily => GlyphTypeface.FontFamily;
-
-        [Obsolete("Use Name to get the fonts family name. Name2 was accidentally released.")]
-        public string Name2 => GlyphTypeface.FontFamily.Name;
 
         /// <summary>
         /// Gets the font family name.
@@ -334,17 +297,6 @@ namespace PdfSharp.Drawing
         {
             double value = CellSpace * _emSize / UnitsPerEm;
             return value;
-        }
-
-        /// <summary>
-        /// Returns the line spacing, in the current unit of a specified Graphics object, of this font.
-        /// The line spacing is the vertical distance between the base lines of two consecutive lines of
-        /// text. Thus, the line spacing includes the blank space between lines along with the height of
-        /// </summary>
-        [Obsolete("Use GetHeight() without parameter.")]
-        public double GetHeight(XGraphics graphics)
-        {
-            throw new InvalidOperationException("Honestly: Use GetHeight() without parameter!");
         }
 
         /// <summary>

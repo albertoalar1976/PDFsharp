@@ -52,11 +52,6 @@ namespace MigraDoc.DocumentObjectModel
                     return Values.DiagonalDown;
                 case BorderType.DiagonalUp:
                     return Values.DiagonalUp;
-#pragma warning disable CS0618
-                case BorderType.Horizontal: // Not used in MigraDoc 1.2.
-                case BorderType.Vertical:   // Not used in MigraDoc 1.2.
-#pragma warning restore CS0618
-                    return null;
                 case BorderType.Left:
                     return Values.Left;
                 case BorderType.Right:

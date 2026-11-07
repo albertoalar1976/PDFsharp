@@ -324,26 +324,6 @@ namespace PdfSharp.Drawing
         }
 
         /// <summary>
-        /// Converts an int to an XUnit object with type set to point.
-        /// </summary>
-        [Obsolete("In PDFsharp 6.1 implicit conversion from int is marked obsolete, because it led to misunderstandings and unexpected behavior. " +
-                  "Provide the unit by XUnit.FromPoint() or use the new class XUnitPt instead.")]
-        public static implicit operator XUnit(int value) => new(value/*, XGraphicsUnit.Point*/);
-
-        /// <summary>
-        /// Converts a double to an XUnit object with type set to point.
-        /// </summary>
-        [Obsolete("In PDFsharp 6.1 implicit conversion from double is marked obsolete, because it led to misunderstandings and unexpected behavior. " +
-                  "Provide the unit by XUnit.FromPoint() or use the new class XUnitPt instead.")]
-        public static implicit operator XUnit(double value) => new(value/*, XGraphicsUnit.Point*/);
-
-        /// <summary>
-        /// Converts an XUnit object to a double value as point.
-        /// </summary>
-        [Obsolete("In PDFsharp 6.1 implicit conversion to double is marked obsolete, because it led to misunderstandings and unexpected behavior. Use the XUnit.Point property instead.")]
-        public static implicit operator double(XUnit value) => value.PointValue;
-
-        /// <summary>
         /// Memberwise comparison checking the exact value and unit.
         /// To compare by value tolerating rounding errors, use IsSameValue() or code like Math.Abs(a.Pt - b.Pt) &lt; 1e-5.
         /// </summary>

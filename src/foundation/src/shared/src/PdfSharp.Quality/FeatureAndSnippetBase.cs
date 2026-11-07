@@ -370,55 +370,6 @@ namespace PdfSharp.Quality
         }
 
         /// <summary>
-        /// Saves and optionally shows a PDF document.
-        /// </summary>
-        /// <param name="filepath">The filepath.</param>
-        /// <param name="startViewer">if set to <c>true</c> [start viewer].</param>
-        [Obsolete("Use a XxxUtility class.")]
-        public string SaveAndShowPdfDocument(string filepath, bool startViewer = false)
-        {
-            return SaveAndShowFile(PdfBytes, filepath, startViewer);
-        }
-
-        /// <summary>
-        /// Saves and optionally shows a PNG image.
-        /// </summary>
-        /// <param name="filepath">The filepath.</param>
-        /// <param name="startViewer">if set to <c>true</c> [start viewer].</param>
-        [Obsolete("Use a XxxUtility class.")]
-        public string SaveAndShowPngImage(string filepath, bool startViewer = false)
-        {
-            return SaveAndShowFile(PngBytes, filepath, startViewer);
-        }
-
-        /// <summary>
-        /// Saves and shows a parallel comparison PDF document.
-        /// </summary>
-        /// <param name="filepath">The filepath.</param>
-        /// <param name="startViewer">if set to <c>true</c> [start viewer].</param>
-        [Obsolete("Use a XxxUtility class.")]
-        public string SaveAndShowComparisonDocument(string filepath, bool startViewer = false)
-        {
-            return SaveAndShowFile(ComparisonBytes, filepath, startViewer);
-        }
-
-        /// <summary>
-        /// Saves a stream to a file.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <param name="path">The path.</param>
-        [Obsolete("Use a XxxUtility class.")]
-        public void SaveStreamToFile(Stream stream, string path)
-        {
-            int length = (int)stream.Length;
-            var bytes = new byte[length];
-            var read = stream.Read(bytes, 0, length);
-            Debug.Assert(read == length);
-            using var fs = new FileStream(path, FileMode.Create);
-            fs.Write(bytes, 0, length);
-        }
-
-        /// <summary>
         /// Prepares new bitmap image for drawing.
         /// </summary>
         public void BeginImage()

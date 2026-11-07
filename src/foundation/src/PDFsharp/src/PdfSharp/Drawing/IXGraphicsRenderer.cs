@@ -95,12 +95,6 @@ namespace PdfSharp.Drawing
         void DrawString(string s, XFont font, XBrush brush, XRect layoutRectangle, XStringFormat format);
 
         /// <summary>
-        /// Draws a series of glyphs identified by the specified text and font.
-        /// </summary>
-        [Obsolete("Not yet implemented.")]
-        void DrawString(string s, XGlyphTypeface typeface, XBrush brush, XRect layoutRectangle, XStringFormat format);
-
-        /// <summary>
         /// Draws an image.
         /// </summary>
         void DrawImage(XImage image, double x, double y, double width, double height);

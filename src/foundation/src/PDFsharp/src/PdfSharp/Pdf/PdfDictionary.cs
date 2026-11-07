@@ -1202,17 +1202,6 @@ namespace PdfSharp.Pdf
             /// <summary>
             /// Sets the entry to a direct datetime value.
             /// </summary>
-            [Obsolete("Use DateTimeOffset as parameter.")]
-            public void SetDateTime(string key, DateTime value)
-            {
-                Name.EnsureName(key);
-
-                SetValueInternal(key, new PdfDate(value));
-            }
-
-            /// <summary>
-            /// Sets the entry to a direct datetime value.
-            /// </summary>
             public void SetDateTime(string key, DateTimeOffset value)
             {
                 Name.EnsureName(key);
@@ -1618,21 +1607,6 @@ namespace PdfSharp.Pdf
 
                 return GetReference(key)
                        ?? throw new InvalidOperationException(SyMsgs.IndirectReferenceMustNotBeNull.Message);
-            }
-
-            /// <summary>
-            /// Sets the entry to an indirect reference.
-            /// The specified object must be an indirect object,
-            /// otherwise an exception is raised.
-            /// </summary>
-            [Obsolete("Use SetObject with an indirect object.")]
-            public void SetReference(string key, PdfObject obj)
-            {
-                Name.EnsureName(key);
-
-                if (obj.Reference == null)
-                    throw new ArgumentException("PdfObject is not an indirect object.", nameof(obj));// #SyMsg
-                SetValueInternal(key, obj.Reference);
             }
 
             /// <summary>
@@ -2563,38 +2537,6 @@ namespace PdfSharp.Pdf
 
                     return bytes ?? [];
                 }
-            }
-
-            /// <summary>
-            /// Tries to unfilter the bytes of the stream. If the stream is filtered and PDFsharp knows the filter
-            /// algorithm, the stream content is replaced by its unfiltered value and the function returns true.
-            /// Otherwise, the content remains untouched and the function returns false.
-            /// The function is useful for analyzing existing PDF files.
-            /// </summary>
-            [Obsolete("Not correctly implemented. Use the function TryUncompress.")]
-            public bool TryUnfilter()
-            {
-                // Keep old code, do not break existing code.
-                if (_value != null)
-                {
-                    var filter = _ownerDictionary.Elements.GetValue(Keys.Filter/*, VCF.NoTransform*/);
-                    if (filter != null)
-                    {
-                        // PDFsharp can only uncompress streams that are compressed with the ZIP or LZH algorithm.
-                        var decodeParms = _ownerDictionary.Elements.GetValue(Keys.DecodeParms/*, VCF.NoTransform*/);
-                        var bytes = Filtering.Decode(_value, filter, decodeParms);
-                        if (bytes != null!)
-                        {
-                            _ownerDictionary.Elements.Remove(Keys.Filter);
-                            _ownerDictionary.Elements.Remove(Keys.DecodeParms);
-                            Value = bytes;
-                        }
-                        else
-                            return false;
-                    }
-                }
-
-                return true;
             }
 
             /// <summary>

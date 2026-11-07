@@ -47,29 +47,6 @@ namespace PdfSharp.Pdf.Attachments
         }
 
         /// <summary>
-        /// Initializes a new instance of PdfFileSpecification referring an embedded file stream.
-        /// </summary>
-        [Obsolete("Use PdfFileSpecification constructor with EmbeddedFileInfo parameter.")]
-        public PdfFileSpecification(PdfDocument document, PdfEmbeddedFileStream embeddedFileStream, string name)
-            : base(document)
-        {
-            // ReSharper disable once StringLiteralTypo
-            Elements.SetName(Keys.Type, "/Filespec");
-
-            Elements.SetString(Keys.F, name);
-            Elements.SetString(Keys.UF, name);
-
-            var embeddedFileDictionary = new PdfDictionary(Owner);
-
-            Owner.Internals.AddObject(embeddedFileStream);
-            embeddedFileDictionary.Elements.SetReference(Keys.F,
-                embeddedFileStream.Reference ?? throw TH.InvalidOperationException_ReferenceMustNotBeNull());
-            embeddedFileDictionary.Elements.SetReference(Keys.UF, embeddedFileStream.Reference);
-
-            Elements.SetObject(Keys.EF, embeddedFileDictionary);
-        }
-
-        /// <summary>
         /// Initializes a new instance of this class using the elements of the specified dictionary.
         /// After this type transformation the specified dictionary is dead and cannot be used anymore.
         /// </summary>

@@ -170,13 +170,6 @@ namespace MigraDoc.DocumentObjectModel
         }
 
         /// <summary>
-        /// This is now the same as PageWidth.
-        /// </summary>
-        [Obsolete("EffectivePageWidth used to return the actual width of the page, while PageWidth returned the width of the non-rotated page format." +
-                  "As of now, PageWidth is already the effective page width.")]
-        public Unit EffectivePageWidth => PageWidth;
-
-        /// <summary>
         /// Gets or sets the starting number for the first section page.
         /// </summary>
         public int StartingNumber
@@ -216,13 +209,6 @@ namespace MigraDoc.DocumentObjectModel
             Values.PageFormat = null;
             Values.Orientation = null;
         }
-
-        /// <summary>
-        /// This is now the same as PageHeight.
-        /// </summary>
-        [Obsolete("EffectivePageHeight used to return the actual height of the page, while PageHeight returned the height of the non-rotated page format." +
-                  "As of now, PageHeight is already the effective page height.")]
-        public Unit EffectivePageHeight => PageHeight;
 
         /// <summary>
         /// Gets or sets the top margin of the pages in the section.

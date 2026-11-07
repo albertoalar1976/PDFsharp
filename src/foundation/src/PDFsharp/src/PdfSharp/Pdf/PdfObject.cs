@@ -642,14 +642,6 @@ namespace PdfSharp.Pdf
             => _iref ?? throw new InvalidOperationException("The indirect reference must be not null here.");
 
         /// <summary>
-        /// Gets the indirect reference of this object. Throws if it is null.
-        /// </summary>
-        /// <exception cref="System.InvalidOperationException">The indirect reference must be not null here.</exception>
-        [Obsolete("Use RequiredReference.")]
-        public PdfReference ReferenceNotNull
-            => RequiredReference;
-
-        /// <summary>
         /// Gets the actual reference.
         /// This function exists only for PdfWidgetAnnotations that are a part of an AcroField.
         /// </summary>

@@ -97,13 +97,6 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Creates an XColor structure from a 32-bit ARGB value.
         /// </summary>
-        [Obsolete("Use FromArgb(uint argb).")]
-        public static XColor FromArgb(int argb) 
-            => new((byte)(argb >> 24), (byte)(argb >> 16), (byte)(argb >> 8), (byte)(argb));
-
-        /// <summary>
-        /// Creates an XColor structure from a 32-bit ARGB value.
-        /// </summary>
         public static XColor FromArgb(uint argb) 
             => new((byte)(argb >> 24), (byte)(argb >> 16), (byte)(argb >> 8), (byte)(argb));
 
@@ -185,15 +178,6 @@ namespace PdfSharp.Drawing
             return new XColor(color);
         }
 
-
-        /// <summary>
-        /// Creates an XColor from the specified name of a pre-defined color.
-        /// </summary>
-        [Obsolete("Not really implemented and not useful. See XColorResourceManager.")]
-        public static XColor FromName(string name)
-        {
-            return Empty;
-        }
 
         /// <summary>
         /// Gets or sets the color space to be used for PDF generation.

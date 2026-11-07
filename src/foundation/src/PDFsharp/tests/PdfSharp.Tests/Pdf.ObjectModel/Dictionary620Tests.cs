@@ -88,9 +88,6 @@ namespace PdfSharp.Tests.Pdf.ObjectModel
                 PdfArray? narray = e.GetArray("0"); // 4stla: 6.2.0: 1 parameter, 6.3.0: 2 parameters
                 PdfReference? nref = e.GetReference("0");
                 e.SetObject("0", nobj!);
-#pragma warning disable CS0618 // Type or member is obsolete but was part of the PDFsharp 6.2 API
-                e.SetReference("0", nobj!);
-#pragma warning restore CS0618 // Type or member is obsolete
                 e.SetReference("0", nref!);
 
                 #region IDictionary Members

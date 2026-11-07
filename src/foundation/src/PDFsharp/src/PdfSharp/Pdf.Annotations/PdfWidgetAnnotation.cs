@@ -19,10 +19,6 @@ namespace PdfSharp.Pdf.Annotations
     {
         // Reference 2.0: 12.5.6.19  Widget annotations / Page 498
 
-        [Obsolete("PDFsharp 6.4: Use a constructor with a PDF document parameter.")]
-        public PdfWidgetAnnotation()
-            => throw new InvalidOperationException("PDFsharp 6.4: Use a constructor with a PDF document parameter.");
-
         public PdfWidgetAnnotation(PdfDocument document)
             : base(document)
         {

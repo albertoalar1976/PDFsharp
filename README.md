@@ -43,6 +43,11 @@ In containers, install the fonts you need, e.g. `apt-get install fonts-liberatio
 or pass your own font folders: `new SystemFontResolver(["/app/fonts"])`.
 `GetFamilyNames()` lists the families found.
 
+### Removed obsolete API
+
+This fork removed the API that the upstream project had marked as obsolete.
+See [MIGRATION.md](MIGRATION.md) for the replacements.
+
 ## Read this FIRST
 
 The documentation of the original project can be found at <https://docs.pdfsharp.net>.

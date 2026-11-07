@@ -520,16 +520,5 @@ namespace PdfSharp.Pdf.Internal
         static string? s_formatCMYK;
         // ReSharper restore InconsistentNaming
 
-        /// <summary>
-        /// Converts an XMatrix into a string with up to 4 decimal digits and a decimal point.
-        /// </summary>
-        [Obsolete]
-        public static string ToString(XMatrix matrix)
-        {
-            const string format = Config.SignificantDecimalPlaces4;
-            return String.Format(CultureInfo.InvariantCulture,
-                "{0:" + format + "} {1:" + format + "} {2:" + format + "} {3:" + format + "} {4:" + format + "} {5:" + format + "}",
-                matrix.M11, matrix.M12, matrix.M21, matrix.M22, matrix.OffsetX, matrix.OffsetY);
-        }
     }
 }

@@ -236,12 +236,6 @@ namespace PdfSharp.Pdf
         public bool HasMediaBox => Elements.HasValue(InheritablePageKeys.MediaBox);
 
         /// <summary>
-        /// Gets a copy of the media box if it exists, or an empty PdfRectangle if no media box is set.
-        /// </summary>
-        [Obsolete("Use properties HasMediaBox and MediaBox.")]
-        public PdfRectangle MediaBoxReadOnly => Elements.GetRequiredRectangle(InheritablePageKeys.MediaBox, false, new());
-
-        /// <summary>
         /// Gets or sets the crop box.
         /// </summary>
         public PdfRectangle CropBox
@@ -254,12 +248,6 @@ namespace PdfSharp.Pdf
         /// Gets a value indicating whether a crop box is set.
         /// </summary>
         public bool HasCropBox => Elements.HasValue(InheritablePageKeys.CropBox);
-
-        /// <summary>
-        /// Gets a copy of the crop box if it exists, or an empty PdfRectangle if no crop box is set.
-        /// </summary>
-        [Obsolete("Use properties HasCropBox and CropBox.")]
-        public PdfRectangle CropBoxReadOnly => Elements.GetRequiredRectangle(InheritablePageKeys.CropBox, false, new());
 
         /// <summary>
         /// Gets a copy of the effective crop box if it exists, or an empty PdfRectangle if neither crop box nor media box are set.
@@ -282,13 +270,6 @@ namespace PdfSharp.Pdf
         /// Gets a value indicating whether a bleed box is set.
         /// </summary>
         public bool HasBleedBox => Elements.HasValue(Keys.BleedBox);
-
-        /// <summary>
-        /// Gets a copy of the bleed box if it exists, or an empty PdfRectangle if no bleed box is set.
-        /// </summary>
-        [Obsolete("Use properties HasBleedBox and BleedBox.")]
-
-        public PdfRectangle BleedBoxReadOnly => Elements.GetRequiredRectangle(Keys.BleedBox, false, new());
 
         /// <summary>
         /// Gets a copy of the effective bleed box if it exists, or an empty PdfRectangle if neither bleed box nor crop box nor media box are set.
@@ -318,12 +299,6 @@ namespace PdfSharp.Pdf
         public bool HasArtBox => Elements.HasValue(Keys.ArtBox);
 
         /// <summary>
-        /// Gets a copy of the art box if it exists, or an empty PdfRectangle if no art box is set.
-        /// </summary>
-        [Obsolete("Use properties HasArtBox and ArtBox.")]
-        public PdfRectangle ArtBoxReadOnly => Elements.GetRequiredRectangle(Keys.ArtBox, false, new());
-
-        /// <summary>
         /// Gets a copy of the effective art box if it exists, or an empty PdfRectangle if neither art box nor crop box nor media box are set.
         /// </summary>
         public PdfRectangle EffectiveArtBoxReadOnly
@@ -349,13 +324,6 @@ namespace PdfSharp.Pdf
         /// Gets a value indicating whether a trim box is set.
         /// </summary>
         public bool HasTrimBox => Elements.HasValue(Keys.TrimBox);
-
-        /// <summary>
-        /// Gets a copy of the trim box if it exists, or an empty PdfRectangle if no trim box is set.
-        /// </summary>
-        [Obsolete("Use properties HasTrimBox and TrimBox.")]
-
-        public PdfRectangle TrimBoxReadOnly => Elements.GetRequiredRectangle(Keys.TrimBox, false, new());
 
         /// <summary>
         /// Gets a copy of the effective trim box if it exists, or an empty PdfRectangle if neither trim box nor crop box nor media box are set.

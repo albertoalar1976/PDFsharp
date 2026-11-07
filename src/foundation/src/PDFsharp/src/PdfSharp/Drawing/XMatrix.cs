@@ -117,24 +117,6 @@ namespace PdfSharp.Drawing
         }
 
         /// <summary>
-        /// Appends the specified matrix to this matrix. 
-        /// </summary>
-        [Obsolete("Use Append.")]
-        public void Multiply(XMatrix matrix)
-        {
-            Append(matrix);
-        }
-
-        /// <summary>
-        /// Prepends the specified matrix to this matrix. 
-        /// </summary>
-        [Obsolete("Use Prepend.")]
-        public void MultiplyPrepend(XMatrix matrix)
-        {
-            Prepend(matrix);
-        }
-
-        /// <summary>
         /// Multiplies this matrix with the specified matrix.
         /// </summary>
         public void Multiply(XMatrix matrix, XMatrixOrder order)
@@ -170,30 +152,6 @@ namespace PdfSharp.Drawing
             }
 
             DeriveMatrixType();
-        }
-
-        /// <summary>
-        /// Appends a translation of the specified offsets to this matrix.
-        /// </summary>
-        [Obsolete("Use TranslateAppend or TranslatePrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        public void Translate(double offsetX, double offsetY)
-        {
-            throw new InvalidOperationException("Temporarily out of order.");
-            //if (_type == XMatrixTypes.Identity)
-            //{
-            //  SetMatrix(1.0, 0, 0, 1.0, offsetX, offsetY, XMatrixTypes.Translation);
-            //}
-            //else if (_type == XMatrixTypes.Unknown)
-            //{
-            //  _offsetX += offsetX;
-            //  _offsetY += offsetY;
-            //}
-            //else
-            //{
-            //  _offsetX += offsetX;
-            //  _offsetY += offsetY;
-            //  _type |= XMatrixTypes.Translation;
-            //}
         }
 
         /// <summary>
@@ -253,15 +211,6 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Appends the specified scale vector to this matrix.
         /// </summary>
-        [Obsolete("Use ScaleAppend or ScalePrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        public void Scale(double scaleX, double scaleY)
-        {
-            this = CreateScaling(scaleX, scaleY) * this;
-        }
-
-        /// <summary>
-        /// Appends the specified scale vector to this matrix.
-        /// </summary>
         public void ScaleAppend(double scaleX, double scaleY) // TODO_OLD: will become default
         {
             this *= CreateScaling(scaleX, scaleY);
@@ -304,18 +253,6 @@ namespace PdfSharp.Drawing
         }
 
         /// <summary>
-        /// Scales the matrix with the specified scalar.
-        /// </summary>
-        [Obsolete("Use ScaleAppend or ScalePrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        // ReSharper disable InconsistentNaming
-        public void Scale(double scaleXY)
-        // ReSharper restore InconsistentNaming
-        {
-            throw new InvalidOperationException("Temporarily out of order.");
-            //Scale(scaleXY, scaleXY, XMatrixOrder.Prepend);
-        }
-
-        /// <summary>
         /// Appends the specified scale vector to this matrix.
         /// </summary>
         // ReSharper disable InconsistentNaming
@@ -346,16 +283,6 @@ namespace PdfSharp.Drawing
         }
 
         /// <summary>
-        /// Function is obsolete.
-        /// </summary>
-        [Obsolete("Use ScaleAtAppend or ScaleAtPrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        public void ScaleAt(double scaleX, double scaleY, double centerX, double centerY)
-        {
-            throw new InvalidOperationException("Temporarily out of order.");
-            //this *= CreateScaling(scaleX, scaleY, centerX, centerY);
-        }
-
-        /// <summary>
         /// Appends the specified scale about the specified point of this matrix.
         /// </summary>
         public void ScaleAtAppend(double scaleX, double scaleY, double centerX,
@@ -370,17 +297,6 @@ namespace PdfSharp.Drawing
         public void ScaleAtPrepend(double scaleX, double scaleY, double centerX, double centerY)
         {
             this = CreateScaling(scaleX, scaleY, centerX, centerY) * this;
-        }
-
-        /// <summary>
-        /// Function is obsolete.
-        /// </summary>
-        [Obsolete("Use RotateAppend or RotatePrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        public void Rotate(double angle)
-        {
-            throw new InvalidOperationException("Temporarily out of order.");
-            //angle %= 360.0;
-            //this *= CreateRotationRadians(angle * Const.Deg2Rad);
         }
 
         /// <summary>
@@ -443,17 +359,6 @@ namespace PdfSharp.Drawing
         }
 
         /// <summary>
-        /// Function is obsolete.
-        /// </summary>
-        [Obsolete("Use RotateAtAppend or RotateAtPrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        public void RotateAt(double angle, double centerX, double centerY)
-        {
-            throw new InvalidOperationException("Temporarily out of order.");
-            //angle %= 360.0;
-            //this *= CreateRotationRadians(angle * Const.Deg2Rad, centerX, centerY);
-        }
-
-        /// <summary>
         /// Appends a rotation of the specified angle at the specified point to this matrix.
         /// </summary>
         public void RotateAtAppend(double angle, double centerX, double centerY) // TODO_OLD: will become default
@@ -469,16 +374,6 @@ namespace PdfSharp.Drawing
         {
             angle %= 360.0;
             this = CreateRotationRadians(angle * Const.Deg2Rad, centerX, centerY) * this;
-        }
-
-        /// <summary>
-        /// Rotates the matrix with the specified angle at the specified point.
-        /// </summary>
-        [Obsolete("Use RotateAtAppend or RotateAtPrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        public void RotateAt(double angle, XPoint point)
-        {
-            throw new InvalidOperationException("Temporarily out of order.");
-            //RotateAt(angle, point, XMatrixOrder.Prepend);
         }
 
         /// <summary>
@@ -517,16 +412,6 @@ namespace PdfSharp.Drawing
             }
 
             DeriveMatrixType();
-        }
-
-        /// <summary>
-        /// Function is obsolete.
-        /// </summary>
-        [Obsolete("Use ShearAppend or ShearPrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        public void Shear(double shearX, double shearY)
-        {
-            throw new InvalidOperationException("Temporarily out of order.");
-            //Shear(shearX, shearY, XMatrixOrder.Prepend);
         }
 
         /// <summary>
@@ -577,18 +462,6 @@ namespace PdfSharp.Drawing
             }
 
             DeriveMatrixType();
-        }
-
-        /// <summary>
-        /// Function is obsolete.
-        /// </summary>
-        [Obsolete("Use SkewAppend or SkewPrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        public void Skew(double skewX, double skewY)
-        {
-            throw new InvalidOperationException("Temporarily out of order.");
-            //skewX %= 360.0;
-            //skewY %= 360.0;
-            //this *= CreateSkewRadians(skewX * Const.Deg2Rad, skewY * Const.Deg2Rad);
         }
 
         /// <summary>

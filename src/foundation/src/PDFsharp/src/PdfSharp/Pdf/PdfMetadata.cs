@@ -90,13 +90,6 @@ namespace PdfSharp.Pdf
         }
 
         /// <summary>
-        /// Obsolete, use ToString.
-        /// </summary>
-        [Obsolete("Use ToString.")]
-        public string Xml
-            => Stream == null ? "" : Stream.ToString();
-
-        /// <summary>
         /// Creates the XMP metadata for the PDF document.
         /// Creating XMP metadata is not the business of PDFsharp.
         /// This is a suggestion how you can do it.

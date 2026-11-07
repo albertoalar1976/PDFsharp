@@ -20,13 +20,5 @@ namespace PdfSharp.Features.Drawing
         {
             RenderSnippetAsPdf(new Snippets.Drawing.GraphicsUnitDownwards(), XUnit.FromPoint(WidthInPoint), XUnit.FromPoint(HeightInPoint), XGraphicsUnit.Presentation, XPageDirection.Downwards);
         }
-
-        /// <summary>
-        /// Render snippet with page direction upwards.
-        /// </summary>
-        public void Upwards()
-        {
-            RenderSnippetAsPdf(new Snippets.Drawing.GraphicsUnitUpwards(), XUnit.FromPoint(WidthInPoint), XUnit.FromPoint(HeightInPoint), XGraphicsUnit.Presentation, XPageDirection.Downwards);
-        }
     }
 }

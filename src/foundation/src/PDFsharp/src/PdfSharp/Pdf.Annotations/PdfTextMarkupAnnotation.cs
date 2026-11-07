@@ -11,9 +11,6 @@ namespace PdfSharp.Pdf.Annotations
     public abstract class PdfTextMarkupAnnotation : PdfMarkupAnnotation
     {
         // Reference 2.0: 12.5.6.10  Text markup annotations / Page 492
-        [Obsolete("PDFsharp 6.4: Use a constructor with a PDF document parameter.")]
-        protected PdfTextMarkupAnnotation()
-            => throw new NotImplementedException("PDFsharp 6.4: Use a constructor with a PDF document parameter.");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PdfTextMarkupAnnotation"/> class.

@@ -257,40 +257,6 @@ namespace PdfSharp.Drawing
         bool _disposed;
 
         /// <summary>
-        /// Gets the width of the image.
-        /// </summary>
-        [Obsolete("Use either PixelWidth or PointWidth. Temporarily obsolete because of rearrangements for WPF. Currently same as PixelWidth, but will become PointWidth in future releases of PDFsharp.")]
-        public virtual double Width
-        {
-            get
-            {
-                if (_importedImage != null)
-                    return _importedImage.PixelWidth;
-                return 100;
-                //#if GDI && !WPF
-                //                return _gdiImage.Width;
-                //#endif
-            }
-        }
-
-        /// <summary>
-        /// Gets the height of the image.
-        /// </summary>
-        [Obsolete("Use either PixelHeight or PointHeight. Temporarily obsolete because of rearrangements for WPF. Currently same as PixelHeight, but will become PointHeight in future releases of PDFsharp.")]
-        public virtual double Height
-        {
-            get
-            {
-                if (_importedImage != null)
-                    return _importedImage.PixelHeight;
-                return 100;
-                //#if GDI && !WPF
-                //                return _gdiImage.Height;
-                //#endif
-            }
-        }
-
-        /// <summary>
         /// The factor for conversion from DPM to PointWidth or PointHeight.
         /// 72 points per inch, 1000 mm per meter, 25.4 mm per inch => 72 * 1000 / 25.4.
         /// </summary>

@@ -16,11 +16,6 @@ namespace PdfSharp.Fonts
     /// </summary>
     public static class GlobalFontSettings
     {
-        /// <summary>
-        /// The name of the default font. This name is obsolete and must not be used anymore.
-        /// </summary>
-        [Obsolete("DefaultFontName is deprecated. Do not use it anymore.")]
-        public const string DefaultFontName = "PlatformDefault";
 
         /// <summary>
         /// Gets or sets the custom font resolver for the current application.
@@ -110,24 +105,6 @@ namespace PdfSharp.Fonts
             }
 
             location = value;
-        }
-
-        /// <summary>
-        /// Adds a font resolver. NYI
-        /// </summary>
-        /// <param name="fontResolver">The font resolver.</param>
-        [Obsolete("Not yet implemented.")]
-        /*public*/
-        static void AddFontResolver(IFontResolverMarker fontResolver)
-        {
-            int x = fontResolver switch
-            {
-                IFontResolver => 7,
-                IFontResolver2 => 8,
-                _ => throw new ArgumentException("Not a valid font resolver.")
-            };
-            _ = x;
-            throw new NotImplementedException();
         }
 
         /// <summary>

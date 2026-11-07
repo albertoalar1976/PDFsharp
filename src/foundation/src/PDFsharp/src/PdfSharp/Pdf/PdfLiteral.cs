@@ -38,15 +38,6 @@ namespace PdfSharp.Pdf
         }
 
         /// <summary>
-        /// Creates a literal from an XMatrix
-        /// </summary>
-        [Obsolete]
-        public static PdfLiteral FromMatrix(XMatrix matrix)
-        {
-            return new PdfLiteral($"[{PdfEncoders.ToString(matrix)}]");
-        }
-
-        /// <summary>
         /// Gets the value as literal string.
         /// </summary>
         public string Value { get; }

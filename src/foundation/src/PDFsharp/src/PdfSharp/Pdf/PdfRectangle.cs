@@ -122,12 +122,6 @@ namespace PdfSharp.Pdf
         /// <summary>
         /// Tests whether all coordinates are zero.
         /// </summary>
-        [Obsolete("Use 'IsZero' instead.")]
-        public bool IsEmpty => IsZero;
-
-        /// <summary>
-        /// Tests whether all coordinates are zero.
-        /// </summary>
         public bool IsZero => X1 == 0 && Y1 == 0 && X2 == 0 && Y2 == 0;
 
         /// <summary>
@@ -262,12 +256,6 @@ namespace PdfSharp.Pdf
         /// </summary>
         internal override void WriteObject(PdfWriter writer)
             => writer.Write(this);
-
-        /// <summary>
-        /// Represents an empty PdfRectangle.
-        /// </summary>
-        [Obsolete("A rectangle defined by two points cannot be well-defined as empty. Do not use this property.")]
-        public static PdfRectangle Empty => throw new InvalidOperationException("Use 'new PdfRectangle()' instead of 'PdfRectangle.Empty'");
 
         /// <summary>
         /// Gets the DebuggerDisplayAttribute text.

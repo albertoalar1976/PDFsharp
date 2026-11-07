@@ -748,12 +748,6 @@ namespace PdfSharp.Pdf
         public PdfOutlineCollection Outlines => Catalog.Outlines;
 
         /// <summary>
-        /// Get the AcroForm (interactive form) dictionary.
-        /// </summary>
-        [Obsolete("Use Catalog.GetAcroForm or Catalog.GetOrCreateAcroForm.")]
-        public PdfForm AcroForm => Catalog.AcroForm;
-
-        /// <summary>
         /// Gets or sets the default language of the document.
         /// </summary>
         public string Language
@@ -963,54 +957,6 @@ namespace PdfSharp.Pdf
         public void AddNamedDestination(string destinationName, int destinationPage,
             PdfNamedDestinationParameters parameters)
             => Internals.Catalog.Names.AddNamedDestination(destinationName, destinationPage, parameters);
-
-        /// <summary>
-        /// Adds an embedded file to the document.
-        /// </summary>
-        /// <param name="name">The name used to refer and to entitle the embedded file.</param>
-        /// <param name="path">The path of the file to embed.</param>
-        [Obsolete("Use EmbeddedFilesManager.ForDocument(document).Add(embeddedFileInfo)")]
-        public void AddEmbeddedFile(string name, string path)
-        {
-            var stream = new FileStream(path, FileMode.Open);
-            AddEmbeddedFile(name, stream);
-        }
-
-        /// <summary>
-        /// This function is deprecated. TODO
-        /// Adds an embedded file to the document.
-        /// </summary>
-        /// <param name="name">The name used to refer and to entitle the embedded file.</param>
-        /// <param name="stream">The stream containing the file to embed.</param>
-        [Obsolete("Use EmbeddedFilesManager.ForDocument(document).Add(embeddedFileInfo)")]
-        public void AddEmbeddedFile(string name, Stream stream)
-        {
-            var length = (int)stream.Length;
-            var bytes = new byte[length];
-            var read = stream.Read(bytes, 0, length);
-            if (read != length)
-                throw new InvalidOperationException($"Try to read {length} bytes, but read {read} bytes.");
-
-            var efi = new EmbeddedFileInfo
-            {
-                NamesKey = name,
-                FileName = name,
-                FileType = "",
-                Description = "",
-                CreationTime = DateTimeOffset.Now,
-                ModificationTime = null,
-                Data = bytes,
-                AFRelationship = PdfAFRelationship.Unspecified
-            };
-            EmbeddedFilesManager.ForDocument(this).AddFile(efi);
-        }
-
-        /// <summary>
-        /// Flattens a document (make the fields non-editable).
-        /// </summary>
-        [Obsolete("This function does nothing useful and was removed.")]
-        public void Flatten()
-            => throw new InvalidOperationException("This function does nothing useful and was removed.");
 
         /// <summary>
         /// TODO. Experimental, do no use.
