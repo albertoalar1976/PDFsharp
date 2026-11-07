@@ -29,12 +29,10 @@ function FilterBranchName([string]$name)
 
 #CHECK_BEFORE_RELEASE
 # Predefined values if we have no .git at all or git but no tag.
-$NoVersionTag = "v7.0.0-preview-2"          # Default value if no git tag can be found.
-$Product = "PDFsharp 7.0-Preview-2"         # Default product name.
-$branchName = "release/7.0.0-preview-2"     # Default branch name if not compiled from a git repo.
-$commitDate = "2026-10-13"                  # Default commit date if not compiled from a git repo.
-# The version of the used PdfSharp.License.dll.
-$pdfSharpLicenseVersion = "6.5.0"
+$NoVersionTag = "v7.0.0-preview-1"          # Default value if no git tag can be found.
+$Product = "PDFsharp 7.0-Preview-1"         # Default product name.
+$branchName = "release/7.0.0-preview-1"     # Default branch name if not compiled from a git repo.
+$commitDate = "2026-03-23"                  # Default commit date if not compiled from a git repo.
 
 Push-Location $PSScriptRoot
 
@@ -168,8 +166,6 @@ $semVersion["SHA"] = $SHA
 $semVersion["ShortSHA"] = $shortSHA
 $semVersion['GitTag'] = $gitTag
 
-$semVersion['PdfSharpLicenseVersion'] = $pdfSharpLicenseVersion
-
 # Analyze branch name to determine SemVer.
 # We have/need:
 #  * develop
@@ -302,7 +298,6 @@ $templateSemVerProps = @"
     <CommitDate>{CommitDate}</CommitDate>
     <Sha>{Sha}</Sha>
     <ShortSha>{ShortSha}</ShortSha>
-    <PdfSharpLicenseVersion>{PdfSharpLicenseVersion}</PdfSharpLicenseVersion>
 
   </PropertyGroup>
 </Project>
@@ -320,8 +315,7 @@ $outputSemVerProps = $templateSemVerProps `
     -replace "{BranchName}", $semVersion['BranchName'] `
     -replace "{CommitDate}", $semVersion['CommitDate'] `
     -replace "{Sha}", $semVersion['Sha'] `
-    -replace "{ShortSha}", $semVersion['ShortSha'] `
-    -replace "{PdfSharpLicenseVersion}", $semVersion['PdfSharpLicenseVersion']
+    -replace "{ShortSha}", $semVersion['ShortSha']
 
 # Read old file.
 $oldOutputSemVerProps = "<empty>"
@@ -368,7 +362,6 @@ namespace PdfSharp.Internal
         const string SemCommitDate = "{CommitDate}";
         const string SemSha = "{Sha}";
         const string SemShortSha = "{ShortSha}";
-        const string PdfSharpLicenseVersion = "{PdfSharpLicenseVersion}";
     }
 }
 "@
@@ -385,8 +378,7 @@ $outputSemVerInfo = $templateSemVerInfo `
     -replace "{BranchName}", $semVersion['BranchName'] `
     -replace "{CommitDate}", $semVersion['CommitDate'] `
     -replace "{Sha}", $semVersion['Sha'] `
-    -replace "{ShortSha}", $semVersion['ShortSha'] `
-    -replace "{PdfSharpLicenseVersion}", $semVersion['PdfSharpLicenseVersion']
+    -replace "{ShortSha}", $semVersion['ShortSha']
 
 # Read old file.
 $oldOutputSemVerInfo = "<empty>"

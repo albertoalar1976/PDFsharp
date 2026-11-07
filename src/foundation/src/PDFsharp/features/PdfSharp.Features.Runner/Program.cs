@@ -17,9 +17,6 @@ namespace PdfSharp.Features
     {
         static void Main(string[] args)
         {
-            // Set AGPL license.
-            PdfSharpLicense.SetAgplLicense();
-
 #if CORE
             GlobalFontSettings.UseWindowsFontsUnderWindows = true;
 #endif

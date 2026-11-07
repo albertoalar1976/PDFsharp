@@ -6,8 +6,8 @@
 
 # PDFsharp & MigraDoc 7
 
-Version **7.0.0 Preview 2**  
-Published **2026-10-13**
+Version **7.0.0 Preview 1**  
+Published **2026-03-24**
 
 This is a preview version of the **PDFsharp** project, the main project of PDFsharp & MigraDoc 7.
 
@@ -19,9 +19,9 @@ This fork targets **.NET 10** only.
 * The GDI and WPF builds (`net10.0-windows`) are for Windows desktop applications.
 * .NET Framework, .NET Standard, and .NET 8/9 (end of support on 2026-11-10) are no longer supported.
 
-PDFsharp: Copyright (c) 2005-2026 empira Software GmbH, Troisdorf (Cologne Area), Germany
-MigraDoc: Copyright (c) 2001-2026 empira Software GmbH, Troisdorf (Cologne Area), Germany
-Published Open Source under [AGPL and Commercial License](https://docs.pdfsharp.net/LICENSE.html)
+PDFsharp: Copyright (c) 2005-2026 empira Software GmbH, Troisdorf (Cologne Area), Germany  
+MigraDoc: Copyright (c) 2001-2026 empira Software GmbH, Troisdorf (Cologne Area), Germany  
+Published Open Source under the [MIT License](https://docs.pdfsharp.net/LICENSE.html)
 
 For more information see [docs.pdfsharp.net](https://docs.pdfsharp.net/)
 
@@ -85,5 +85,5 @@ Andreas Seifert
 
 ## Libraries used by PDFsharp
 
-The Core build of PDFsharp uses BigGustave to read PNG images. BigGustave was released into the public domain and does not restrict the AGPL or Commercial License used by PDFsharp.  
+The Core build of PDFsharp uses BigGustave to read PNG images. BigGustave was released into the public domain and does not restrict the MIT license used by PDFsharp.  
 Link to project repository: https://github.com/EliotJones/BigGustave

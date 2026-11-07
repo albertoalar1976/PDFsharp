@@ -40,7 +40,6 @@ namespace PdfSharp.Pdf.IO
     {
         PdfReader(ILogger? logger, PdfReaderOptions? options)
         {
-            PdfSharpLicense.CheckLicense();
             _logger = logger ?? PdfSharpLogHost.PdfReadingLogger;
             _options = options ?? new();
         }

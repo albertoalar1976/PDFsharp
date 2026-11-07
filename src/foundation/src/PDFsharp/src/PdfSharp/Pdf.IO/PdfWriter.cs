@@ -14,18 +14,8 @@ namespace PdfSharp.Pdf.IO
     /// <summary>
     /// Represents a writer for generation of PDF streams.
     /// </summary>
-    class PdfWriter
+    class PdfWriter(Stream pdfStream, PdfDocument document, PdfStandardSecurityHandler? effectiveSecurityHandler)
     {
-        public PdfWriter(Stream pdfStream, PdfDocument document, PdfStandardSecurityHandler? effectiveSecurityHandler)
-        {
-            PdfSharpLicense.CheckLicense();
-            _stream = pdfStream ?? throw new ArgumentNullException(nameof(pdfStream));
-            _document = document ?? throw new ArgumentNullException(nameof(document));
-            EffectiveSecurityHandler = effectiveSecurityHandler;
-
-            Layout = document.Options.Layout;
-        }
-
         public void Close(bool closeUnderlyingStream = true)
         {
             if (closeUnderlyingStream)
@@ -39,7 +29,7 @@ namespace PdfSharp.Pdf.IO
         /// <summary>
         /// Gets or sets the kind of layout.
         /// </summary>
-        public PdfWriterLayout Layout { get; set; }
+        public PdfWriterLayout Layout { get; set; } = document.Options.Layout;
 
         internal bool IsCompactLayout => Layout == PdfWriterLayout.Compact;
 
@@ -861,10 +851,10 @@ namespace PdfSharp.Pdf.IO
         /// </summary>
         internal Stream Stream => _stream;
 
-        Stream _stream;
-        readonly PdfDocument _document;
+        Stream _stream = pdfStream ?? throw new ArgumentNullException(nameof(pdfStream));
+        readonly PdfDocument _document = document ?? throw new ArgumentNullException(nameof(document));
 
-        internal PdfStandardSecurityHandler? EffectiveSecurityHandler { get; set; }
+        internal PdfStandardSecurityHandler? EffectiveSecurityHandler { get; set; } = effectiveSecurityHandler;
 
         class StackItem(PdfObject value, int childItemCount)
         {

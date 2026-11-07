@@ -30,9 +30,6 @@ namespace HelloWorld
             });
             LogHost.Factory = loggerFactory;
 
-            // Set AGPL license.
-            PdfSharpLicense.SetAgplLicense();
-
             GlobalFontSettings.UseWindowsFontsUnderWindows = true;
             GlobalFontSettings.UseWindowsFontsUnderWsl2 = true;
 
@@ -42,6 +39,7 @@ namespace HelloWorld
             document.Info.Title = "Created with PDFsharp";
             document.Info.Author = "PDFsharp team";
             document.Info.Subject = "Hello, World!";
+            document.ViewerPreferences.FitWindow = true;
 
             // Create an empty page in this document.
             var page = document.AddPage();

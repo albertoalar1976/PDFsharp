@@ -26,9 +26,6 @@ namespace HelloWorld
     {
         static void Main()
         {
-            // Set AGPL license.
-            PdfSharpLicense.SetAgplLicense();
-
             if (Capabilities.Build.IsCoreBuild)
                 GlobalFontSettings.FontResolver = new FailsafeFontResolver();
 

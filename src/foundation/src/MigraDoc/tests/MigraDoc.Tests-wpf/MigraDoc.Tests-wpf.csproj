@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\MigraDoc.Tests\Initializer.cs" Link="Initializer.cs" />
     <Compile Include="..\MigraDoc.Tests\ChartTests.cs" Link="ChartTests.cs" />
     <Compile Include="..\MigraDoc.Tests\ConcurrentRenderingTests.cs" Link="ConcurrentRenderingTests.cs" />
     <Compile Include="..\MigraDoc.Tests\CultureAndRegionTests.cs" Link="CultureAndRegionTests.cs" />

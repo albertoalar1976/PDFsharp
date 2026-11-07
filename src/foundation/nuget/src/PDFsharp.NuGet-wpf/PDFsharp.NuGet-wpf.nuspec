@@ -8,10 +8,10 @@
         <authors>$authors$</authors>
         <owners>$owners$</owners>
         <projectUrl>$projectUrl$</projectUrl>
-        <license type="expression">AGPL-3.0-only</license>
+        <license type="expression">MIT</license>
         <icon>images\PDFsharp-128x128.png</icon>
         <readme>README.md</readme>
-        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <releaseNotes>$releaseNotes$</releaseNotes>
         <copyright>$CopyrightPdfSharp$</copyright>
         <tags>$tags$</tags>

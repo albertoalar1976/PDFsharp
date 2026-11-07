@@ -37,16 +37,10 @@
     <EmbeddedResource Include="..\PdfSharp\Resources\sRGB2014.icc" Link="Resources\sRGB2014.icc" />
   </ItemGroup>
 
-  <ItemGroup >
-    <Reference Include="PdfSharp.License">
-      <HintPath>..\..\..\..\..\..\assets\license\bin\$(PdfSharpLicenseVersion)\PdfSharp.License.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="PdfSharp.Tests-wpf,             PublicKey=$(PDFsharpStronNamePublicKey)" />
-    <InternalsVisibleTo Include="PdfSharp.TestHelper-wpf,        PublicKey=$(PDFsharpStronNamePublicKey)" />
-    <InternalsVisibleTo Include="PdfSharp.License.Tests-wpf,     PublicKey=$(PDFsharpStronNamePublicKey)" />
+    <InternalsVisibleTo Include="PDFsharp.Tests-wpf,             PublicKey=$(PDFsharpStronNamePublicKey)" />
+    <InternalsVisibleTo Include="PDFsharp.TestHelper-wpf,        PublicKey=$(PDFsharpStronNamePublicKey)" />
     <InternalsVisibleTo Include="PdfSharp.Annotations.Tests-wpf, PublicKey=$(PDFsharpStronNamePublicKey)" />
   </ItemGroup>
 
