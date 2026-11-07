@@ -9,7 +9,6 @@
         <owners>$owners$</owners>
         <projectUrl>$projectUrl$</projectUrl>
         <license type="expression">MIT</license>
-        <icon>images\MigraDoc-128x128.png</icon>
         <readme>README.md</readme>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <releaseNotes>$releaseNotes$</releaseNotes>
@@ -32,6 +31,5 @@
     <files>
         <file src="bin\$config$\net10.0\**\MigraDoc*.*" target="lib\net10.0\" exclude="**\*NuGet*"/>
         <file src="README.md" />
-        <file src="..\..\..\..\..\assets\migradoc\images\MigraDoc-128x128.png" target="images\" />
     </files>
 </package>

@@ -8,4 +8,14 @@
     <DefineConstants>$(DefineConstants);USE_LONG_SIZE;TEST_CODExxx;PRESERVE_PARSED_VALUESxxx;PDFSHARP_DEBUGxxx</DefineConstants>
   </PropertyGroup>
   <Import Condition="Exists('PdfSharpBuildConfig.targets')" Project="PdfSharpBuildConfig.targets" />
+
+  <!-- Some projects embed fonts from the assets folder, e.g. PdfSharp.WPFonts and PdfSharp.Snippets.
+       Without the assets the compiler reports an error that does not tell what to do. -->
+  <Target Name="PdfSharpCheckAssets" BeforeTargets="PrepareForBuild" Condition="'@(EmbeddedResource)' != ''">
+    <ItemGroup>
+      <_PdfSharpMissingAsset Include="@(EmbeddedResource)" Condition="!Exists('%(FullPath)')" />
+    </ItemGroup>
+    <Error Condition="'@(_PdfSharpMissingAsset)' != ''"
+           Text="Missing file(s) from the assets folder: @(_PdfSharpMissingAsset->'%(Filename)%(Extension)', ', '). Run ./dev/download-assets.ps1 once before building." />
+  </Target>
 </Project>
