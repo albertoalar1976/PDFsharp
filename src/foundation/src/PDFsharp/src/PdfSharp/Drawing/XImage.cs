@@ -818,6 +818,9 @@ namespace PdfSharp.Drawing
                 _importedImage = null;
             }
 #endif
+            // The stream belongs to the caller, so it is not closed here. But the image must not keep it,
+            // e.g. a large MemoryStream, alive after it was disposed.
+            _stream = null!;
 
 #if GDI
             if (_gdiImage != null!)

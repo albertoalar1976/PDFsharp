@@ -101,8 +101,8 @@ namespace MigraDoc.RtfRendering
                     {
                         if (closeStream)
                             streamWriter.Close();
-                        else
-                            stream.Position = 0; // Reset the stream position if the stream is kept open.
+                        else if (stream.CanSeek)
+                            stream.Position = 0; // Reset the stream position if the stream is kept open (if it can seek).
                     }
                 }
             }
