@@ -23,6 +23,26 @@ The copyright notices of the original authors must be kept:
 PDFsharp: Copyright (c) 2005-2026 empira Software GmbH, Troisdorf (Cologne Area), Germany  
 MigraDoc: Copyright (c) 2001-2026 empira Software GmbH, Troisdorf (Cologne Area), Germany
 
+### Fonts on Windows, Linux, and macOS
+
+`SystemFontResolver` uses the fonts installed on the computer, the same way on all three operating systems.
+It finds TrueType fonts (.ttf) and TrueType collections (.ttc) in the standard font folders,
+simulates bold and italic if a family has no such face,
+and uses a metric-compatible family if a family is not installed, e.g. Liberation Sans for Arial on Linux.
+
+```cs
+// Once at application startup.
+GlobalFontSettings.FontResolver = new SystemFontResolver();
+
+// Or: your own fonts first, the installed fonts for everything else.
+GlobalFontSettings.FontResolver = new MyFontResolver();
+GlobalFontSettings.FallbackFontResolver = new SystemFontResolver();
+```
+
+In containers, install the fonts you need, e.g. `apt-get install fonts-liberation`,
+or pass your own font folders: `new SystemFontResolver(["/app/fonts"])`.
+`GetFamilyNames()` lists the families found.
+
 ## Read this FIRST
 
 The documentation of the original project can be found at <https://docs.pdfsharp.net>.

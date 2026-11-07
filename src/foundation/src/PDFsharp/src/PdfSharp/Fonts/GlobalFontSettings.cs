@@ -190,6 +190,7 @@ namespace PdfSharp.Fonts
         /// If true, PDFsharp uses the build-in WindowsPlatformFontResolver to resolve some standards fonts like Arial or Times New Roman if
         /// the code runs under Windows. If false, which is default, you must provide your own custom font resolver.
         /// We recommend to use always a custom font resolver for a PDFsharp Core build.
+        /// To use the installed fonts the same way on Windows, Linux, and macOS, use <see cref="SystemFontResolver"/>.
         /// </summary>
         public static bool UseWindowsFontsUnderWindows
         {
@@ -224,6 +225,7 @@ namespace PdfSharp.Fonts
         /// If true, PDFsharp uses the build-in WindowsPlatformFontResolver to resolve some standards fonts like Arial or Times New Roman if
         /// the code runs under WSL2. If false, which is default, you must provide your own custom font resolver.
         /// We recommend to use always a custom font resolver for a PDFsharp Core build.
+        /// To use the installed fonts the same way on Windows, Linux, and macOS, use <see cref="SystemFontResolver"/>.
         /// </summary>
         public static bool UseWindowsFontsUnderWsl2
         {
