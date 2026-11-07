@@ -1,0 +1,219 @@
+[
+  {
+    "file": "gif-palette256.gif",
+    "width": 37,
+    "height": 23,
+    "format": "Indexed8",
+    "mode": "RGBA"
+  },
+  {
+    "file": "gif-interlaced.gif",
+    "width": 37,
+    "height": 23,
+    "format": "Indexed8",
+    "mode": "RGBA"
+  },
+  {
+    "file": "gif-palette16.gif",
+    "width": 37,
+    "height": 23,
+    "format": "Indexed8",
+    "mode": "RGBA"
+  },
+  {
+    "file": "gif-bilevel.gif",
+    "width": 50,
+    "height": 21,
+    "format": "Indexed8",
+    "mode": "RGBA"
+  },
+  {
+    "file": "gif-transparent.gif",
+    "width": 37,
+    "height": 23,
+    "format": "Indexed8",
+    "mode": "RGBA"
+  },
+  {
+    "file": "gif-animated.gif",
+    "width": 37,
+    "height": 23,
+    "format": "Indexed8",
+    "mode": "RGBA"
+  },
+  {
+    "file": "gif-offset.gif",
+    "width": 40,
+    "height": 30,
+    "format": "Indexed8",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-rgb-none.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Bgr32",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-rgb-lzw.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Bgr32",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-rgb-deflate.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Bgr32",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-rgb-packbits.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Bgr32",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-rgba.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Bgra32",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-gray8.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Gray8",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-bilevel.tif",
+    "width": 50,
+    "height": 21,
+    "format": "Indexed1",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-palette8.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Indexed8",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-cmyk.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Cmyk32",
+    "mode": "CMYK"
+  },
+  {
+    "file": "tiff-multipage.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Bgr32",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-g4.tif",
+    "width": 50,
+    "height": 21,
+    "format": "CcittFax",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-g3.tif",
+    "width": 50,
+    "height": 21,
+    "format": "CcittFax",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-mh.tif",
+    "width": 50,
+    "height": 21,
+    "format": "CcittFax",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-rgb-lzw-predictor.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Bgr32",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-rgb16-deflate-predictor.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Bgr32",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-gray16.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Gray8",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-gray4.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Gray8",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-palette4.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Indexed4",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-tiled.tif",
+    "width": 40,
+    "height": 35,
+    "format": "Bgr32",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-planar.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Bgr32",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-bigendian.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Bgr32",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-rgba-associated.tif",
+    "width": 37,
+    "height": 23,
+    "format": "Bgra32",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-bilevel-miniswhite.tif",
+    "width": 50,
+    "height": 21,
+    "format": "Indexed1",
+    "mode": "RGBA"
+  },
+  {
+    "file": "tiff-g4-lsb.tif",
+    "width": 50,
+    "height": 21,
+    "format": "CcittFax",
+    "mode": "RGBA"
+  }
+]

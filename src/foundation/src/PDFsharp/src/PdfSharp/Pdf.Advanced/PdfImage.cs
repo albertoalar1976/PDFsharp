@@ -227,10 +227,20 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         void InitializeNonJpeg()
         {
+            if (ImportedImage is ImportedCcittImage ccittImage)
+            {
+                InitializeCcitt(ccittImage);
+                return;
+            }
+
             if (ImportedImage != null)
             {
                 switch (ImportedImage.ImageFormat)
                 {
+                    case PdfSharp.Internal.Imaging.ImageFormats.Cmyk32:
+                        CreateTrueColorMemoryBitmap(4, 8, false);
+                        break;
+
                     case PdfSharp.Internal.Imaging.ImageFormats.Bgra32:
                         CreateTrueColorMemoryBitmap(3, 8, true);
                         break;
@@ -261,6 +271,38 @@ namespace PdfSharp.Pdf.Advanced
                 return;
             }
 
+        }
+
+        /// <summary>
+        /// Writes a bilevel image with CCITT Group 3 or Group 4 compressed data as it is. PDF supports this compression directly.
+        /// </summary>
+        void InitializeCcitt(ImportedCcittImage image)
+        {
+            var data = image.ImageData;
+            Stream = new PdfStream(data, this);
+            Elements.SetInteger(PdfStream.Keys.Length, data.Length);
+            Elements.SetName(PdfStream.Keys.Filter, "/CCITTFaxDecode");
+            var parameters = new PdfDictionary();
+            if (image.K != 0)
+                parameters.Elements.SetInteger("/K", image.K);
+            if (image.EncodedByteAlign)
+                parameters.Elements.SetBoolean("/EncodedByteAlign", true);
+            // The number of rows is known, so the data need not end with an end-of-block pattern.
+            parameters.Elements.SetBoolean("/EndOfBlock", false);
+            parameters.Elements.SetInteger("/Columns", image.PixelWidth);
+            parameters.Elements.SetInteger("/Rows", image.PixelHeight);
+            Elements[PdfStream.Keys.DecodeParms] = parameters;
+            Elements.SetInteger(Keys.Width, image.PixelWidth);
+            Elements.SetInteger(Keys.Height, image.PixelHeight);
+            Elements.SetInteger(Keys.BitsPerComponent, 1);
+            Elements.SetName(Keys.ColorSpace, "/DeviceGray");
+            if (image.Inverted)
+            {
+                var decode = new PdfArray(Document);
+                decode.Elements.Add(new PdfInteger(1));
+                decode.Elements.Add(new PdfInteger(0));
+                Elements[Keys.Decode] = decode;
+            }
         }
 
         void CreateIndexedMemoryBitmap(int bits)
@@ -544,8 +586,7 @@ namespace PdfSharp.Pdf.Advanced
             Elements[Keys.Width] = new PdfInteger(ii.PixelWidth);
             Elements[Keys.Height] = new PdfInteger(ii.PixelHeight);
             Elements[Keys.BitsPerComponent] = new PdfInteger(8);
-            // Anything needed for CMYK? Do we have sample images?
-            Elements[Keys.ColorSpace] = new PdfName(components == 1 ? "/DeviceGray" : "/DeviceRGB");
+            Elements[Keys.ColorSpace] = new PdfName(components switch { 1 => "/DeviceGray", 4 => "/DeviceCMYK", _ => "/DeviceRGB" });
 
             if (_image is { Interpolate: true })
             {

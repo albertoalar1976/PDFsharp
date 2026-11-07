@@ -43,6 +43,16 @@ In containers, install the fonts you need, e.g. `apt-get install fonts-liberatio
 or pass your own font folders: `new SystemFontResolver(["/app/fonts"])`.
 `GetFamilyNames()` lists the families found.
 
+### Images
+
+`XImage.FromFile` and `XImage.FromStream` read JPEG, PNG, BMP, GIF, and TIFF on all platforms.
+GIF: the first frame, with transparency and interlacing.
+TIFF: the first page; bilevel, gray, palette, RGB, RGBA, and CMYK images with 1 to 16 bits per sample,
+uncompressed or compressed with PackBits, LZW, or Deflate. CMYK stays CMYK in the PDF file.
+Scanned bilevel TIFF images compressed with CCITT Group 4, Group 3 (1D), or modified Huffman
+are written to the PDF file without decoding them, because PDF supports these compressions.
+Not supported: JPEG compressed TIFF, YCbCr and Lab TIFF, Group 3 2D, and Group 4 with more than one strip.
+
 ### Removed obsolete API
 
 This fork removed the API that the upstream project had marked as obsolete.

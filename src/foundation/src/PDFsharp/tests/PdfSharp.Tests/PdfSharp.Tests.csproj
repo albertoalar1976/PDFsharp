@@ -57,4 +57,9 @@
     <Folder Include="Pdf\acroforms\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- GIF and TIFF test images and their expected pixels, see Drawing/TestImages/generate.py. -->
+    <None Update="Drawing\TestImages\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

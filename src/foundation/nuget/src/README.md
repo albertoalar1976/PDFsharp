@@ -25,7 +25,7 @@ PDFsharp is the Open Source .NET library that easily creates and processes PDF d
 
 This is the PDFsharp Core package.
 This package does not rely on Windows components and runs on Windows, Linux, and macOS with the same code.
-Image formats supported by this package include Windows BMP, PNG, and JPEG.
+Image formats supported by this package include Windows BMP, PNG, JPEG, GIF, and TIFF.
 See Project Information for details.
 
 ### MigraDoc
@@ -39,6 +39,6 @@ MigraDoc - the Open Source .NET library that easily creates documents based on a
 
 This is the MigraDoc Core package.
 This package does not rely on Windows components and runs on Windows, Linux, and macOS with the same code.
-Image formats supported by this package include Windows BMP, PNG, and JPEG.
+Image formats supported by this package include Windows BMP, PNG, JPEG, GIF, and TIFF.
 See Project Information for details.
 

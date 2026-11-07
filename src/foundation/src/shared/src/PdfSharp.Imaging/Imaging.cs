@@ -116,7 +116,9 @@ namespace PdfSharp.Internal.Imaging
         static readonly BmpImageImporter BmpImporter = new();
         static readonly JpegImageImporter JpegImporter = new();
         static readonly PngImageImporter PngImporter = new();
-        static readonly BitmapImageImporter[] Importers = [JpegImporter, PngImporter, BmpImporter];
+        static readonly GifImageImporter GifImporter = new();
+        static readonly TiffImageImporter TiffImporter = new();
+        static readonly BitmapImageImporter[] Importers = [JpegImporter, PngImporter, BmpImporter, GifImporter, TiffImporter];
     }
 }
 
@@ -338,6 +340,42 @@ namespace PdfSharp.Internal.Imaging
 namespace PdfSharp.Internal.Imaging
 {
     /// <summary>
+    /// Represents an imported GIF image. Only the first frame of an animated GIF is used.
+    /// </summary>
+    public class ImportedGifImage : ImportedRasterImage
+    {
+    }
+
+    /// <summary>
+    /// Represents an imported TIFF image. Only the first page of a multi-page TIFF is used.
+    /// </summary>
+    public class ImportedTiffImage : ImportedRasterImage
+    {
+    }
+
+    /// <summary>
+    /// A bilevel image with CCITT Group 3 or Group 4 compressed data, which PDF supports directly.
+    /// ImageData contains the compressed data, with the most significant bit first.
+    /// </summary>
+    public class ImportedCcittImage : ImportedImage
+    {
+        /// <summary>
+        /// The K parameter of the PDF CCITTFaxDecode filter: -1 for Group 4, 0 for Group 3 one-dimensional coding.
+        /// </summary>
+        public int K { get; internal set; }
+
+        /// <summary>
+        /// True if each encoded line begins on a byte boundary.
+        /// </summary>
+        public bool EncodedByteAlign { get; internal set; }
+
+        /// <summary>
+        /// True if the colors are inverted, i.e. the CCITT "white" runs are black.
+        /// </summary>
+        public bool Inverted { get; internal set; }
+    }
+
+    /// <summary>
     /// Represents an imported JPEG image.
     /// </summary>
     /// <seealso cref="PdfSharp.Internal.Imaging.ImportedImage" />
@@ -431,6 +469,17 @@ namespace PdfSharp.Internal.Imaging
         /// JPEG file with CMYK.
         /// </summary>
         JPEGCMYK,
+
+        /// <summary>
+        /// CMYK image with 8 bits per component, e.g. from a TIFF file. Written to PDF as DeviceCMYK.
+        /// </summary>
+        Cmyk32,
+
+        /// <summary>
+        /// Bilevel image compressed with CCITT Group 3 or Group 4, e.g. from a scanned TIFF file.
+        /// Written to PDF as it is, with the CCITTFaxDecode filter.
+        /// </summary>
+        CcittFax,
     }
 }
 
