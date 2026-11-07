@@ -1426,7 +1426,6 @@ namespace PdfSharp.Drawing
                 throw new ArgumentNullException(nameof(font));
             if (stringFormat == null)
                 throw new ArgumentNullException(nameof(stringFormat));
-#if true
             var renderEvents = RenderEvents ?? Owner?.RenderEvents;
             // Allocate event arguments only if somebody listens. Formerly, every measured string allocated them.
             if (renderEvents is { HasPrepareTextHandlers: true })
@@ -1457,22 +1456,7 @@ namespace PdfSharp.Drawing
                     codePointsWithGlyphIndices = otDescriptor.GlyphIndicesFromCodePoints(codePoints);
                 }
             }
-#if true_  // renderEvents being null is possible and OK.
-            else
-            {
-                // We always need a target for RenderEvent.
-                // TODO_OLD: Check whether this can happen.
-                PdfSharpLogHost.FontManagementLogger.LogCritical(
-                    "MeasureString could not invoke OnRenderTextEvent because we have no owning PDF document in the current context and no renderEvent parameter.");
-                throw new InvalidOperationException("No owning document or valid renderEvent.");
-            }
-#endif
             return FontHelper.MeasureString(codePointsWithGlyphIndices, font/*, stringFormat*/);
-#else
-
-            XSize size = FontHelper.MeasureString(text, font, XStringFormats.Default);
-            return size;
-#endif
         }
 
         /// <summary>
@@ -1597,52 +1581,6 @@ namespace PdfSharp.Drawing
             }
         }
 
-#if false
-// #barcode => extension method
-        // ----- DrawBarCode --------------------------------------------------------------------------
-
-        /// <summary>
-        /// Draws the specified bar code.
-        /// </summary>
-        public void DrawBarCode(BarCodes.BarCode barcode, XPoint position)
-        {
-            barcode.Render(this, XBrushes.Black, null, position);
-        }
-
-        /// <summary>
-        /// Draws the specified bar code.
-        /// </summary>
-        public void DrawBarCode(BarCodes.BarCode barcode, XBrush brush, XPoint position)
-        {
-            barcode.Render(this, brush, null, position);
-        }
-
-        /// <summary>
-        /// Draws the specified bar code.
-        /// </summary>
-        public void DrawBarCode(BarCodes.BarCode barcode, XBrush brush, XFont font, XPoint position)
-        {
-            barcode.Render(this, brush, font, position);
-        }
-
-        // ----- DrawMatrixCode -----------------------------------------------------------------------
-
-        /// <summary>
-        /// Draws the specified data matrix code.
-        /// </summary>
-        public void DrawMatrixCode(BarCodes.MatrixCode matrixcode, XPoint position)
-        {
-            matrixcode.Render(this, XBrushes.Black, position);
-        }
-
-        /// <summary>
-        /// Draws the specified data matrix code.
-        /// </summary>
-        public void DrawMatrixCode(BarCodes.MatrixCode matrixcode, XBrush brush, XPoint position)
-        {
-            matrixcode.Render(this, brush, position);
-        }
-#endif
 
         #endregion
 
@@ -2021,12 +1959,6 @@ namespace PdfSharp.Drawing
             _transformationMatrix = matrix;
             matrix = DefaultViewMatrix;
             matrix.Multiply(_transformationMatrix, XMatrixOrder.Prepend);
-#if CORE_ // No concept of target context in Core build.
-            if (TargetContext == XGraphicTargetContext.CORE)
-            {
-                _ = typeof(int);
-            }
-#endif
             _renderer?.AddTransform(transform, XMatrixOrder.Prepend);
         }
 
@@ -2110,16 +2042,10 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// (Under construction. May change in future versions.)
         /// </summary>
-#if true_  // Change to 'true_' if code does not compile.
-        public SpaceTransformer Transformer
-            => field ??= new SpaceTransformer(this);
-
-#else
         public SpaceTransformer Transformer
             => _transformer ??= new SpaceTransformer(this);
 
         SpaceTransformer? _transformer;
-#endif
 
         #endregion
 

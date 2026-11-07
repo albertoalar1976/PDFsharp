@@ -6,12 +6,6 @@ using PdfSharp.Pdf;
 using PdfSharp.Drawing;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering.Internals;
-#if PSGFX
-using PdfSharp.Graphics.Pdf;
-using PdfSharp.Graphics.Pdf.Media;
-
-#else
-#endif
 
 namespace MigraDoc.Rendering
 {
@@ -120,20 +114,7 @@ namespace MigraDoc.Rendering
         /// </summary>
         public void RenderDocument()
         {
-#if true
             PrepareRenderPages();
-#else
-            if (this.documentRenderer == null)
-                PrepareDocumentRenderer();
-
-            if (this.pdfDocument == null)
-            {
-                this.pdfDocument = new PdfDocument();
-                this.pdfDocument.Info.Creator = VersionInfo.Creator;
-            }
-
-            WriteDocumentInformation();
-#endif
             RenderPages(1, DocumentRenderer.FormattedDocument.PageCount);
         }
 
@@ -212,26 +193,12 @@ namespace MigraDoc.Rendering
             {
                 var pdfPage = _pdfDocument.AddPage();
                 var pageInfo = DocumentRenderer.FormattedDocument.GetPageInfo(pageNr);
-#if PSGFX
-                pdfPage.Width = PdfSharp.Drawing.XUnit.FromPoint(pageInfo.Width);
-                pdfPage.Height = PdfSharp.Drawing.XUnit.FromPoint(pageInfo.Height);
-#else
                 pdfPage.Width = pageInfo.Width;
                 pdfPage.Height = pageInfo.Height;
-#endif
                 pdfPage.Orientation = pageInfo.Orientation;
 
-#if PSGFX
-                var pageVisual = PdfPageVisual.FromPdfPage(pdfPage);
-                var gfx = pageVisual.RenderOpen();
-#else
                 using var gfx = XGraphics.FromPdfPage(pdfPage);
-#endif
                 DocumentRenderer.RenderPage(gfx, pageNr);
-#if PSGFX
-                // DrawingContext must be closed.
-                gfx.Close();
-#endif
             }
         }
 

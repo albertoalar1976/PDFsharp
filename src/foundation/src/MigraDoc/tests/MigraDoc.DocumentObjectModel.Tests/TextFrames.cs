@@ -38,9 +38,6 @@ namespace MigraDoc.DocumentObjectModel.Tests
             //// This setting has no effect on the RTF renderer.
             //const bool unicode = false;
 
-#if DEBUG_
-            var ddl = MigraDoc.DocumentObjectModel.IO.DdlWriter.WriteToString(document);
-#endif
 
             // Create a renderer for the MigraDoc document.
             var pdfRenderer = new PdfDocumentRenderer()

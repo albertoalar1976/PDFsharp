@@ -437,15 +437,9 @@ namespace PdfSharp.Drawing.Pdf
             {
                 // Take chirality into account and
                 // invert the direction of rotation.
-#if true
                 // Prevent getting negative zeros in cm operator.
                 transform.M12 = value.M12 == 0.0 ? 0 : -value.M12;
                 transform.M21 = value.M21 == 0.0 ? 0 : -value.M21;
-#else
-                // Can result in e.g. "1 -0 -0 1 200 150 cm".
-                transform.M12 = -value.M12;
-                transform.M21 = -value.M21;
-#endif
             }
             UnrealizedCtm.Prepend(transform);
 
@@ -501,9 +495,6 @@ namespace PdfSharp.Drawing.Pdf
 
         void RealizeClipPath(XGraphicsPath clipPath)
         {
-#if CORE_  // It should work in Core build.
-            DiagnosticsHelper.HandleNotImplemented("RealizeClipPath");
-#endif
             renderer.BeginGraphicMode();
             RealizeCtm();
             renderer.AppendPath(clipPath.CorePath);

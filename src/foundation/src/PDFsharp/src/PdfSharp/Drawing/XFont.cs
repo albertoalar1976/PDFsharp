@@ -128,60 +128,6 @@ namespace PdfSharp.Drawing
         }
 
 
-#if UWP_
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XFont"/> class from a System.Drawing.FontFamily.
-        /// </summary>
-        /// <param name="fontFamily">The System.Drawing.FontFamily.</param>
-        /// <param name="emSize">The em size.</param>
-        /// <param name="style">The font style.</param>
-        public XFont(UwpFontFamily fontFamily, double emSize, XFontStyleEx style)
-            : this(fontFamily, emSize, style, new XPdfFontOptions(GlobalFontSettings.DefaultFontEncoding))
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XFont"/> class from a System.Drawing.FontFamily.
-        /// </summary>
-        /// <param name="fontFamily">The System.Drawing.FontFamily.</param>
-        /// <param name="emSize">The em size.</param>
-        /// <param name="style">The font style.</param>
-        /// <param name="pdfOptions">Additional PDF options.</param>
-        public XFont(UwpFontFamily fontFamily, double emSize, XFontStyleEx style, XPdfFontOptions pdfOptions)
-        {
-            _familyName = fontFamily.Source;
-            _gdiFontFamily = fontFamily;
-            _emSize = emSize;
-            _style = style;
-            _pdfOptions = pdfOptions;
-            InitializeFromGdi();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XFont"/> class from a System.Drawing.Font.
-        /// </summary>
-        /// <param name="font">The System.Drawing.Font.</param>
-        public XFont(GdiFont font)
-            : this(font, new XPdfFontOptions(GlobalFontSettings.DefaultFontEncoding))
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XFont"/> class from a System.Drawing.Font.
-        /// </summary>
-        /// <param name="font">The System.Drawing.Font.</param>
-        /// <param name="pdfOptions">Additional PDF options.</param>
-        public XFont(GdiFont font, XPdfFontOptions pdfOptions)
-        {
-            if (font.Unit != GraphicsUnit.World)
-                throw new ArgumentException("Font must use GraphicsUnit.World.");
-            _gdiFont = font;
-            Debug.Assert(font.Name == font.FontFamily.Name);
-            _familyName = font.Name;
-            _emSize = font.Size;
-            _style = FontStyleFrom(font);
-            _pdfOptions = pdfOptions;
-            InitializeFromGdi();
-        }
-#endif
 
         //// Methods
         //public Font(Font prototype, FontStyle newStyle);
@@ -214,10 +160,6 @@ namespace PdfSharp.Drawing
         /// </summary>
         void Initialize()
         {
-#if DEBUG_
-            if (_familyName == "Segoe UI Semilight" && (_style & XFontStyleEx.BoldItalic) == XFontStyleEx.Italic)
-                _ = typeof(int);
-#endif
             FontResolvingOptions fontResolvingOptions = OverrideStyleSimulations
                 ? new FontResolvingOptions(_style, StyleSimulations)
                 : new FontResolvingOptions(_style);
@@ -402,12 +344,7 @@ namespace PdfSharp.Drawing
         [Obsolete("Use GetHeight() without parameter.")]
         public double GetHeight(XGraphics graphics)
         {
-#if true
             throw new InvalidOperationException("Honestly: Use GetHeight() without parameter!");
-#else
-            double value = CellSpace * _emSize / UnitsPerEm;
-            return value;
-#endif
         }
 
         /// <summary>

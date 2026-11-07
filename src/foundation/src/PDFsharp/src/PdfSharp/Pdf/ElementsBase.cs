@@ -63,12 +63,6 @@ namespace PdfSharp.Pdf
             [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
             Type type, PdfContainer? oldContainer, bool createIndirect)
         {
-#if DEBUG_
-            //if (ShouldBreak1 || oldContainer?.Aaa == "ABC")
-            //    Debugger.Break();
-            if (type == typeof(PdfFormXObject))
-                _ = typeof(int);
-#endif
             PdfContainer cont;
             if (oldContainer == null)
             {
@@ -150,122 +144,7 @@ namespace PdfSharp.Pdf
             return cont ?? NRT.ThrowOnNull<PdfContainer>();
         }
 
-#if true_  // KEEP for reference DELETE 25-12-31
-        protected PdfArray CreateArray(
-            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
-            Type type, PdfArray? oldArray)
-        {
-#if DEBUG_
-            if (ShouldBreak1 || oldArray?.Aaa == "Stefan")
-                Debugger.Break();
-#endif
-            // PagesArray is a PdfArray.
-            //Debug.Assert(type != typeof(PdfArray));
-            Debug.Assert(typeof(PdfArray).IsAssignableFrom(type));
 
-            PdfArray? array;
-            if (oldArray == null)
-            {
-                // Try constructor with signature 'Ctor(PdfDocument owner)'.
-                var ctorInfo = type.GetConstructor(
-                      BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                      null, [typeof(PdfDocument)], null);
-#if true
-                if (ctorInfo != null)
-                {
-                    array = ctorInfo.Invoke([OwningContainer.Owner]) as PdfArray;
-                }
-                else
-                {
-                    // Try constructor with signature 'Ctor()'.
-                    ctorInfo = type.GetConstructor(
-                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                        null, [], null);
-
-                    if (ctorInfo == null)
-                        throw new InvalidOperationException(
-                            $"No appropriate constructor found for type {type.FullName}.");
-                    array = ctorInfo.Invoke([]) as PdfArray;
-                }
-                Debug.Assert(array?.IsTransformed is false);
-                array.SetTransformed();
-#else  // DELETE
-                Debug.Assert(ctorInfo != null, "No appropriate constructor found for type: " + type.Name);
-                array = ctorInfo.Invoke([OwningContainer.Owner]) as PdfArray;
-#endif
-            }
-            else
-            {
-                // Use constructor with signature 'Ctor(PdfArray array)'.
-                var ctorInfo = type.GetConstructor(
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                    null, types: [typeof(PdfArray)], null);
-                if (ctorInfo == null)
-                    throw new InvalidOperationException($"No appropriate constructor found for type {type.FullName}.");
-
-                array = ctorInfo.Invoke([oldArray]) as PdfArray;
-                //Debug.Assert(array?.IsTransformed is false);
-                array?.SetTransformed();
-            }
-            return array ?? NRT.ThrowOnNull<PdfArray>();
-        }
-#endif
-
-#if true_  // KEEP for reference
-        protected PdfDictionary CreateDictionary(
-            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
-                Type type, PdfDictionary? oldDictionary)
-        {
-            //Debug.Assert(type != typeof(PdfDictionary));
-            Debug.Assert(typeof(PdfDictionary).IsAssignableFrom(type));
-
-            ConstructorInfo? ctorInfo;
-            PdfDictionary? dict;
-            if (oldDictionary == null)
-            {
-                // Try constructor with signature 'Ctor(PdfDocument owner)'.
-                ctorInfo = type.GetConstructor(
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                    null, [typeof(PdfDocument)], null);
-
-                if (ctorInfo != null)
-                {
-                    dict = ctorInfo.Invoke([OwningContainer.Owner]) as PdfDictionary;
-                }
-                else
-                {
-                    // Try constructor with signature 'Ctor()'.
-                    ctorInfo = type.GetConstructor(
-                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                        null, [], null);
-
-                    if (ctorInfo == null)
-                        throw new InvalidOperationException($"No appropriate constructor found for type {type.FullName}.");
-                    dict = ctorInfo.Invoke([]) as PdfDictionary;
-                }
-                Debug.Assert(dict?.IsTransformed is false);
-                dict.SetTransformed();
-            }
-            else
-            {
-                // Use constructor with signature 'Ctor(PdfDictionary dict)'.
-                ctorInfo = type.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                  null, [typeof(PdfDictionary)], null);
-                if (ctorInfo == null)
-                    throw new InvalidOperationException($"No appropriate constructor found for type {type.FullName}.");
-
-                dict = ctorInfo.Invoke([oldDictionary]) as PdfDictionary;
-                //Debug.Assert(dict?.IsTransformed is false);
-                if (dict?.IsTransformed == false)
-                {
-                    Debugger.Break();
-                    dict?.SetTransformed();
-                }
-            }
-            Debug.Assert(dict?.IsTransformed is true);
-            return dict ?? NRT.ThrowOnNull<PdfDictionary>();
-        }
-#endif
         /// <summary>
         /// Ensures that the specified value type is at least
         /// of the specified generic type.

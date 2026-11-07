@@ -127,34 +127,6 @@ namespace PdfSharp.Pdf.Security
         /// </summary>
         static class MD5Core
         {
-#if false  // Not used in PDFsharp. KEEP code for reference, but do not include it.
-            public static byte[] GetHash(byte[] input)
-            {
-                if (input == null)
-                    throw new ArgumentNullException(nameof(input));
-
-                // Initialize values defined in RFC 1321.
-                // Note that the code below may look strange but is correct.
-                var abcd = new ABCD
-                {
-                    A = A,
-                    B = B,
-                    C = C,
-                    D = D
-                };
-
-                // We pass in the input array by block, the final block of data must be handled specially for padding & length embedding.
-                int startIndex = 0;
-                while (startIndex <= input.Length - 64)
-                {
-                    GetHashBlock(input, ref abcd, startIndex);
-                    startIndex += 64;
-                }
-
-                // The final data block. 
-                return GetHashFinalBlock(input, startIndex, input.Length - startIndex, abcd, (long)input.Length * 8);
-            }
-#endif
 
             internal static byte[] GetHashFinalBlock(byte[] input, int ibStart, int cbSize, ABCD abcd, long len)
             {
@@ -167,7 +139,6 @@ namespace PdfSharp.Pdf.Security
                 Array.Copy(input, ibStart, working, 0, cbSize);
                 working[cbSize] = 0x80;
 
-#if true  // StL: Isn’t this what the code below means?
                 // Do we need an additional chunk to store the length?
                 if (cbSize >= 56)
                 {
@@ -177,22 +148,6 @@ namespace PdfSharp.Pdf.Security
                 }
                 Array.Copy(length, 0, working, 56, 8);
                 GetHashBlock(working, ref abcd, 0);
-#else
-                // We have enough room to store the length in this chunk.
-                if (cbSize < 56)
-                {
-                    Array.Copy(length, 0, working, 56, 8);
-                    GetHashBlock(working, ref abcd, 0);
-                }
-                else // We need an additional chunk to store the length.
-                {
-                    GetHashBlock(working, ref abcd, 0);
-                    // Create an entirely new chunk due to the 0-assigned trick mentioned above, to avoid an extra function call clearing the array.
-                    working = new byte[64];
-                    Array.Copy(length, 0, working, 56, 8);
-                    GetHashBlock(working, ref abcd, 0);
-                }
-#endif
 
                 byte[] output = new byte[16];
                 Array.Copy(BitConverter.GetBytes(abcd.A), 0, output, 0, 4);

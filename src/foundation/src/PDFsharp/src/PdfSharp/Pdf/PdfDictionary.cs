@@ -565,21 +565,7 @@ namespace PdfSharp.Pdf
             /// Returns true on success, false if value is of wrong type.
             /// </summary>
             public bool TryGetUnsignedInteger(string key, out uint result)
-#if true
                 => TryGetUnsignedIntegerInternal(key, out result, false, 0, false);
-#else
-            {
-                bool success = TryGetLongIntegerInternal(key, out long longResult, false, 0, false);
-                if (!success || longResult < Int32.MinValue || longResult > UInt32.MaxValue)
-                {
-                    result = 0;
-                    return false;
-                }
-
-                result = unchecked((uint)longResult);
-                return true;
-            }
-#endif
             bool TryGetUnsignedIntegerInternal(string key, out uint result, bool create, uint defaultValue, bool throwOnTypeMismatch)
             {
                 // Background: PDF treats flags (like permissions) as a 32-bit unsigned integer.
@@ -1247,10 +1233,6 @@ namespace PdfSharp.Pdf
                                             DynamicallyAccessedMemberTypes.NonPublicConstructors)]
                 Type? valueType = null)
             {
-#if PDFSHARP_DEBUG_
-                if (ShouldBreak5)
-                    Debugger.Break();
-#endif
                 Name.EnsureName(key);
                 if (valueType != null)
                     EnsureValueType<PdfItem>(valueType);
@@ -1744,18 +1726,6 @@ namespace PdfSharp.Pdf
                                             DynamicallyAccessedMemberTypes.NonPublicConstructors)]
                 Type? valueType, bool throwOnTypeMismatch)
             {
-#if DEBUG_
-                // Are we reading a PDF document?
-                if ((OwningDictionary.Document?.IrefTable ?? null) is { IsUnderConstruction: true })
-                {
-                    //Debugger.Break();
-                    _ = typeof(int);
-                }
-#endif
-#if DEBUG_
-                if (typeof(PdfNameDictionary) == valueType)
-                    _ = typeof(int);
-#endif
                 // Name.EnsureName(key) must be done by caller.
 
                 bool valueIsAlreadyOfSuitableType = false;
@@ -1873,68 +1843,8 @@ namespace PdfSharp.Pdf
 
                     if (value is PdfReference iref)
                     {
-#if DEBUG_
-                        var irefTable = OwningDictionary.Document?.IrefTable ?? null;
-                        if (irefTable is { IsUnderConstruction: true })
-                        {
-                            //Debug.Assert(false, "Should not happen anymore.");
-                            _ = typeof(int);
-                        }
-#endif
                         // Case: value is an indirect object. It can only be a container.
 
-#if true_  // TODO Create US for this case and DELETE the code.
-                        // Check a very particular case first that can happen during
-                        // the timespan when the IrefTable is not completely read.
-                        var irefTable = OwningDictionary.Document?.IrefTable ?? null;
-                        if (irefTable is { IsUnderConstruction: true })
-                        {
-                            // Case: During the import of a PDF document GetValue is called.
-                            // This happens only during encryption.
-                            // IMPROVE: Prevent from coming here. Check if we need temp irefs anymore.
-                            var newIref = irefTable[iref.Value.ObjectID];
-                            if (newIref == null)
-                            {
-                                // Case: Cannot happen. We can have irefs with no value, but not
-                                // indirect objects with no reference.
-                                _ = typeof(int);
-                            }
-                            else if (ReferenceEquals(iref, newIref) is false)
-                            {
-                                // Case: We are reading a PDF document that hast more than one XRef table or xref streams.
-                                // A top level object can contain an indirect reference to an object with an ID that does not yet exist.
-                                // TODO more checks...
-                                if (ReferenceEquals(iref.Value, newIref.Value))
-                                {
-                                    iref = newIref;
-                                    iref.Value.Reference = iref;
-                                    UpdateValueInternal(key, iref);
-                                }
-                            }
-                            else
-                            {
-                                _ = typeof(int);
-                            }
-                        }
-#if DEBUG
-                        else if (irefTable != null)
-                        {
-                            // TO/DO: Check if already required.
-                            var altIref = irefTable[iref.Value.ObjectID];
-                            if (altIref == null)
-                            {
-                                // Should not come here.
-                                _ = typeof(int);
-                            }
-                            else if (ReferenceEquals(iref, altIref) is false)
-                            {
-                                // Should not come here.
-                                iref = altIref;
-                                UpdateValueInternal(key, iref);
-                            }
-                        }
-#endif
-#endif
                         // Is PdfReference explicitly requested?
                         if (valueType == typeof(PdfReference))
                             return value;
@@ -2127,14 +2037,6 @@ namespace PdfSharp.Pdf
             /// </summary>
             void SetValueInternal(string key, PdfItem value, bool mustNotExist = false)
             {
-#if DEBUG_
-                // Are we reading a PDF document?
-                if ((OwningDictionary.Document?.IrefTable ?? null) is { IsUnderConstruction: true })
-                {
-                    //Debugger.Break();
-                    _ = typeof(int);
-                }
-#endif
                 // Already asserted from caller.
                 Debug.Assert(value is not null);
 

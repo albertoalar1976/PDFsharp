@@ -159,10 +159,6 @@ namespace PdfSharp.Fonts
                     fontResolverInfo = existingFontResolverInfo;
                     // Associate existing resolver info with the new typeface key.
                     fontResolverInfosByName.TryAdd(typefaceKey, fontResolverInfo);
-#if DEBUG_
-                    // The font source should exist.
-                    Debug.Assert(fontResolverInfosByName.ContainsKey(fontResolverInfo.FaceName));
-#endif
                 }
                 else
                 {

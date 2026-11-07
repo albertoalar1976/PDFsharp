@@ -171,22 +171,6 @@ namespace PdfSharp.Pdf.IO
             endPosition = (SizeType)Position;
         }
 
-#if false
-        /// <summary>  // DELETE
-        /// Writes a signature placeholder hexadecimal string to the PDF stream.
-        /// </summary>
-        public void Write(PdfSignaturePlaceholderItem_ item, out SizeType startPosition, out SizeType endPosition)  // TODO: Use PdfPlaceholder and DELETE
-        {
-            WriteSeparator(CharCat.Delimiter);
-            // ReSharper disable once RedundantCast
-            startPosition = (SizeType)Position;
-            // A PDF hex string with question marks '<????????...??>'
-            WriteRaw(item.ToString());
-            // ReSharper disable once RedundantCast
-            endPosition = (SizeType)Position;
-            //_lastCat = CharCat.Delimiter;
-        }
-#endif
 
         /// <summary>
         /// Writes the specified PDF name to the PDF stream.
@@ -246,10 +230,6 @@ namespace PdfSharp.Pdf.IO
         /// </summary>
         public void Write(PdfReference iref)
         {
-#if DEBUG_
-            if (iref.ObjectID.ObjectNumber == 6)
-                _ = typeof(int);
-#endif
             WriteSeparator(CharCat.Character);
             WriteRaw(iref.ToString());
         }

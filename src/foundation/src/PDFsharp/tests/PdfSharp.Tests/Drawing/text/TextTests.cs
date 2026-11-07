@@ -204,7 +204,6 @@ namespace PdfSharp.Tests.Drawing
                 // ReSharper disable once AccessToModifiedClosure
                 if (enableLigatures)
                 {
-#if true
                     //bool hits = false;
                     var preparedText = args.Text;
                     var font = args.Font;
@@ -228,31 +227,6 @@ namespace PdfSharp.Tests.Drawing
 
                     //if (hits)
                     args.Text = preparedText;
-#else
-                    bool hits = false;
-                    var preparedText = args.Text;
-                    foreach (var ligature in ligatures)
-                    {
-                        int idx;
-                        do
-                        {
-                            idx = preparedText.IndexOf(ligature.Key, StringComparison.Ordinal);
-                            if (idx >= 0)
-                            {
-                                preparedText = preparedText.Substring(0, idx) +
-                                       ligature.Value +
-                                       preparedText.Substring(idx + ligature.Key.Length);
-                                hits = true;
-                            }
-                        } while (idx >= 0);
-                    }
-
-                    if (hits)
-                    {
-                        args.Text = preparedText;
-                        args.UseReturnedText = true;
-                    }
-#endif
                 }
             };
 

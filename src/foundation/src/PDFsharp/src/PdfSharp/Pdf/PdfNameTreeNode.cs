@@ -118,7 +118,6 @@ namespace PdfSharp.Pdf
 
         void Initialize()
         {
-#if true
             var kids = Elements.GetValue(Keys.Kids);
             if (kids != null)
             {
@@ -162,23 +161,6 @@ namespace PdfSharp.Pdf
                     throw new InvalidOperationException("Value of name tree key 'Limits' is not of type PdfArray.");
                 }
             }
-#else
-            var kids = Elements.GetArray(Keys.Kids);
-            if (kids != null)
-            {
-                for (var i = 0; i < kids.Elements.Count; i++)
-                {
-                    var kidDict = kids.Elements.GetDictionary(i);
-                    if (kidDict != null)
-                    {
-                        var kid = new PdfNameTreeNode(kidDict) { Parent = this };
-                        _kids.Add(kid);
-                    }
-                }
-            }
-            _updateRequired = true;
-            UpdateLimits();
-#endif
         }
 
         /// <summary>

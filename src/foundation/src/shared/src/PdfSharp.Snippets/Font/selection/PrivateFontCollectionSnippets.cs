@@ -25,11 +25,7 @@ namespace PdfSharp.Snippets.Font
 {
     public class PrivateFontCollection1Snippet : Snippet
     {
-#if true
         readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.WinAnsi);
-#else
-        readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.Unicode);
-#endif
 
         const string FamilyNameA = "Arial";
         const string FamilyNameT = "Tahoma";

@@ -2,11 +2,7 @@
 // See the LICENSE file in the solution root for more information.
 
 using PdfSharp.Diagnostics;
-#if PSGFX
-using PdfSharp.Graphics.Media.MatrixExtensions;
-#else
 using PdfSharp.Drawing;
-#endif
 
 namespace PdfSharp.Charting.Renderers
 {

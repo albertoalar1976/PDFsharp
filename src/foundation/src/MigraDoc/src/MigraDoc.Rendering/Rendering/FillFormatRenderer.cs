@@ -3,9 +3,7 @@
 
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Shapes;
-#if !PSXGRA
 using PdfSharp.Drawing;
-#endif
 
 namespace MigraDoc.Rendering
 {
@@ -42,12 +40,8 @@ namespace MigraDoc.Rendering
             if (_fillFormat == null || !IsVisible())
                 return null;
 
-#if noCMYK
-            return new XSolidBrush(XColor.FromArgb(_fillFormat.Color.Argb));
-#else
             Debug.Assert(_fillFormat.Document != null, "_fillFormat.Document != null");
             return new XSolidBrush(ColorHelper.ToXColor(_fillFormat.Color, _fillFormat.Document.UseCmykColor));
-#endif
         }
 
         readonly XGraphics _gfx;

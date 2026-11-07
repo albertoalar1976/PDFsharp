@@ -87,18 +87,11 @@ namespace PdfSharp.Pdf.Attachments
         {
             get
             {
-#if true
                 if (Elements.TryGetString(Keys.UF, out var name))
                     return name;
                 if (Elements.TryGetString(Keys.F, out name))
                     return name;
                 return "";
-#else
-                var name = Elements.GetString(Keys.UF);
-                if (String.IsNullOrEmpty(name))
-                    name = Elements.GetString(Keys.F);
-                return name;
-#endif
             }
         }
 

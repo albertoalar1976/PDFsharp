@@ -54,12 +54,6 @@ namespace PdfSharp.Pdf.Advanced
             var parser = new Parser(base.Document, new MemoryStream(Stream.UnfilteredValue), documentParser);
             _header = parser.ReadObjectStreamHeader(n, first);
 
-#if DEBUG_
-            if (Internal.PdfDiagnostics.TraceObjectStreams)
-            {
-                Debug.WriteLine(String.Format("PdfObjectStream(document) created. Header item count: {0}", _header.GetLength(0)));
-            }
-#endif
         }
 
         /// <summary>

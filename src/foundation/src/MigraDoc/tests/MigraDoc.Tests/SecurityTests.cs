@@ -93,17 +93,6 @@ namespace MigraDoc.Tests
         // ReSharper disable once UnusedParameter.Local
         static void OpenPdf(Stream stream)
         {
-#if true_ // Should be "true_" by default and in source control. Change to "true" to enable automatic PDF starting for testing purposes.
-            if (stream is FileStream fileStream)
-            {
-                var filename = fileStream.Name;
-                Process.Start(new ProcessStartInfo(filename) { UseShellExecute = true });
-            }
-            else if (stream is MemoryStream)
-            {
-                throw new InvalidOperationException("Cannot open PDF from MemoryStream.");
-            }
-#endif
         }
 
         [SkippableFact]
@@ -713,7 +702,6 @@ namespace MigraDoc.Tests
             pdfRendererRead.Save(streamRead, false);
             OpenPdf(streamRead);
         }
-#if true
         const string SkippedTestEmbeddedFilesMessage =
             "The feature to encrypt embedded file streams only is not yet correctly implemented. " +
             "The resulting files may not be readable with PDF readers. " +
@@ -722,16 +710,6 @@ namespace MigraDoc.Tests
         [SkippableTheory]
         [ClassData(typeof(TestData.V4), Skip = SkippedTestEmbeddedFilesMessage)]
         [ClassData(typeof(TestData.V5), Skip = SkippedTestEmbeddedFilesMessage)]
-#else
-        /// <summary>
-        /// Tests to embed a not encrypted file in an encrypted file, in which only embedded file streams shall be encrypted.
-        /// </summary>
-        [SkippableTheory]
-        [ClassData(typeof(TestData.V4))]
-        [ClassData(typeof(TestData.V5))]
-        [ClassData(typeof(TestData.V4Skipped), Skip = SkippedTestOptionsMessage)]
-        [ClassData(typeof(TestData.V5Skipped), Skip = SkippedTestOptionsMessage)]
-#endif
         public void Test_EmbeddedFile_OnlyEmbeddedFileStreamsEncrypted(TestOptionsEnum optionsEnum)
         {
             Skip.If(true || SkippableTests.SkipSlowTestsUnderDotNetFramework());
@@ -824,21 +802,12 @@ namespace MigraDoc.Tests
             }
         }
 
-#if true
         [SkippableFact]
         public void Test_Strings()
         {
             Skip.If(SkippableTests.SkipSlowTests());
 
             var optionsEnum = TestOptionsEnum.V5; // Encryption V5 should be sufficient, as it even crashes on wrong encrypted string length.
-#else
-        [SkippableTheory]
-        [ClassData(typeof(TestData.AllVersions))]
-        [ClassData(typeof(TestData.AllVersionsSkipped), Skip = SkippedTestOptionsMessage)]
-        public void Test_Strings(TestOptionsEnum optionsEnum)
-        {
-            Skip.If(SkippableTests.SkipSlowTests());
-#endif
             // Cache old logger factory.
             var oldLoggerFactory = LogHost.Factory;
 

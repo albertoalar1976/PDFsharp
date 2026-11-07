@@ -4,9 +4,6 @@
 using System.Globalization;
 using PdfSharp.Diagnostics;
 using PdfSharp.Drawing;
-#if PSGFX
-using PdfSharp.Graphics.Media.MatrixExtensions;
-#endif
 
 namespace PdfSharp.Charting.Renderers
 {
@@ -147,11 +144,7 @@ namespace PdfSharp.Charting.Renderers
             }
 
             double lineSpace = (float_)yari.TickLabelsFont.GetHeight(); // old: yari.TickLabelsFont.GetHeight(gfx);
-#if PSGFX
-            int cellSpace = yari.TickLabelsFont.FontFamily.GetLineSpacing((Drawing.XFontStyleEx)yari.TickLabelsFont.Style);
-#else
             int cellSpace = yari.TickLabelsFont.FontFamily.GetLineSpacing(yari.TickLabelsFont.Style);
-#endif
             double xHeight = yari.TickLabelsFont.Metrics.XHeight;
 
             XSize labelSize = new XSize(0, 0);

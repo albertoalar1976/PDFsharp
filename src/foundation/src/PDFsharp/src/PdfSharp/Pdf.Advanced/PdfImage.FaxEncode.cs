@@ -698,7 +698,6 @@ namespace PdfSharp.Pdf.Advanced
         /// <param name="bits">The count of bits.</param>
         internal void WriteBits(uint value, uint bits)
         {
-#if true
         // TODO_OLD: Try to make this faster!
 
         // If we have to write more bits than fit into the buffer, we fill
@@ -733,25 +732,6 @@ namespace PdfSharp.Pdf.Advanced
                 _bitsInBuffer = 0;
                 ++_bytesOffsetWrite;
             }
-#else
-            // Simple implementation writing bit by bit:
-            int mask = 1 << (int)(bits - 1);
-            for (int b = 0; b < bits; ++b)
-            {
-                if ((value & mask) != 0)
-                    buffer = (buffer << 1) + 1;
-                else
-                    buffer = buffer << 1;
-                ++bitsInBuffer;
-                mask /= 2;
-                if (bitsInBuffer == 8)
-                {
-                    imageData[bytesOffsetWrite] = (byte)buffer;
-                    bitsInBuffer = 0;
-                    ++bytesOffsetWrite;
-                }
-            }
-#endif
         }
 
         /// <summary>

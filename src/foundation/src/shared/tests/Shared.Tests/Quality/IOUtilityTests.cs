@@ -166,15 +166,6 @@ namespace Shared.Tests.Quality
 
             IOUtility.EnsureAssets();
 
-#if true_   // Does not work - assets folder is locked.
-            var root = IOHelper.GetSolutionRoot()!;
-            var assetsPath = Path.Combine(root, "assets");
-            var assetsPath2 = Path.Combine(root, "assets_");
-            Directory.Move(assetsPath, assetsPath2);
-            var action = IOHelper.EnsureAssetsAreDownloaded;
-            action.Should().Throw<InvalidOperationException>();
-            Directory.Move(assetsPath2, assetsPath);
-#endif
         }
 
         [Fact]

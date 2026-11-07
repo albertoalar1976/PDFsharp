@@ -82,10 +82,6 @@ namespace PdfSharp.Pdf.Advanced
         internal override void PrepareForSave()
         {
             base.PrepareForSave();
-#if DEBUG_
-            if (FontDescriptor._descriptor.FontFace.loca == null)
-                _ = typeof(int);
-#endif
             FontDescriptor.PrepareForSave();
         }
 

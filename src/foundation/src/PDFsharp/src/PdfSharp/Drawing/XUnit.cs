@@ -47,12 +47,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public XUnit(double value, XGraphicsUnit type)
         {
-#if true
             if ((int)type is < (int)XGraphicsUnit.Point or > (int)XGraphicsUnit.Presentation)
-#else
-            // According to the profiler this code makes PDFsharp remarkably slow.
-            if (!Enum.IsDefined(typeof(XGraphicsUnit), type))
-#endif
                 throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(XGraphicsUnit));
 
             Value = value;

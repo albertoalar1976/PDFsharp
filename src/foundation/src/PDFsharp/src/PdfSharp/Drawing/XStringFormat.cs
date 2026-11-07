@@ -5,27 +5,6 @@ using System;
 
 namespace PdfSharp.Drawing
 {
-#if true_
-    /// <summary>
-    /// Not used in this implementation.
-    /// </summary>
-    [Flags]
-    public enum XStringFormatFlags
-    {
-        //DirectionRightToLeft  = 0x0001,
-        //DirectionVertical     = 0x0002,
-        //FitBlackBox           = 0x0004,
-        //DisplayFormatControl  = 0x0020,
-        //NoFontFallback        = 0x0400,
-        /// <summary>
-        /// The default value.
-        /// </summary>
-        MeasureTrailingSpaces = 0x0800,
-        //NoWrap                = 0x1000,
-        //LineLimit             = 0x2000,
-        //NoClip                = 0x4000,
-    }
-#endif
 
     /// <summary>
     /// Represents the text layout information.

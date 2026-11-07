@@ -167,15 +167,6 @@ namespace PdfSharp.Drawing
         }
         internal XGraphics? Gfx;
 
-#if true_
-        /// <summary>
-        /// Disposes this instance.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-        }
-#endif
 
         /// <summary>
         /// Sets the form in the state FormState.Finished.
@@ -196,13 +187,6 @@ namespace PdfSharp.Drawing
                 //pdfForm.CreateStream(PdfEncoders.RawEncoding.GetBytes(PdfRenderer.GetContent()));
                 PdfRenderer.Close();
                 Debug.Assert(PdfRenderer == null!);
-#if true_
-                if (_document.Options.CompressContentStreams)
-                {
-                    _pdfForm!.Stream!.Value = Filtering.FlateDecode.Encode(_pdfForm.Stream.Value, _document.Options.FlateEncodeMode);
-                    _pdfForm.Elements.SetName(PdfStream.Keys.Filter, "/FlateDecode");
-                }
-#endif
                 int length = _pdfForm!.Stream!.Length;
                 _pdfForm.Elements.SetInteger("/Length", length);
             }

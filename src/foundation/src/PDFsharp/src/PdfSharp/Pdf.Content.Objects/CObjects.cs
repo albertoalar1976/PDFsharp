@@ -194,7 +194,6 @@ namespace PdfSharp.Pdf.Content.Objects
         /// </summary>
         public string ToContent(ContentWriterOptions? options = null)
         {
-#if true
             options ??= new();
             //Stream stream = new MemoryStream();
             ContentWriter writer = new(options);
@@ -210,21 +209,6 @@ namespace PdfSharp.Pdf.Content.Objects
             //Debug.Assert(readBytes == count);
             //stream.Close();
             //return bytes;
-#else
-            options ??= new();
-            Stream stream = new MemoryStream();
-            ContentWriter writer = new(stream, options);
-            WriteObject(writer);
-            writer.Close(false);
-
-            stream.Position = 0;
-            int count = (int)stream.Length;
-            byte[] bytes = new byte[count];
-            var readBytes = stream.Read(bytes, 0, count);
-            Debug.Assert(readBytes == count);
-            stream.Close();
-            return bytes;
-#endif
         }
 
         /// <summary>
@@ -534,17 +518,6 @@ namespace PdfSharp.Pdf.Content.Objects
                                 break;
 
                             default:
-#if true_
-                                // Not absolutely necessary to use octal encoding for characters less than blank.
-                                if (ch < ' ')
-                                {
-                                    s.Append("\\");
-                                    s.Append((char)(((ch >> 6) & 7) + '0'));
-                                    s.Append((char)(((ch >> 3) & 7) + '0'));
-                                    s.Append((char)((ch & 7) + '0'));
-                                }
-                                else
-#endif
                                 sb.Append(ch);
                                 break;
                         }
@@ -678,16 +651,10 @@ namespace PdfSharp.Pdf.Content.Objects
             bool delimiter = true;
             for (int idx = 0; idx < _items.Count; idx++)
             {
-#if true
                 var value = _items[idx].ToString() ?? throw new InvalidOperationException("Sequence element must not be null.");
                 if (!delimiter && !CLexer.IsDelimiter(value[0]))
                     sb.Append(' ');
                 delimiter = CLexer.IsDelimiter(value[^1]);
-#else
-                // Add spaces except for first item.
-                if (idx > 0)
-                    sb.Append(' ');
-#endif
                 sb.Append(value);
             }
             sb.Append(']');
@@ -932,22 +899,7 @@ namespace PdfSharp.Pdf.Content.Objects
         {
             if (_opCode.OpCodeName == OpCodeName.Dictionary)
                 return " ";
-#if true
             return Name;
-#else
-            var sb = new StringBuilder();
-            if (_sequence != null)
-            {
-                int count = _sequence.Count;
-                for (int idx = 0; idx < count; idx++)
-                {
-                    sb.Append(_sequence[idx]);
-                }
-            }
-            sb.Append(' ');
-            sb.Append(Name);
-            return sb.ToString();
-#endif
         }
 
         internal override void WriteObject(ContentWriter writer)

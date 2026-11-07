@@ -44,24 +44,8 @@ namespace PdfSharp.Pdf.Forms
         {
             get
             {
-#if true
                 var item = Elements.GetRequiredValue<PdfFormField>(index);
                 return item;
-#else
-                PdfItem item = Elements[index];
-                Debug.Assert(item is PdfReference);
-                PdfDictionary? dict = ((PdfReference)item).Value as PdfDictionary;
-                Debug.Assert(dict != null);
-                PdfFormField? field = dict as PdfFormField;
-                if (field == null && dict != null!)
-                {
-                    // Do type transformation
-                    field = null; // CreateAcroField(dict); MAKE CODE COMPILE
-                    //Elements[index] = field.XRef;
-                }
-
-                return field!; // NRT
-#endif
             }
         }
 
@@ -217,11 +201,7 @@ namespace PdfSharp.Pdf.Forms
                             if (xo != null)
                             {
                                 Debug.Assert(xo.IsIndirect);
-#if true
                                 var xo2 = streamOrDict.Elements.GetDictionary(key, VCF.None, typeof(PdfFormXObject));
-#else
-                        TransformToXObject(xo);
-#endif
                                 Debug.Assert(xo.IsDead);
                             }
                             else

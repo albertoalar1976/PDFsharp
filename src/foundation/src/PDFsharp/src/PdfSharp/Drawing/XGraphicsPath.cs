@@ -33,23 +33,7 @@ namespace PdfSharp.Drawing
             return path;
         }
 
-#if GDI_
-#endif
 
-#if WPF_
-        internal static XGraphicsPath FromPathGeometry(PathGeometry pathGeometry)
-        {
-            foreach (var figure in pathGeometry.Figures)
-            {
-                foreach (var segment in figure.Segments)
-                {
-                    segment.
-                }
-            }
-
-            return default;
-        }
-#endif
 
         // ----- AddLine ------------------------------------------------------------------------------
 
@@ -262,10 +246,8 @@ namespace PdfSharp.Drawing
         /// </summary>
         public void AddRoundedRectangle(double x, double y, double width, double height, double ellipseWidth, double ellipseHeight)
         {
-#if true
             double arcWidth = ellipseWidth / 2;
             double arcHeight = ellipseHeight / 2;
-#if true  // Clockwise
             CorePath.MoveTo(x + width - arcWidth, y);
             CorePath.QuadrantArcTo(x + width - arcWidth, y + arcHeight, arcWidth, arcHeight, 1, true);
 
@@ -279,30 +261,6 @@ namespace PdfSharp.Drawing
             CorePath.QuadrantArcTo(x + arcWidth, y + arcHeight, arcWidth, arcHeight, 2, true);
 
             CorePath.CloseSubpath();
-#else  // Counterclockwise
-            _corePath.MoveTo(x + arcWidth, y);
-            _corePath.QuadrantArcTo(x + arcWidth, y + arcHeight, arcWidth, arcHeight, 2, false);
-
-            _corePath.LineTo(x, y + height - arcHeight, false);
-            _corePath.QuadrantArcTo(x + arcWidth, y + height - arcHeight, arcWidth, arcHeight, 3, false);
-
-            _corePath.LineTo(x + width - arcWidth, y + height, false);
-            _corePath.QuadrantArcTo(x + width - arcWidth, y + height - arcHeight, arcWidth, arcHeight, 4, false);
-
-            _corePath.LineTo(x + width, y + arcHeight, false);
-            _corePath.QuadrantArcTo(x + width - arcWidth, y + arcHeight, arcWidth, arcHeight, 1, false);
-
-            _corePath.CloseSubpath();
-#endif
-#else
-            // AddArc not yet implemented
-            AddArc((float)(x + width - ellipseWidth), (float)y, (float)ellipseWidth, (float)ellipseHeight, -90, 90);
-            AddArc((float)(x + width - ellipseWidth), (float)(y + height - ellipseHeight), (float)ellipseWidth,
-                (float)ellipseHeight, 0, 90);
-            AddArc((float)x, (float)(y + height - ellipseHeight), (float)ellipseWidth, (float)ellipseHeight, 90, 90);
-            AddArc((float)x, (float)y, (float)ellipseWidth, (float)ellipseHeight, 180, 90);
-            CloseFigure();
-#endif
         }
 
         // ----- AddEllipse ---------------------------------------------------------------------------

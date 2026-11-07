@@ -141,15 +141,9 @@ namespace PdfSharp.Charting.Renderers
                         y = innerCircle * Math.Sin(rad);
                         points[5].X = pos.X;
                         points[5].Y = (float_)(pos.Y + y);
-#if PSGFX
-                        throw new NotImplementedException("AddLines");
-                        //gp.AddLines(points);
-                    }
-#else
                         gp.AddLines(points);
                     }
                     break;
-#endif
             }
             gp.CloseFigure();
 

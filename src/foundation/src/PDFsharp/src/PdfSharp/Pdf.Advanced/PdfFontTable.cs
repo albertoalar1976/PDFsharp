@@ -55,7 +55,6 @@ namespace PdfSharp.Pdf.Advanced
             return pdfFont;
         }
 
-#if true
         /// <summary>
         /// Gets a PdfFont from a font program. If no PdfFont already exists, a new one is created.
         /// </summary>
@@ -63,23 +62,7 @@ namespace PdfSharp.Pdf.Advanced
         {
             Debug.Assert(false, "Should not come here anymore.");
             return null!;
-#if true_
-            //FontSelector selector = new FontSelector(idName);
-            string selector = null; // ComputeKey(font); //new FontSelector(font);
-            if (!_fonts.TryGetValue(selector, out var pdfFont))
-            {
-                //if (font.Unicode)
-                pdfFont = new PdfType0Font(Owner, idName, fontData, false);
-                //else
-                //  pdfFont = new PdfTrueTypeFont(_owner, font);
-                //pdfFont.Document = _document;
-                Debug.Assert(pdfFont.Owner == Owner);
-                _fonts[selector] = pdfFont;
-            }
-            return pdfFont;
-#endif
         }
-#endif
 
         /// <summary>
         /// Tries to get a PdfFont from the font dictionary.
@@ -90,12 +73,6 @@ namespace PdfSharp.Pdf.Advanced
             Debug.Assert(false, "Should not come here anymore.");
             return null;
 
-#if true_
-            //FontSelector selector = new FontSelector(idName);
-            string selector = null;
-            _fonts.TryGetValue(selector, out var pdfFont);
-            return pdfFont;
-#endif
         }
 
         internal static string ComputePdfFontKey(XGlyphTypeface glyphTypeface, FontType fontType)

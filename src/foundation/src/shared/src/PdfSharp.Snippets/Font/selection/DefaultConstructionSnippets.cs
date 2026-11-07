@@ -36,11 +36,7 @@ namespace PdfSharp.Snippets.Font
         const string Text = "Sphinx";
         const string Text2 = "Sphinx abc test";
         const double EmSize = 24;
-#if true
         readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.WinAnsi);
-#else
-        readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.Unicode);
-#endif
 
 #if TIMES_NEW_ROMAN
         const string FamilyName = "Times New Roman";
@@ -253,11 +249,7 @@ namespace PdfSharp.Snippets.Font
             var timesBoldItalic2 = new XFont(times, 42, XFontStyleEx.BoldItalic);
 #endif
 #if SEGOE_UI
-#if false
-            var segoe = new FontFamily("Segoe UI");
-#else
             var segoe = "Segoe UI";
-#endif
             var segoeRegular = new XFont(segoe, 32, XFontStyleEx.Regular);
             var segoeBold = new XFont(segoe, 32, XFontStyleEx.Bold);
             var segoeItalic = new XFont(segoe, 32, XFontStyleEx.Italic);
@@ -269,24 +261,6 @@ namespace PdfSharp.Snippets.Font
             var segoeBoldLight = new XFont(segoeLight, 32, XFontStyleEx.Bold);
             var segoeItalicLight = new XFont(segoeLight, 32, XFontStyleEx.Italic);
             var segoeBoldItalicLight = new XFont(segoeLight, 32, XFontStyleEx.BoldItalic);
-#endif
-#if false
-            var segoeRegular2 = new XFont(new GdiFont("Segoe UI", 32, FontStyle.Regular, GraphicsUnit.World));
-            var segoeBold2 = new XFont(new GdiFont("Segoe UI", 32, FontStyle.Bold, GraphicsUnit.World));
-            var segoeItalic2 = new XFont(new GdiFont("Segoe UI", 32, FontStyle.Italic, GraphicsUnit.World));
-            var segoeBoldItalic2 = new XFont(new GdiFont("Segoe UI", 32, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.World));
-#endif
-#if WPF_
-            GlyphTypeface glyphTypeface = null;
-            //var times = new XFont(glyphTypeface, new Font("Times New Roman", 10), null);
-            var times = new XFont("Times New Roman", 10);
-            var times2 = new XFont("Times New Roman", 10);
-            var segoeFamily=new FontFamily("Segoe UI");
-            var segoeRegular2 = new XFont(new Typeface(segoeFamily,FontStyles.Normal, FontWeights.Regular,FontStretches.Normal), 32);
-            var segoeBold2 = new XFont(new Typeface(segoeFamily, FontStyles.Normal, FontWeights.Bold, FontStretches.Normal), 32);
-            var segoeItalic2 = new XFont(new Typeface(segoeFamily, FontStyles.Italic, FontWeights.Regular, FontStretches.Normal), 32);
-            var segoeOblique2 = new XFont(new Typeface(segoeFamily, FontStyles.Oblique, FontWeights.Regular, FontStretches.Normal), 32);
-            var segoeBoldItalic2 = new XFont(new Typeface(segoeFamily, FontStyles.Italic, FontWeights.Bold, FontStretches.Normal), 32);
 #endif
 
             BeginBox(gfx, 1, BoxOptions.Tile);
@@ -360,11 +334,7 @@ namespace PdfSharp.Snippets.Font
         const string Text = "Sphinx";
         const string Text2 = "Sphinx abc test";
         const float EmSize = 24;
-#if true
         readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.WinAnsi);
-#else
-        readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.Unicode);
-#endif
 
 #if TIMES_NEW_ROMAN
         const string FamilyName = "Times New Roman";
@@ -555,11 +525,7 @@ namespace PdfSharp.Snippets.Font
         const string Text = "Sphinx";
         const double EmSize = 24;
 
-#if true
         readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.WinAnsi);
-#else
-        readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.Unicode);
-#endif
         public PrivateFontCollectionSnippet()
         {
             //NoText = true;
@@ -571,17 +537,7 @@ namespace PdfSharp.Snippets.Font
         {
             // No PrivateFontCollection - use font resolver.
 
-#if GDI_
-            var assembly = Assembly.GetExecutingAssembly();
-            XPrivateFontCollection.Add(assembly.GetManifestResourceStream("PdfSharp.Features.Fonts.xfiles.ttf")!);
-            XPrivateFontCollection.Add(assembly.GetManifestResourceStream("PdfSharp.Features.Fonts.oblivious.ttf")!);
-#endif
 
-#if WPF_
-            var uri = new Uri("pack://application:,,,/");
-            XPrivateFontCollection.Add(uri, "./Fonts/#X-Files");
-            XPrivateFontCollection.Add(uri, "./Fonts/#Oblivious font");
-#endif
         }
 
         public override void RenderSnippet(XGraphics gfx)
@@ -674,11 +630,6 @@ namespace PdfSharp.Snippets.Font
 
         static FrutigerFontsSnippet()
         {
-#if GDI_
-            XPrivateFontCollection.Add(Assembly.GetExecutingAssembly().GetManifestResourceStream("PdfSharp.Features.Fonts.walrod.ttf")!);
-            XPrivateFontCollection.Add(Assembly.GetExecutingAssembly().GetManifestResourceStream("PdfSharp.Features.Fonts.battlest.ttf")!);
-            XPrivateFontCollection.Add(Assembly.GetExecutingAssembly().GetManifestResourceStream("PdfSharp.Features.Fonts.xfiles.ttf")!);
-#endif
 
         }
 
@@ -833,11 +784,7 @@ namespace PdfSharp.Snippets.Font
         //const string FamilyNameLight = "Helvetica Neue|light";
         const string FamilyNameLight = "Helvetica Neue Light";
 
-#if true
         readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.WinAnsi);
-#else
-        readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.Unicode);
-#endif
 
         public HelveticaNeueFontsSnippet()
         {
@@ -848,21 +795,7 @@ namespace PdfSharp.Snippets.Font
 
         static HelveticaNeueFontsSnippet()
         {
-#if GDI_
-            XPrivateFontCollection.Add(Assembly.GetExecutingAssembly().GetManifestResourceStream("PdfSharp.Features.Fonts.walrod.ttf")!);
-            XPrivateFontCollection.Add(Assembly.GetExecutingAssembly().GetManifestResourceStream("PdfSharp.Features.Fonts.battlest.ttf")!);
-            XPrivateFontCollection.Add(Assembly.GetExecutingAssembly().GetManifestResourceStream("PdfSharp.Features.Fonts.xfiles.ttf")!);
-#endif
 
-#if WPF_
-            Uri uriPackApplication = new Uri("pack://application:,,,/");
-#if true_ //FRUTIGER_VIA_WPF_FONTFAMILY
-            // We have 'Helvetica Neue', 'Helvetica Neue Light', and 'Helvetica Neue,bold'.
-            XPrivateFontCollection.Add(uriPackApplication, "./Fonts/HelveticaNeue/#Helvetica Neue");
-            XPrivateFontCollection.Add(uriPackApplication, "./Fonts/HelveticaNeue/#Helvetica Neue Bold");
-            XPrivateFontCollection.Add(uriPackApplication, "./Fonts/HelveticaNeue/#Helvetica Neue Light");
-#endif
-#endif
         }
 
 #if VARIANT2___

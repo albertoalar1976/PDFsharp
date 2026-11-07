@@ -41,15 +41,9 @@ namespace PdfSharp.Internal.Imaging
                 int i = (int)(dpi + .5);
                 double diff = Math.Abs(dpi - (double)i);
                 // If DPI value is less than 0.1 % of the nearest integer, return the integer.
-#if true
                 // Rounding only for 72 and 96 DPI.
                 if ((i == 72 || i == 96) && diff * 1000 < i)
                     return i;
-#else
-                    // Rounding for all values.
-                    if (diff * 1000 < i)
-                        return i;
-#endif
                 return dpi;
             }
         }
@@ -96,22 +90,11 @@ namespace PdfSharp.Internal.Imaging
         public static bool TryImportImage(byte[] bitmapBytes,
             [MaybeNullWhen(false)] out ImportedImage importedImage)
         {
-#if true
             foreach (var importer in Importers)
             {
                 if (importer.TryImport(bitmapBytes, out importedImage))
                     return true;
             }
-#else
-            if (PngImporter.TryImport(bitmapBytes, out importedImage))
-                return true;
-
-            if (JpegImporter.TryImport(bitmapBytes, out importedImage))
-                return true;
-
-            if (BmpImporter.TryImport(bitmapBytes, out importedImage))
-                return true;
-#endif
             importedImage = null!;
             return false;
         }

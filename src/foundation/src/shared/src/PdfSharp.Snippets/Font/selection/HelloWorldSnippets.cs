@@ -37,11 +37,7 @@ namespace PdfSharp.Snippets.Font
         const string Text = "Sphinx";
         const string Text2 = "Sphinx abc test";
         const double EmSize = 24;
-#if true
         readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.WinAnsi);
-#else
-        readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.Unicode);
-#endif
 
         static IFontResolver fs = new SegoeWpFontResolver();
 

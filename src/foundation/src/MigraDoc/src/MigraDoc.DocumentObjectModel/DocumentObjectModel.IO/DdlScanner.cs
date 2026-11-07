@@ -1136,15 +1136,6 @@ namespace MigraDoc.DocumentObjectModel.IO
                 return Symbol.Chr; // Shortcut for \chr(
             }
 
-#if false
-            // \/ is an escaped slash.
-            if (ch == '/')
-            {
-                _token += "/";
-                _symbol = Symbol.Chr;
-                return Symbol.Chr;
-            }
-#endif
             while (!IsEof(ch) && IsIdentifierChar(ch, false))
                 ch = AppendAndScanNextChar();
 

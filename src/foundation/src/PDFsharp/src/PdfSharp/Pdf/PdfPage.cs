@@ -732,12 +732,7 @@ namespace PdfSharp.Pdf
         {
             get
             {
-#if true
                 return field ??= Elements.GetRequiredDictionary<PdfResources>(InheritablePageKeys.Resources, VCF.Create);
-#else
-                return _resources ??= (PdfResources?)Elements.GetValue(InheritablePageKeys.Resources, VCF.Create)
-                                      ?? NRT.ThrowOnNull<PdfResources>();
-#endif
             }
         }
 
@@ -872,7 +867,6 @@ namespace PdfSharp.Pdf
         /// </summary>
         internal void ApplyInheritedValues(ref readonly PdfPageTreeNode.InheritedValues inheritedValues)  // TODO review
         {
-#if true
             if (inheritedValues.Resources != null)
             {
                 var resources = Elements.GetDictionary(InheritablePageKeys.Resources);
@@ -918,51 +912,6 @@ namespace PdfSharp.Pdf
 
             if (inheritedValues.Rotate != null && Elements.GetValue(InheritablePageKeys.Rotate) == null)
                 Elements[InheritablePageKeys.Rotate] = inheritedValues.Rotate;
-#else
-            // Old code - DELETE
-            if (values.Resources != null!)
-            {
-                PdfDictionary? resources;
-                var res = page.Elements[InheritablePageKeys.Resources];
-                if (res is PdfReference pdfReference)
-                {
-                    resources = (PdfDictionary)pdfReference.Value.Clone();
-                    resources.Document = page.Owner;
-                }
-                else
-                    resources = (PdfDictionary?)res;
-
-                if (resources == null)
-                {
-                    resources = values.Resources.Clone();
-                    resources.Document = page.Owner;
-                    page.Elements.Add(InheritablePageKeys.Resources, resources);
-                }
-                else
-                {
-                    foreach (var name in values.Resources.Elements.KeyNames)
-                    {
-                        if (!resources.Elements.ContainsKey(name.Value))
-                        {
-                            var item = values.Resources.Elements[name];
-                            Debug.Assert(item != null);
-                            if (item is PdfObject)
-                                item = item.Clone();
-                            resources.Elements.Add(name.ToString(), item);
-                        }
-                    }
-                }
-            }
-
-            if (values.MediaBox != null! && page.Elements[InheritablePageKeys.MediaBox] == null)
-                page.Elements[InheritablePageKeys.MediaBox] = values.MediaBox;
-
-            if (values.CropBox != null! && page.Elements[InheritablePageKeys.CropBox] == null)
-                page.Elements[InheritablePageKeys.CropBox] = values.CropBox;
-
-            if (values.Rotate != null! && page.Elements[InheritablePageKeys.Rotate] == null)
-                page.Elements[InheritablePageKeys.Rotate] = values.Rotate;
-#endif
         }
 
         internal override void PrepareForSave()

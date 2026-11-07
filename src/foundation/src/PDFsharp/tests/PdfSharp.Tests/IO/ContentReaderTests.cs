@@ -18,9 +18,6 @@ namespace PdfSharp.Tests.IO
         public ContentReaderTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE_
-            GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

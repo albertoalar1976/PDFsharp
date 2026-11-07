@@ -417,23 +417,6 @@ namespace PdfSharp.Internal.Imaging
             //int k = 0;
 
             // No fax encoding here
-#if false
-            if (bits == 1 && options.EnableCcittCompressionForBilevelImages)
-            {
-                // We try  Group 4 (2D) encoding here and keep the smaller byte array.
-                byte[] tempG4 = new byte[imageData.Length];
-                // Size will be 0 if fax encoding increases the size.
-                int ccittSizeG4 = PdfImage.DoFaxEncodingGroup4(ref tempG4, Data, (uint)bytesFileOffset, (uint)width, (uint)height);
-
-                isFGaxEncoded = ccittSizeG4 > 0;
-                if (isFGaxEncoded)
-                {
-                    Array.Resize(ref tempG4, ccittSizeG4);
-                    imageDataFax = tempG4;
-                    k = -1;
-                }
-            }
-#endif
 
             {
                 int bytesOffsetRead = 0;
@@ -498,13 +481,6 @@ namespace PdfSharp.Internal.Imaging
             Image.ExtractedImageData = imageData;
 
             // CCITT FAX encoding not yet supported, but has no advantages over FlateDecode.
-#if false
-            if (imageDataFax != null)
-            {
-                Image.CcittFaxData = imageDataFax;
-            }
-            Image.CcittFaxK = k;
-#endif
 
             Image.IsGray = isGray;
             Image.Bitonal = isBitonal;

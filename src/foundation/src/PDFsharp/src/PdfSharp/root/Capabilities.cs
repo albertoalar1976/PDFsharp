@@ -51,12 +51,6 @@ namespace PdfSharp
         static Capabilities()
         {
             _ = PdfSharp.Internal.FooBarEnum3.xxx;
-#if DEBUG_
-            var x = Capabilities.IsAvailable.GlyphsToPathFrom(new XFontFamily("test"));
-
-            Capabilities.Action.GlyphsToPath = FeatureNotAvailableBehavior.ThrowException;
-            x = Capabilities.Build.IsGdiBuild;
-#endif
         }
 
         /// <summary>
@@ -162,29 +156,12 @@ namespace PdfSharp
             /// Indicates whether the current application is running on WSL2.
             /// If IsWsl2 is true, IsLinux also is true.
             /// </summary>
-#if true
             public static bool IsWsl2 =>
                 _isWsl2 ??= IsLinux &&
                 Environment.GetEnvironmentVariable("WSL_DISTRO_NAME") != null;
             static bool? _isWsl2;
             // New implementation checking Environment.GetEnvironmentVariable("WSL_DISTRO_NAME").
             // Checking WSL_DISTRO_NAME seems to be the best way to check whether we are under WSL2.
-#else
-            // KEEP Old implementation using Directory.Exists("/mnt/c/Windows").
-            public static bool IsWsl2
-            {
-                get
-                {
-                    if (IsLinux)
-                    {
-                        // The source code of WPF contains hard-coded "C:\Windows".
-                        // So this directory is carved in stone forever.
-                        return Directory.Exists("/mnt/c/Windows");
-                    }
-                    return false;
-                }
-            }
-#endif
 
             /// <summary>
             /// Gets a 3-character abbreviation of the current operating system.

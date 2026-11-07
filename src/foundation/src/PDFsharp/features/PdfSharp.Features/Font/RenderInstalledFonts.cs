@@ -25,11 +25,7 @@ namespace PdfSharp.Features.Font
 
     public class RenderInstalledFontsSnippet : Snippet
     {
-#if true
         static readonly XPdfFontOptions PdfOptions = XPdfFontOptions.WinAnsiDefault;
-#else
-        static readonly XPdfFontOptions PdfOptions = XPdfFontOptions.UnicodeDefault;
-#endif
         // WPF’s System.Windows.Media.Fonts.SystemFontFamilies gets fewer families than InstalledFontCollection().Families,
         // because some faces are embedded in a family here, while they are not in InstalledFontCollection().Families.
         // E.g. Arial Black is included in Arial in WPF, but not in Core and GDI.

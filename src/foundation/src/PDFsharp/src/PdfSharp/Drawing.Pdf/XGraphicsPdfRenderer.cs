@@ -959,23 +959,13 @@ namespace PdfSharp.Drawing.Pdf
             {
                 if (_gfx.PageDirection == XPageDirection.Downwards)
                 {
-#if true
                     const string format = "q {2:" + numFormat + "} 0 0 {3:" + numFormat + "} {0:" + numFormat + "} {1:" + numFormat + "} cm {4} Do Q\n";
                     AppendFormatImage(format, x, y + height, width, height, name);
-#else
-                    AppendFormatImage("q {2:" + format + "} 0 0 {3:" + format + "} {0:" + format + "} {1:" + format + "} cm {4} Do Q\n",
-                        x, y + height, width, height, name);
-#endif
                 }
                 else
                 {
-#if true
                     const string format = "q {2:" + numFormat + "} 0 0 {3:" + numFormat + "} {0:" + numFormat + "} {1:" + numFormat + "} cm {4} Do Q\n";
                     AppendFormatImage(format, x, y, width, height, name);
-#else
-                    AppendFormatImage("q {2:" + format + "} 0 0 {3:" + format + "} {0:" + format + "} {1:" + format + "} cm {4} Do Q\n",
-                        x, y, width, height, name);
-#endif
                 }
             }
             else
@@ -993,13 +983,8 @@ namespace PdfSharp.Drawing.Pdf
                 {
                     var xForm = form as XPdfForm;
                     // Reset colors in this graphics state. Usually PDF images should set them, but in rare cases they don’t and this may result in changed colors inside the image.
-#if true
                     bool resetColor = xForm != null;
                     const string resetColorCode = "\n0 g\n0 G\n";
-#else
-                    bool resetColorXX = xForm != null;
-                    var resetColor = xForm != null ? "\n0 g\n0 G\n" : " ";
-#endif
 
                     if (_gfx.PageDirection == XPageDirection.Downwards)
                     {
@@ -1011,27 +996,17 @@ namespace PdfSharp.Drawing.Pdf
                             xDraw -= xForm.Page!.MediaBox.X1;
                             yDraw += xForm.Page.MediaBox.Y1;
                         }
-#if true
                         const string formatReset = "q" + resetColorCode + "{2:" + numFormat + "} 0 0 {3:" + numFormat + "} {0:" + numFormat + "} {1:" + numFormat + "} cm {4} Do Q\n";
                         const string format = "q {2:" + numFormat + "} 0 0 {3:" + numFormat + "} {0:" + numFormat + "} {1:" + numFormat + "} cm {4} Do Q\n";
 
                         AppendFormatImage(resetColor ? formatReset : format, xDraw, yDraw + height, cx, cy, name);
-#else
-                        AppendFormatImage("q" + resetColor + "{2:" + format + "} 0 0 {3:" + format + "} {0:" + format + "} {1:" + format + "} cm {4} Do Q\n",
-                            xDraw, yDraw + height, cx, cy, name);
-#endif
                     }
                     else
                     {
                         // TODO_OLD Translation for MediaBox.
-#if true
                         const string formatReset = "q" + resetColorCode + "{2:" + numFormat + "} 0 0 {3:" + numFormat + "} {0:" + numFormat + "} {1:" + numFormat + "} cm {4} Do Q\n";
                         const string format = "q {2:" + numFormat + "} 0 0 {3:" + numFormat + "} {0:" + numFormat + "} {1:" + numFormat + "} cm {4} Do Q\n";
                         AppendFormatImage(resetColor ? formatReset : format, x, y, cx, cy, name);
-#else
-                        AppendFormatImage("q" + resetColor + "{2:" + format + "} 0 0 {3:" + format + "} {0:" + format + "} {1:" + format + "} cm {4} Do Q\n",
-                            x, y, cx, cy, name);
-#endif
                     }
                 }
             }
@@ -1428,58 +1403,6 @@ namespace PdfSharp.Drawing.Pdf
                 pt2.X, pt2.Y);
         }
 
-#if _CORE_
-        /// <summary>
-        /// Appends the content of a GraphicsPath object.
-        /// </summary>
-        internal void AppendPath(GraphicsPath path)
-        {
-            int count = path.PointCount;
-            if (count == 0)
-                return;
-            PointF[] points = path.PathPoints;
-            Byte[] types = path.PathTypes;
-
-            for (int idx = 0; idx < count; idx++)
-            {
-                // From GDI+ documentation:
-                const byte PathPointTypeStart = 0; // move
-                const byte PathPointTypeLine = 1; // line
-                const byte PathPointTypeBezier = 3; // default Bezier (= cubic Bezier)
-                const byte PathPointTypePathTypeMask = 0x07; // type mask (lowest 3 bits).
-                //const byte PathPointTypeDashMode = 0x10; // currently in dash mode.
-                //const byte PathPointTypePathMarker = 0x20; // a marker for the path.
-                const byte PathPointTypeCloseSubpath = 0x80; // closed flag
-
-                byte type = types[idx];
-                switch (type & PathPointTypePathTypeMask)
-                {
-                    case PathPointTypeStart:
-                        //PDF_moveto(pdf, points[idx].X, points[idx].Y);
-                        AppendFormat("{0:" + format + "} {1:" + format + "} m\n", points[idx].X, points[idx].Y);
-                        break;
-
-                    case PathPointTypeLine:
-                        //PDF_lineto(pdf, points[idx].X, points[idx].Y);
-                        AppendFormat("{0:" + format + "} {1:" + format + "} l\n", points[idx].X, points[idx].Y);
-                        if ((type & PathPointTypeCloseSubpath) != 0)
-                            Append("h\n");
-                        break;
-
-                    case PathPointTypeBezier:
-                        Debug.Assert(idx + 2 < count);
-                        //PDF_curveto(pdf, points[idx].X, points[idx].Y, 
-                        //                 points[idx + 1].X, points[idx + 1].Y, 
-                        //                 points[idx + 2].X, points[idx + 2].Y);
-                        AppendFormat("{0:" + format + "} {1:" + format + "} {2:" + format + "} {3:" + format + "} {4:" + format + "} {5:" + format + "} c\n", points[idx].X, points[idx].Y,
-                            points[++idx].X, points[idx].Y, points[++idx].X, points[idx].Y);
-                        if ((types[idx] & PathPointTypeCloseSubpath) != 0)
-                            Append("h\n");
-                        break;
-                }
-            }
-        }
-#endif
 
         /// <summary>
         /// Appends the content of a GraphicsPath object.
@@ -1967,36 +1890,9 @@ namespace PdfSharp.Drawing.Pdf
         {
             // If EffectiveCtm is not yet realized InverseEffectiveCtm is invalid.
             Debug.Assert(_gfxState.UnrealizedCtm.IsIdentity, "Somewhere a RealizeTransform is missing.");
-#if true
             // See in #else case why this is correct.
             XPoint pt = _gfxState.WorldTransform.Transform(point);
             return _gfxState.InverseEffectiveCtm.Transform(new XPoint(pt.X, PageHeightPt / DefaultViewMatrix.M22 - pt.Y));
-#else
-            // Get inverted PDF world transform matrix.
-            XMatrix invers = _gfxState.EffectiveCtm;
-            invers.Invert();
-
-            // Apply transform in Windows world space.
-            XPoint pt1 = _gfxState.WorldTransform.Transform(point);
-#if true
-            // Do the transformation (see #else case) in one step.
-            XPoint pt2 = new XPoint(pt1.X, PageHeightPt / DefaultViewMatrix.M22 - pt1.Y);
-#else
-            // Replicable version
-
-            // Apply default transformation.
-            pt1.X = pt1.X * DefaultViewMatrix.M11;
-            pt1.Y = pt1.Y * DefaultViewMatrix.M22;
-
-            // Convert from Windows space to PDF space.
-            XPoint pt2 = new XPoint(pt1.X, PageHeightPt - pt1.Y);
-
-            pt2.X = pt2.X / DefaultViewMatrix.M11;
-            pt2.Y = pt2.Y / DefaultViewMatrix.M22;
-#endif
-            XPoint pt3 = invers.Transform(pt2);
-            return pt3;
-#endif
         }
         #endregion
 

@@ -328,15 +328,11 @@ namespace PdfSharp.Pdf
         /// </summary>
         public override string ToString()
         {
-#if true
             var encoding = (PdfStringEncoding)(_flags & PdfStringFlags.EncodingMask);
             string pdf = (_flags & PdfStringFlags.HexLiteral) == 0 ?
                 PdfEncoders.ToStringLiteral(Value, encoding, null) :
                 PdfEncoders.ToHexStringLiteral(Value, encoding, null);
             return pdf;
-#else
-            return _value;
-#endif
         }
 
         /// <summary>
@@ -345,35 +341,6 @@ namespace PdfSharp.Pdf
         public static PdfString Empty => _empty ??= new PdfString();
         static PdfString? _empty;
 
-#if true_ 
-        /// <summary>
-        /// H/ack for document encoded bookmarks.
-        /// </summary>
-        public string ToStringFromPdfDocEncoded()
-        {
-            if (_value == null)
-                return "";
-            int length = _value.Length;
-            char[] bytes = new char[length];
-            for (int idx = 0; idx < length; idx++)
-            {
-                char ch = _value[idx];
-                if (ch <= 255)
-                {
-                    bytes[idx] = Encode[ch];
-                }
-                else
-                {
-                    //Debug-Break.Break();
-                    throw new InvalidOperationException("DocEncoded string contains char greater 255.");
-                }
-            }
-            var sb = new StringBuilder(length);
-            for (int idx = 0; idx < length; idx++)
-                sb.Append(bytes[idx]);
-            return sb.ToString();
-        }
-#endif
 
         static readonly char[] Encode =
         [

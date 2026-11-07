@@ -141,7 +141,6 @@ namespace MigraDoc.DocumentObjectModel.Internals
             if (vd == null)
                 throw new ArgumentException(MdDomMsgs.InvalidValueName(name).Message);
 
-#if true
             if (trail == null)
                 return vd.IsNull(dom);
 
@@ -155,20 +154,6 @@ namespace MigraDoc.DocumentObjectModel.Internals
                 throw new ArgumentException(MdDomMsgs.InvalidValueName(name).Message);
 
             return doc.IsNull(trail);
-#else
-            if (/*vd is NullableDescriptor ||*/ vd is ValueTypeDescriptor)
-            {
-                if (trail != null)
-                    throw new ArgumentException(DomSR.InvalidValueName(name));
-                return vd.IsNull(dom);
-            }
-            var docObj = (DocumentObject?)vd.GetValue(dom, GV.ReadOnly);
-            if (docObj == null)
-                return true;
-            if (trail != null)
-                return docObj.IsNull(trail);
-            return docObj.IsNull();
-#endif
 
             //      DomValueDescriptor vd = vds[name];
             //      if (vd == null)

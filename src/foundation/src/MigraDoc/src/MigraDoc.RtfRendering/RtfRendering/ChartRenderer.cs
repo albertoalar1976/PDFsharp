@@ -5,9 +5,7 @@ using System.Globalization;
 using System.Diagnostics;
 using System.Drawing;
 using Microsoft.Extensions.Logging;
-#if !NETSTANDARD2_0_OR_GREATER
 using System.Drawing.Imaging;
-#endif
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Shapes.Charts;
 using MigraDoc.Logging;

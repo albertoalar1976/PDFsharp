@@ -12,23 +12,6 @@ namespace PdfSharp.Tests.Pdf.Objects
     public class DateTests : PdfSharpTestBase
     {
         readonly string _tempRoot = GetTempRoot(typeof(DateTests));
-#if true_
-        [Fact]
-        public void Test_format_specifiers()
-        {
-            // How do I use the K and zzz format specifiers?
-            // See https://learn.microsoft.com/en-us/dotnet/api/system.datetimeoffset.tostring?view=net-8.0
-            var now = DateTimeOffset.Now;
-            var d1 = now.ToString("zzz");
-            var d2 = now.ToString("zz");
-            var d3 = now.ToString("zzz");
-            var d4 = now.ToString("ssK");
-            var d5 = now.ToString("yyyy-MM-ddTHH:mm:ssK");
-
-             now = new DateTimeOffset(2025, 9, 22, 15, 16, 17, TimeSpan.Zero);
-             var d6 = now.ToString("yyyy-MM-ddTHH:mm:ssK");
-        }
-#endif
 
         [Fact]
         public void Test_MetadataManager_ToXmpDateString()

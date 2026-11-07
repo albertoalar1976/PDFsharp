@@ -149,7 +149,6 @@ namespace PdfSharp.Drawing.BarCodes
         /// <param name="text">The code to be checked.</param>
         protected override void CheckCode(string text)
         {
-#if true
             if (text == null)
                 throw new ArgumentNullException(nameof(text));
 
@@ -164,7 +163,6 @@ namespace PdfSharp.Drawing.BarCodes
                 if (!Char.IsDigit(ch))
                     throw new ArgumentException(BcgSR.Invalid2Of5Code(text));
             }
-#endif
         }
     }
 }

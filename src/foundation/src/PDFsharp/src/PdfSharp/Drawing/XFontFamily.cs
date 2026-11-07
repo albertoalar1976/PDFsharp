@@ -81,16 +81,6 @@ namespace PdfSharp.Drawing
         /// </summary>
         public string Name => FamilyInternal.Name;
 
-#if true__
-        public double LineSpacing
-        {
-            get
-            {
-                WpfFamily.FamilyTypefaces[0].UnderlineThickness
-            }
-        }
-
-#endif
 
         /// <summary>
         /// Returns the cell ascent, in design units, of the XFontFamily object of the specified style.
@@ -123,10 +113,6 @@ namespace PdfSharp.Drawing
             var fontDescriptorCache = PsGlobals.Global.Fonts.FontDescriptorCache;
             OpenTypeFontDescriptor descriptor = (OpenTypeFontDescriptor)fontDescriptorCache.GetOrCreateDescriptor(Name, style);
             int result = descriptor.UnitsPerEm;
-#if DEBUG_
-            int headValue = descriptor.FontFace.head.unitsPerEm;
-            Debug.Assert(headValue == result);
-#endif
             return result;
         }
 

@@ -76,17 +76,8 @@ namespace PdfSharp.Features.IO
                 }
                 stopwatch.Stop();
                 var x = stopwatch.ElapsedMilliseconds;
-#if DEBUG_
-                Console.W/riteLine($"Time: {x}ms");
-                Console.W/riteLine($"Try: {LexerHelper.TryCheckReferenceCount}, success: {LexerHelper.TryCheckReferenceSuccessCount}");
-#endif
 
                 //document.Info.Author = "empira";
-#if true_
-                var prefix = Path.GetFileNameWithoutExtension(file);
-                var filename = PdfFileUtility.GetTempPdfFileName(prefix);
-                document.Save(filename);
-#endif
             }
         }
     }

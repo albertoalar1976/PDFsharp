@@ -38,19 +38,7 @@ namespace GdiGrammarByExample
             // Save the PDF document.
             pdfRenderer.Save(DdlGbeTestBase.WslPathHack(pdfFile));
 
-#if DEBUG____
-            // Code to generate MDDDL files.
-            var dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(pdfFile + ".mdddl");
-            dw.WriteDocument(document);
-            dw.Close(); 
-#endif
 
-#if DEBUG____
-            // Code to generate RTF files.
-            var rtf = new RtfDocumentRenderer();
-            // Set the working directory so the renderer finds the referenced images.
-            rtf.Render(document, pdfFile + ".rtf", workingDirectory);
-#endif
 
             return pdfFile;
         }

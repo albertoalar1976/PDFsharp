@@ -106,37 +106,6 @@ namespace PdfSharp
         /// </summary>
         B5 = 18,
 
-#if true_
-        /// <summary>
-        /// Identifies a paper sheet size of 917 mm by 1297 mm or 36.00 inches by 51.20 inches.
-        /// </summary>
-        C0 = 19,
-
-        /// <summary>
-        /// Identifies a paper sheet size of 648 mm by 917 mm or 25.60 inches by 36.00 inches.
-        /// </summary>
-        C1 = 20,
-
-        /// <summary>
-        /// Identifies a paper sheet size of 458 mm by 648 mm or 18.00 inches by 25.60 inches.
-        /// </summary>
-        C2 = 21,
-
-        /// <summary>
-        /// Identifies a paper sheet size of 324 mm by 458 mm or 12.80 inches by 18.00 inches.
-        /// </summary>
-        C3 = 22,
-
-        /// <summary>
-        /// Identifies a paper sheet size of 229 mm by 324 mm or 9.00 inches by 12.80 inches.
-        /// </summary>
-        C4 = 23,
-
-        /// <summary>
-        /// Identifies a paper sheet size of 162 mm by 229 mm or 6.40 inches by 9.0 inches.
-        /// </summary>
-        C5 = 24,
-#endif
 
         // Current U.S. loose paper sizes 
 

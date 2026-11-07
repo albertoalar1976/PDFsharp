@@ -178,16 +178,6 @@ namespace PdfSharp.Pdf
                        </dc:description>
                      </rdf:Description>
                  """ + "\r\n" +
-#if true_
-                // TODO: what if string from trailer is not a UUID???
-                // xmlns:xapMM: DocumentID, InstanceID
-                $"""
-                     <rdf:Description rdf:about="" xmlns:xapMM="http://ns.adobe.com/xap/1.0/mm/">
-                       <xapMM:DocumentID>uuid:{metadataInfo.DocumentID}</xapMM:DocumentID>
-                       <xapMM:InstanceID>uuid:{metadataInfo.InstanceID}</xapMM:InstanceID>
-                     </rdf:Description>
-                 """ + "\r\n" +
-#endif
                 // XMP trailer.
                 """
                    </rdf:RDF>

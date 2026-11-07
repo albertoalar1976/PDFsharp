@@ -97,51 +97,6 @@ namespace PdfSharp.Pdf.Advanced
         //    Elements[Keys.DescendantFonts] = descendantFonts;
         //}
 
-#if true_  // May be superfluous.
-        public PdfType0Font(PdfDocument document, string idName, byte[] fontData, bool vertical)
-            : base(document)
-        {
-            Elements.SetName(Keys.Type, "/Font");
-            Elements.SetName(Keys.Subtype, "/Type0");
-            Elements.SetName(Keys.Encoding, vertical ? "/Identity-V" : "/Identity-H");
-
-            OpenTypeDescriptor otDescriptor = (OpenTypeDescriptor)FontDescriptorCache.GetOrCreateDescriptor(idName, fontData);
-            //FontDescriptor = new PdfFontDescriptor(document, ttDescriptor);
-            FontDescriptor = document.PdfFontDescriptorCache.GetOrCreatePdfDescriptorFor(otDescriptor);
-
-            FontOptions = new XPdfFontOptions(PdfFontEncoding.Unicode);
-            Debug.Assert(FontOptions != null);
-
-            _cmapInfo0 = new CMapInfo(otDescriptor);
-            //FontDescriptor._cmapInfo2 = new(otDescriptor);
-            _descendantFont = new PdfCIDFont(document, FontDescriptor, fontData)
-            {
-                // Base font uses the same cmap info.
-                CMapInfo = _cmapInfo0
-            };
-            //_descendantFont.FontDescriptor._cmapInfo2 = new(otDescriptor);
-
-            // Create ToUnicode map
-            _toUnicodeMap = new PdfToUnicodeMap(document, _cmapInfo0);
-            document.Internals.AddObject(_toUnicodeMap);
-            Elements.Add(Keys.ToUnicode, _toUnicodeMap);
-
-            //BaseFont = ttDescriptor.FontName.Replace(" ", "");
-            BaseFont = otDescriptor.FontName;
-
-            // CID fonts are always embedded
-            if (!BaseFont.Contains("+"))  // H/A/C/K in PdfType0Font
-                BaseFont = FontDescriptor.CreateEmbeddedFontSubsetName(BaseFont);
-
-            FontDescriptor.FontName = BaseFont;
-            _descendantFont.BaseFont = BaseFont;
-
-            PdfArray descendantFonts = new PdfArray(document);
-            Owner.IrefTable.Add(_descendantFont);
-            descendantFonts.Elements.Add(_descendantFont.Reference!);
-            Elements[Keys.DescendantFonts] = descendantFonts;
-        }
-#endif
 
         XPdfFontOptions FontOptions { get; } = null!;
 

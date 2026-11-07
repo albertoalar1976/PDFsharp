@@ -252,27 +252,19 @@ namespace MigraDoc.Rendering
             else
                 y += CalcMaxTopBorderWidth(0);
 
-#if true
             if (!_bottomBorderMap.TryGetValue(cellRowIndex, out var upperBorderPos))
             {
                 //_ = typeof(int);
             }
-#else
-            XUnitPt upperBorderPos = _bottomBorderMap[cell.Row.Index];
-#endif
 
             y += upperBorderPos;
             if (cell.Row.Index > _lastHeaderRow)
                 y -= _bottomBorderMap[_startRow];
 
-#if true
             if (!_bottomBorderMap.TryGetValue(cellRowIndex + cell.MergeDown + 1, out var lowerBorderPos))
             {
                 //_ = typeof(int);
             }
-#else
-            XUnitPt lowerBorderPos = _bottomBorderMap[cellRowIndex + cell.MergeDown + 1];
-#endif
 
             XUnitPt height = lowerBorderPos - upperBorderPos;
             height -= bordersRenderer.GetWidth(BorderType.Bottom);
@@ -705,14 +697,10 @@ namespace MigraDoc.Rendering
                 {
                     FormattedCell formattedCell = _formattedCells[cell];
                     {
-#if true
                         if (!_bottomBorderMapOld.TryGetValue(cell.Row.Index, out var topBorderPos))
                         {
                             //_ = typeof(int);
                         }
-#else
-                    XUnitPt topBorderPos = _bottomBorderMapOld[cell.Row.Index];
-#endif
                         XUnitPt bottomBorderPos = topBorderPos + formattedCell.InnerHeight;
                         bottomBorderPos += CalcBottomBorderWidth(cell);
                         if (bottomBorderPos > maxBottomBorderPosition)
@@ -802,14 +790,10 @@ namespace MigraDoc.Rendering
                 {
                     FormattedCell formattedCell = _formattedCells[cell];
                     {
-#if true
                         if (!_bottomBorderMap.TryGetValue(rowIndex, out var topBorderPos))
                         {
                             //_ = typeof(int);
                         }
-#else
-                    XUnitPt topBorderPos = _bottomBorderMap[rowIndex];
-#endif
                         XUnitPt bottomBorderPos = topBorderPos + formattedCell.InnerHeight;
                         bottomBorderPos += CalcBottomBorderWidth(cell);
                         if (bottomBorderPos > maxBottomBorderPosition)

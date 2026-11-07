@@ -101,19 +101,11 @@ namespace MigraDocTests.Helpers
         {
             Debug.Assert(createSideBySideFile || createSeparateFiles, "No result file will be created.");
             // Open the input files.
-#if false
-            PdfDocument inputDocument1 = PdfReader.Open(pdfFile, PdfDocumentOpenMode.Import);
-            PdfDocument inputDocument2 = referenceFile != null ? PdfReader.Open(referenceFile, PdfDocumentOpenMode.Import) : null;
-
-            int pages1 = inputDocument1.PageCount;
-            int pages2 = inputDocument2 != null ? inputDocument2.PageCount : 0;
-#else
             XPdfForm inputDocument1 = XPdfForm.FromFile(pdfFile);
             XPdfForm inputDocument2 = /*referenceFile != null ?*/ XPdfForm.FromFile(referenceFile) /*: null*/;
 
             int pages1 = inputDocument1.PageCount;
             int pages2 = inputDocument2?.PageCount ?? 0;
-#endif
             int total = Math.Max(Math.Max(pages, pages1), pages2);
 
             var font = new XFont("Verdana", 8, XFontStyleEx.Bold);

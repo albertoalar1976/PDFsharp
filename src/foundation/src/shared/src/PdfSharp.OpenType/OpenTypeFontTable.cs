@@ -37,9 +37,6 @@ namespace PdfSharp.Internal.OpenType
         /// Gets the font image the table belongs to.
         /// </summary>
         public OpenTypeFontFace? FontData
-#if DEBUG__
-        { get; set; }
-#endif
             = null; //  => FontData;
 
         //internal OpenTypeFontFace? FontData = null!;

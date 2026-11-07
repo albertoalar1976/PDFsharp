@@ -37,16 +37,5 @@ namespace PdfSharp.Fonts
         public static CodePointGlyphIndexPair[] GlyphIndicesFromString(string s, XFont font)
             => font.OpenTypeDescriptor.GlyphIndicesFromString(s);
 
-#if true_
-        /// <summary>
-        /// Maps the characters of a string to an array of code points.
-        /// It uses the concept of runes, which is not implemented in .NET Framework or .NET Standard.
-        /// </summary>
-        static int[] CodepointsFromStringUsingRunes(string s)
-        {
-            var result = s.EnumerateRunes().Select(run => run.Value).ToArray();
-            return result;
-        }
-#endif
     }
 }

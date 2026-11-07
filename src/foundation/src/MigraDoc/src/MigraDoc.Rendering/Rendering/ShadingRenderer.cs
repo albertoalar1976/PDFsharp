@@ -42,7 +42,6 @@ namespace MigraDoc.Rendering
 
             var path = new XGraphicsPath();
 
-#if !PSGFX
             switch (roundedCorner)
             {
                 case RoundedCorner.TopLeft:
@@ -62,7 +61,6 @@ namespace MigraDoc.Rendering
                     path.AddLine(new XPoint(x, y), new XPoint(x + width, y));
                     break;
             }
-#endif
             path.CloseFigure();
             _gfx.DrawPath(_brush, path);
         }
@@ -84,12 +82,8 @@ namespace MigraDoc.Rendering
                 return;
             if (IsVisible())
             {
-#if noCMYK
-                this.brush = new XSolidBrush(XColor.FromArgb((int)this.shading.Color.Argb));
-#else
                 Debug.Assert(_shading.Document != null, "_shading.Document != null");
                 _brush = new XSolidBrush(ColorHelper.ToXColor(_shading.Color, _shading.Document.UseCmykColor));
-#endif
             }
         }
 

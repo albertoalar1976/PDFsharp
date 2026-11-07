@@ -36,7 +36,6 @@ namespace MigraDoc.DocumentObjectModel.Visitors
         /// </summary>
         void Init(Table table)
         {
-#if true
             int rows = table.Rows.Count;
             int columns = table.Columns.Count;
             var flags = new bool[rows, columns];
@@ -71,19 +70,6 @@ namespace MigraDoc.DocumentObjectModel.Visitors
                     }
                 }
             }
-#else
-            int columns = table.Columns.Count;
-            for (int rwIdx = 0; rwIdx < table.Rows.Count; ++rwIdx)
-            {
-                for (int clmIdx = 0; clmIdx < columns; ++clmIdx)
-                {
-                    var cell = table[rwIdx, clmIdx];
-                    // TOxDO Make this smarter?
-                    if (!IsAlreadyCovered(cell))
-                        Add(cell);
-                }
-            }
-#endif
         }
 
         /// <summary>
@@ -325,7 +311,6 @@ namespace MigraDoc.DocumentObjectModel.Visitors
 
             var border = borders.GetBorder(type);
 
-#if true
             // Use "borders" if "border" is null or empty.
             if (border != null && !border.Values.Width.IsValueNullOrEmpty())
             {
@@ -367,31 +352,6 @@ namespace MigraDoc.DocumentObjectModel.Visitors
                     return 0.5;
                 return 0;
             }
-#else
-            // Use "borders" if "border" is null or empty.
-            DocumentObject? relevantDocObj = border;
-            if (border == null || border.Values.Width.IsValueNullOrEmpty())
-                relevantDocObj = borders;
-
-            // TOxDO Avoid 'GetValue("'.
-            // Avoid unnecessary GetValue calls. => Not trivial because it can be Border or Borders.
-            object? visible = relevantDocObj!.GetValue("visible", GV.GetNull); // relevantDocObj cannot be null here.
-            if (visible != null && !(bool)visible)
-                return 0;
-
-            object? width = relevantDocObj.GetValue("width", GV.GetNull);
-            if (width != null)
-                return (Unit)width;
-
-            object? color = relevantDocObj.GetValue("color", GV.GetNull);
-            if (color != null)
-                return 0.5;
-
-            object? style = relevantDocObj.GetValue("style", GV.GetNull);
-            if (style != null)
-                return 0.5;
-            return 0;
-#endif
         }
 
         /// <summary>

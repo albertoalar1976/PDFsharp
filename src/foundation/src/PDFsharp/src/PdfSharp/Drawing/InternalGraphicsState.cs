@@ -79,12 +79,6 @@ namespace PdfSharp.Drawing
 
         public bool Invalid;
 
-#if GDI_
-        /// <summary>
-        /// The GDI+ GraphicsState if constructed from XGraphicsState.
-        /// </summary>
-        public GraphicsState GdiGraphicsState;
-#endif
 
 
         readonly XGraphics _gfx;

@@ -37,12 +37,8 @@ namespace PdfSharp.Tests.Drawing
             var renderTextEventCallCount = 0;
             var renderTextEventReplacementsCount = 0;
 
-#if true
             var renderEvents = new RenderEvents();
             renderEvents.RenderTextEvent += (sender, args) =>
-#else
-            document.RenderEvents.RenderTextEvent += (sender, args) =>
-#endif
             {
                 renderTextEventCallCount++;
 

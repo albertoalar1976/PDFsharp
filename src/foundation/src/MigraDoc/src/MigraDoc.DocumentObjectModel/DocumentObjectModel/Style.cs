@@ -338,13 +338,9 @@ namespace MigraDoc.DocumentObjectModel
                 string baseName = DdlEncoder.QuoteIfNameContainsBlanks(BaseStyle);
                 serializer.WriteLine(name + " : " + baseName);
 
-#if true
                 //var refStyle0 = Document.Styles[Document.Styles.GetIndex(Values.BaseStyle!)];  // BUG_OLD: Base style can be null
                 refStyle = Document.Styles[Values.BaseStyle!];  // BUG_OLD: Base style can be null
                 refFormat = refStyle?.ParagraphFormat;
-#else
-                refFormat = null;
-#endif
             }
 
             serializer.BeginContent();

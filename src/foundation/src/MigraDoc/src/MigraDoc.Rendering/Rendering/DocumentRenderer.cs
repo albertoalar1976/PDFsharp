@@ -5,9 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 using PdfSharp.Events;
 using PdfSharp.Pdf;
 using PdfSharp.Internal;
-#if PSXGRA
-using PdfSharp.Drawing;
-#endif
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Visitors;
 using MigraDoc.DocumentObjectModel.Shapes;
@@ -40,11 +37,7 @@ namespace MigraDoc.Rendering
             _previousListNumbers[ListType.NumberList2] = 0;
             _previousListNumbers[ListType.NumberList3] = 0;
             _formattedDocument = new FormattedDocument(_document, this);
-#if PSGFX
-            var gfx = (XGraphics)null!;  //XGraphics.CreateMeasureContext(new XSize(2000, 2000), XGraphicsUnit.Point, XPageDirection.Downwards, renderEvents);
-#else
             var gfx = XGraphics.CreateMeasureContext(new XSize(2000, 2000), XGraphicsUnit.Point, XPageDirection.Downwards, renderEvents);
-#endif
             _previousListInfo = null;
             _formattedDocument.Format(gfx);
         }
@@ -344,12 +337,7 @@ namespace MigraDoc.Rendering
             {
                 try
                 {
-#if PSGFX
-                    //return new(familyName, emSize, style);
-                    return null!;
-#else
                     return new(familyName, emSize, style);
-#endif
                 }
                 catch (Exception ex)
                 {

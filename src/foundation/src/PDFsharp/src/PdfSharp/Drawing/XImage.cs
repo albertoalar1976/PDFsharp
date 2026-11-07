@@ -99,16 +99,6 @@ namespace PdfSharp.Drawing
 
             // TODO_OLD: Create a fingerprint of the bytes in the stream to identify identical images.
 
-#if true_
-            float vres = image.VerticalResolution;
-            float hres = image.HorizontalResolution;
-            SizeF size = image.PhysicalDimension;
-            int flags = image.Flags;
-            Size sz = image.Size;
-            GraphicsUnit units = GraphicsUnit.Millimeter;
-            RectangleF rect = image.GetBounds(ref units);
-            int width = image.Width;
-#endif
             // Must assign _stream before Initialize().
             _stream = stream;
             Initialize();
@@ -461,25 +451,6 @@ namespace PdfSharp.Drawing
         }
 
 
-#if DEBUG_
-        // TEST
-        internal void CreateAllImages(string name)
-        {
-            if (image != null)
-            {
-                image.Save(name + ".bmp", ImageFormat.Bmp);
-                image.Save(name + ".emf", ImageFormat.Emf);
-                image.Save(name + ".exif", ImageFormat.Exif);
-                image.Save(name + ".gif", ImageFormat.Gif);
-                image.Save(name + ".ico", ImageFormat.Icon);
-                image.Save(name + ".jpg", ImageFormat.Jpeg);
-                image.Save(name + ".png", ImageFormat.Png);
-                image.Save(name + ".tif", ImageFormat.Tiff);
-                image.Save(name + ".wmf", ImageFormat.Wmf);
-                image.Save(name + "2.bmp", ImageFormat.MemoryBmp);
-            }
-        }
-#endif
 
         internal void AssociateWithGraphics(XGraphics gfx)
         {

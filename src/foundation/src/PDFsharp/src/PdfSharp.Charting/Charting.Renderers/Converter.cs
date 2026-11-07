@@ -17,9 +17,6 @@ namespace PdfSharp.Charting.Renderers
         /// </summary>
         internal static XFont ToXFont(Font? font, XFont defaultFont)
         {
-#if PSGFX
-            return null!;
-#else
             var xFont = defaultFont;
             if (font != null)
             {
@@ -40,7 +37,6 @@ namespace PdfSharp.Charting.Renderers
                 xFont = new XFont(fontFamily, size, fontStyle);
             }
             return xFont;
-#endif
         }
 
         /// <summary>
@@ -53,11 +49,7 @@ namespace PdfSharp.Charting.Renderers
         internal static XPen ToXPen(LineFormat? lineFormat, XColor defaultColor, double defaultWidth)
         {
             return ToXPen(lineFormat,  defaultColor,  defaultWidth,
-#if PSGFX
-                XDashStyles.Solid);
-#else
                 XDashStyle.Solid);
-#endif  
         }
 
         /// <summary>
@@ -65,15 +57,8 @@ namespace PdfSharp.Charting.Renderers
         /// will be taken from the defaultColor, defaultWidth and defaultDashStyle parameters.
         /// </summary>
         internal static XPen ToXPen(LineFormat? lineFormat, XColor defaultColor, double defaultWidth,
-#if PSGFX
-            XDashStyle? defaultDashStyle)
-#else
             XDashStyle defaultDashStyle )
-#endif
         {
-#if PSGFX
-            return XPens.Black;
-#else
             XPen pen;
             if (lineFormat == null)
             {
@@ -96,16 +81,11 @@ namespace PdfSharp.Charting.Renderers
 
                 pen = new XPen(color, width)
                 {
-#if PSGFX
-                    DashStyle = lineFormat.DashStyle,
-#else
                     DashStyle = lineFormat.DashStyle,
                     DashOffset = 10 * width
-#endif
                 };
             }
             return pen;
-#endif
         }
 
         /// <summary>
@@ -114,13 +94,9 @@ namespace PdfSharp.Charting.Renderers
         /// </summary>
         internal static XBrush ToXBrush(FillFormat? fillFormat, XColor defaultColor)
         {
-#if PSGFX
-            return XBrushes.Black;
-#else
             if (fillFormat == null || fillFormat.Color.IsEmpty)
                 return new XSolidBrush(defaultColor);
             return new XSolidBrush(fillFormat.Color);
-#endif
         }
 
         /// <summary>
@@ -129,13 +105,9 @@ namespace PdfSharp.Charting.Renderers
         /// </summary>
         internal static XBrush ToXBrush(Font? font, XColor defaultColor)
         {
-#if PSGFX
-            return XBrushes.Black;
-#else
             if (font == null || font.Color.IsEmpty)
                 return new XSolidBrush(defaultColor);
             return new XSolidBrush(font.Color);
-#endif
         }
     }
 }

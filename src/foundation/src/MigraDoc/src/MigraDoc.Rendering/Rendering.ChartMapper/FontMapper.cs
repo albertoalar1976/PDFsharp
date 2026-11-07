@@ -17,21 +17,13 @@ namespace MigraDoc.Rendering.ChartMapper
             font.Bold = domFont.Bold;
             if (domFont.Color.IsEmpty)
             {
-#if PSGFX
-                font.Color = new XColor();
-#else
                 font.Color = PdfSharp.Drawing.XColor.Empty;
-#endif
             }
             else
 
             {
-#if noCMYK
-                font.Color = XColor.FromArgb((int)domFont.Color.Argb);
-#else
                 Debug.Assert(domFont.Document != null, "domFont.Document != null");
                 font.Color = ColorHelper.ToXColor(domFont.Color, domFont.Document.UseCmykColor);
-#endif
             }
             font.Italic = domFont.Italic;
             if (!domFont.Values.Name.IsValueNullOrEmpty())

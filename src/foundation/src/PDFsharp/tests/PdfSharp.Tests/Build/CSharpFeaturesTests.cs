@@ -11,7 +11,6 @@ using PdfSharp.TestHelper;
 using Xunit;
 using FluentAssertions;
 
-#if true
 
 //using MyPoint = (int X, int Y);
 
@@ -206,46 +205,6 @@ namespace PdfSharp.Tests.Build
         class C
         { }
 
-#if true_
-        [Fact]
-        public void Generic_function_with_nullable_enum_values()
-        {
-            MyEnum e1 = default;
-            MyEnum e2 = MyEnum.Foo;
-            MyEnum? e3 = null;
-            MyEnum? e4 = default;
-            MyEnum? e5 = MyEnum.Foo;
-
-            MyEnum r11 = GetEnum1<MyEnum>(e1);
-            //MyEnum? r12 = GetEnum1<MyEnum>(e3);  // does not compile, OK
-            MyEnum? r12 = GetEnum1<MyEnum>((MyEnum)e3);  // does not compile, OK
-            //var r13 = GetEnum1<int>(42);  // does not compile, OK
-
-            MyEnum? r21 = GetEnum2<MyEnum>(e1);
-            MyEnum? r22 = GetEnum2<MyEnum>(e3);
-            var r23 = GetEnum2<nint>(42);
-            var r24 = GetEnum2<nint>(null);
-        }
-
-        enum MyEnum { Foo = 42 }
-
-        TEnum? GetEnum1<TEnum>(TEnum? value) where TEnum : System.Enum
-        {
-            //_ = value.HasValue;  // Works, because v is a value type.
-            //_ = value!.Value;  // Works, because v is a value type.
-            //return null;
-            //return (TEnum?)(object?)null;  // compiles, but crashes at runtime
-            return default;                     // return always 0
-            return value;             // return never null because value cannot be null.
-        }
-
-        TEnum? GetEnum2<TEnum>(TEnum? value) where TEnum : struct, Enum
-        {
-            _ = value.HasValue;  // Works, because v is a value type.
-            //_ = value!.Value;  // Works, because v is a value type.
-            return null;
-        }
-#endif
 
         [Fact]
         public void Test_extension_properties()
@@ -313,4 +272,3 @@ namespace PdfSharp.Tests.Build
         }
     }
 }
-#endif

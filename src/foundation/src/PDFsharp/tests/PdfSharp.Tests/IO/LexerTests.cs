@@ -40,14 +40,6 @@ namespace PdfSharp.Tests.IO
             doc.Save(stream);
             stream.Position = 0;
 
-#if true_
-            // Create file to inspect what was written.
-            var filename = PdfFileUtility.GetTempPdfFullFileName("PdfSharp/Lexer/ReverseSolidusTests-Before");
-            using (var filestream = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
-            {
-                stream.CopyTo(filestream);
-            }
-#endif
 
             var bytes = stream.GetBuffer();
             var encoding = PdfEncoders.WinAnsiEncoding;
@@ -64,15 +56,6 @@ namespace PdfSharp.Tests.IO
             using var modifiedStream = new MemoryStream(modifiedBytes);
             var modifiedDocument = PdfReader.Open(modifiedStream);
 
-#if true_
-            // Create file to inspect what was written.
-            var filename2 = PdfFileUtility.GetTempPdfFullFileName("PdfSharp/Lexer/ReverseSolidusTests-After");
-            modifiedStream.Position = 0;
-            using (var filestream2 = new FileStream(filename2, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
-            {
-                modifiedStream.CopyTo(filestream2);
-            }
-#endif
 
             modifiedDocument.Info.Creator.Should().Be(creatorExpected);
         }

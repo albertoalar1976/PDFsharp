@@ -180,28 +180,6 @@ namespace PdfSharp.Pdf
         {
             writer.WriteBeginObject(this);
             int count = Elements.Count;
-#if TEST_CODE_
-            // Ensure that PDFsharp does not use PdfLiterals anymore (PdfMatrix, PdfOutline, ...).
-            //if (count == 4 && Elements.GetName(1) == "/XYZ" && Elements.GetInteger(2) == 842)
-            if (count is > 3 and <= 5)
-            {
-                if (ParentInfo?.OwningElements.OwningContainer.ObjectID.ObjectNumber == 9658)
-                    Debugger.Break();
-                var item0 = Elements[0];
-                var item1 = Elements[1];
-                var item2 = Elements[2];
-                if (item0 is PdfReference iref && iref.ObjectNumber == 29)
-                {
-                    _ = typeof(int);
-                }
-                if (item1 is PdfName name && name.Value == "/XYZ")
-                //                      &&
-                //(item2 is PdfInteger integer && integer.Value == 842))
-                {
-                    _ = typeof(int);
-                }
-            }
-#endif
             for (int idx = 0; idx < count; idx++)
             {
                 var value = Elements[idx];
@@ -729,10 +707,6 @@ namespace PdfSharp.Pdf
                                             DynamicallyAccessedMemberTypes.NonPublicConstructors)]
                 Type? valueType = null)
             {
-#if PDFSHARP_DEBUG_
-                if (ShouldBreak5)
-                    Debugger.Break();
-#endif
                 EnsureIndex(index, false);
                 EnsureNoCreationFlags(options);
                 if (valueType != null)
@@ -1129,19 +1103,6 @@ namespace PdfSharp.Pdf
                                             DynamicallyAccessedMemberTypes.NonPublicConstructors)]
                 Type? valueType, bool throwOnTypeMismatch)
             {
-#if DEBUG_ // KEEP Test in more detail and report a bug.  TODO
-                // TODO: Why leads 'var valueTest' to type 'PdfItem?'?
-                var valueTest2 = this[index]; // Is of type 'PdfItem' not of type 'PdfItem?'.
-                valueTest2 = null;  // No Warning hint.
-#endif
-#if DEBUG_
-                // Are we reading a PDF document?
-                if ((OwningArray.Document?.IrefTable ?? null) is { IsUnderConstruction: true })
-                {
-                    //Debugger.Break();
-                    _ = typeof(int);
-                }
-#endif
                 Debug.Assert(options is VCF.Create or VCF.CreateIndirect is false);
 
                 // ReSharper suggested to use var, but this would make the type nullable. ???TODO: Why?
@@ -1156,50 +1117,8 @@ namespace PdfSharp.Pdf
 
                 if (value is PdfReference iref)
                 {
-#if DEBUG_
-                    var irefTable = OwningArray.Document?.IrefTable ?? null;
-                    if (irefTable is { IsUnderConstruction: true })
-                    {
-                        //Debug.Assert(false, "Should not happen anymore.");
-                        _ = typeof(int);
-                    }
-#endif
                     // Case: value is an indirect object. It can only be a container.
 
-#if true_  // TODO Create US for this case and DELETE the code.
-                        // Check a very particular case first that can happen during
-                        // the timespan when the IrefTable is not completely read.
-                        var irefTable = OwningArray.Document?.IrefTable ?? null;
-                        if (irefTable is { IsUnderConstruction: true })
-                        {
-                            // Case: During the import of a PDF document GetValue is called.
-                            // This happens only during encryption.
-                            // IMPROVE: Prevent from coming here. Check if we need temp irefs anymore.
-                            var newIref = irefTable[iref.Value.ObjectID];
-                            if (newIref == null)
-                            {
-                                // Case: Cannot happen. We can have irefs with no value, but not
-                                // indirect objects with no reference.
-                                _ = typeof(int);
-                            }
-                            else if (ReferenceEquals(iref, newIref) is false)
-                            {
-                                // Case: We are reading a PDF document that hast more than one XRef table or xref streams.
-                                // A top level object can contain an indirect reference to an object with an ID that does not yet exist.
-                                // TODO more checks...
-                                if (ReferenceEquals(iref.Value, newIref.Value))
-                                {
-                                    iref = newIref;
-                                    iref.Value.Reference = iref;
-                                    UpdateValueInternal(index, iref);
-                                }
-                            }
-                            else
-                            {
-                                _ = typeof(int);
-                            }
-                        }
-#endif
                     // Is PdfReference explicitly requested?
                     if (valueType == typeof(PdfReference))
                         return value;
@@ -1377,23 +1296,6 @@ namespace PdfSharp.Pdf
             /// </summary>
             void SetValueInternal(int index, PdfItem value)
             {
-#if DEBUG_
-                //if (ShouldBreak1)
-                //    Debugger.Break();
-                if (value is PdfReference { ObjectID.ObjectNumber: 5 })
-                    _ = typeof(int);
-
-#endif
-#if true_  // TODO REMOVE or throw exception in DEBUG
-#if DEBUG
-                // Are we reading a PDF document?
-                if ((OwningArray.Document?.IrefTable ?? null) is { IsUnderConstruction: true })
-                {
-                    //Debugger.Break();
-                    _ = typeof(int);
-                }
-#endif
-#endif
                 EnsureIndex(index, true);
 
                 // Already checked by caller.

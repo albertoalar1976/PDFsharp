@@ -60,11 +60,7 @@ namespace MigraDoc.Rendering
         XGraphicsState Transform()
         {
             Area frameContentArea = _renderInfo.LayoutInfo.ContentArea;
-#if PSGFX
-            var state = _gfx.Save();
-#else
             XGraphicsState state = _gfx.Save();
-#endif
             XUnitPt xPosition;
             XUnitPt yPosition;
             switch (_textFrame.Orientation)
@@ -97,13 +93,8 @@ namespace MigraDoc.Rendering
 
         void ResetTransform(XGraphicsState? state)
         {
-#if PSGFX
-            if (state != null)
-                _gfx.Restore(state.Value);
-#else
             if (state != null)
                 _gfx.Restore(state);
-#endif
         }
 
         readonly TextFrame _textFrame;

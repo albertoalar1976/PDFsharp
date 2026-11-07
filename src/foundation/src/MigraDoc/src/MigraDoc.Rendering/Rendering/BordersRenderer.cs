@@ -3,9 +3,7 @@
 
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
-#if !PSXGRA
 using PdfSharp.Drawing;
-#endif
 
 namespace MigraDoc.Rendering
 {
@@ -34,9 +32,6 @@ namespace MigraDoc.Rendering
             else if (!_borders.Color.IsEmpty)
                 clr = _borders.Color;
 
-#if noCMYK
-            return XColor.FromArgb((int)clr.Argb);
-#else
             //      bool cmyk = false; // BUG_OLD CMYK
             //      if (_borders.Document != null)
             //        cmyk = _borders.Document.UseCmykColor;
@@ -46,7 +41,6 @@ namespace MigraDoc.Rendering
             //#endif
             Debug.Assert(_borders.Document != null, "_borders.Document != null");
             return ColorHelper.ToXColor(clr, _borders.Document.UseCmykColor);
-#endif
         }
 
         BorderStyle GetStyle(BorderType type)
@@ -131,11 +125,7 @@ namespace MigraDoc.Rendering
             left += borderWidth / 2;
             var pen = GetPen(type);
             if (pen != null)
-#if PSGFX
-                _gfx.DrawLine(pen, new(left, top + height), new(left, top));
-#else
                 _gfx.DrawLine(pen, left, top + height, left, top);
-#endif
         }
 
         /// <summary>
@@ -154,11 +144,7 @@ namespace MigraDoc.Rendering
             top += borderWidth / 2;
             var pen = GetPen(type);
             if (pen != null)
-#if PSGFX
-                _gfx.DrawLine(pen, new(left + width, top), new(left, top));
-#else
                 _gfx.DrawLine(pen, left + width, top, left, top);
-#endif
         }
 
         internal void RenderDiagonally(BorderType type, XUnitPt left, XUnitPt top, XUnitPt width, XUnitPt height)
@@ -167,25 +153,6 @@ namespace MigraDoc.Rendering
             if (borderWidth == 0)
                 return;
 
-#if PSGFX
-            //XGraphicsState state = _gfx.Save();
-            //_gfx.IntersectClip(new XRect(left, top, width, height));
-
-            //if (type == BorderType.DiagonalDown)
-            //{
-            //    var pen = GetPen(type);
-            //    if (pen != null)
-            //        _gfx.DrawLine(pen, left, top, left + width, top + height);
-            //}
-            //else if (type == BorderType.DiagonalUp)
-            //{
-            //    var pen = GetPen(type);
-            //    if (pen != null)
-            //        _gfx.DrawLine(pen, left, top + height, left + width, top);
-            //}
-
-            //_gfx.Restore(state);
-#else
             XGraphicsState state = _gfx.Save();
             _gfx.IntersectClip(new XRect(left, top, width, height));
 
@@ -203,7 +170,6 @@ namespace MigraDoc.Rendering
             }
 
             _gfx.Restore(state);
-#endif
         }
 
         internal void RenderRounded(RoundedCorner roundedCorner, XUnitPt x, XUnitPt y, XUnitPt width, XUnitPt height)
@@ -232,20 +198,6 @@ namespace MigraDoc.Rendering
 
             switch (roundedCorner)
             {
-#if PSGFX
-                case RoundedCorner.TopLeft:
-                    //_gfx.DrawArc(borderPen, new XRect(x, y, ellipseWidth, ellipseHeight), 180, 90);
-                    break;
-                case RoundedCorner.TopRight:
-                    //_gfx.DrawArc(borderPen, new XRect(x - width, y, ellipseWidth, ellipseHeight), 270, 90);
-                    break;
-                case RoundedCorner.BottomRight:
-                    //_gfx.DrawArc(borderPen, new XRect(x - width, y - height, ellipseWidth, ellipseHeight), 0, 90);
-                    break;
-                case RoundedCorner.BottomLeft:
-                    //_gfx.DrawArc(borderPen, new XRect(x, y - height, ellipseWidth, ellipseHeight), 90, 90);
-                    break;
-#else
                 case RoundedCorner.TopLeft:
                     _gfx.DrawArc(borderPen, new XRect(x, y, ellipseWidth, ellipseHeight), 180, 90);
                     break;
@@ -258,7 +210,6 @@ namespace MigraDoc.Rendering
                 case RoundedCorner.BottomLeft:
                     _gfx.DrawArc(borderPen, new XRect(x, y - height, ellipseWidth, ellipseHeight), 90, 90);
                     break;
-#endif
             }
         }
 
@@ -272,32 +223,6 @@ namespace MigraDoc.Rendering
             var style = GetStyle(type);
             switch (style)
             {
-#if PSGFX
-                case BorderStyle.DashDot:
-                    //pen.DashStyle = XDashStyle.DashDot;
-                    break;
-
-                case BorderStyle.DashDotDot:
-                    //pen.DashStyle = XDashStyle.DashDotDot;
-                    break;
-
-                case BorderStyle.DashLargeGap:
-                    //pen.DashPattern = [3, 3];
-                    break;
-
-                case BorderStyle.DashSmallGap:
-                    //pen.DashPattern = [5, 1];
-                    break;
-
-                case BorderStyle.Dot:
-                    //pen.DashStyle = XDashStyle.Dot;
-                    break;
-
-                case BorderStyle.Single:
-                default:
-                    //pen.DashStyle = XDashStyle.Solid;
-                    break;
-#else
                 case BorderStyle.DashDot:
                     pen.DashStyle = XDashStyle.DashDot;
                     break;
@@ -322,7 +247,6 @@ namespace MigraDoc.Rendering
                 default:
                     pen.DashStyle = XDashStyle.Solid;
                     break;
-#endif
             }
             return pen;
         }

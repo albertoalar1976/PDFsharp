@@ -181,13 +181,6 @@ namespace PdfSharp.Tests.Pdf.Signatures
             Skip.If(SkippableTests.SkipSlowTests());
 
             int loops = 2;
-#if DEBUG_
-            var version = PdfSharp.Internal.BuildInformation.BuildVersionNumber;
-            loops = 100;
-            // Reduce loops for slow timestamp servers.
-            if (timestampURL.Contains("sect"))
-                loops = 5;
-#endif
             IOUtility.EnsureAssetsVersion(RequiredAssets);
 
             for (int loop = 1; loop <= loops; loop++)

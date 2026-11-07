@@ -238,14 +238,9 @@ namespace PdfSharp.Pdf.Security
 
             // Correct permission bits.
             permissionsValue &= 0xfffffffc; // 1... 1111 1111 1100 - Bit 1 & 2 must be 0.
-#if true  // TODO clean up
             //permissionsValue |= 0x000002c0; // 0... 0010 1100 0000 - Bit 7 & 8 must be 1. Also, Bit 10 is no longer used and shall be always set to 1.
             // Top-most bit not correct, but can also be read with PDFsharp up to 6.1.0.
             permissionsValue |= 0x7ffff2c0; // 01.. 1110 1100 0000 - Bit 7 & 8 & 13 through 32 must be 1. Also, Bit 10 is no longer used and shall be always set to 1.
-#else
-            // Include this later as files can not be read with PDFsharp up to 6.1.0.
-            permissionsValue |= 0xfffff2c0; // 1... 1110 1100 0000 - Bit 7 & 8 & 13 through 32 must be 1. Also, Bit 10 is no longer used and shall be always set to 1.
-#endif
             return permissionsValue;
         }
 
@@ -720,26 +715,7 @@ namespace PdfSharp.Pdf.Security
         /// </summary>
         public void EncryptEmbeddedFileStreamsOnly()
         {
-#if true
             throw TH.NotImplementedException_EncryptEmbeddedFileStreamsOnlyCurrentlyShutOff();
-#else
-            // TODO_OLD: Find and fix error in order to produce files readable by common PDF readers. When done enable SecurityTests.Test_OnlyEmbeddedFileStreamEncrypted().
-
-            if (!VersionSupportsCryptFilter())
-                throw TH.InvalidOperationException_InvalidVersionForEncryptEmbeddedFilesOnly();
-
-            var pdfCryptFilters = (PdfCryptFilters?)Elements.GetValue(PdfSecurityHandler.Keys.CF);
-            var defaultCryptFilter = pdfCryptFilters?.GetCryptFilter(CryptFilterConstants.StandardFilterName);
-
-            if (defaultCryptFilter is null)
-                throw TH.InvalidOperationException_MissingDefaultCryptFilter(CryptFilterConstants.StandardFilterName);
-
-            defaultCryptFilter.SetAuthEventForEmbeddedFiles();
-
-            SetCryptFilterAsDefaultForStreams(null);
-            SetCryptFilterAsDefaultForStrings(null);
-            SetCryptFilterAsDefaultForEmbeddedFileStreams(CryptFilterConstants.StandardFilterName);
-#endif
         }
 
         /// <summary>

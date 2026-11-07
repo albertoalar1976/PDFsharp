@@ -43,12 +43,8 @@ namespace PdfSharp.Pdf.Attachments
 
                     //var fc = PdfObjectsHelper.TransformItem<PdfFileSpecification>(item);
                     //var fc = PdfObjectsHelper.TransformArrayItem<PdfFileSpecification>(names, idx * 2 + 1);
-#if true
                     // #warning TODO Check transformation in ArrayElements.GetItemInternal(...)
                     var fc = names.Elements.GetValue<PdfFileSpecification>(idx * 2 + 1);
-#else
-                    var fc = PdfObjectsHelper.TransformArrayItem<PdfFileSpecification>(names, idx * 2 + 1);
-#endif
                     // /*v*/ar fc
 
 

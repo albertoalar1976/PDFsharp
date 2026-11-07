@@ -173,10 +173,6 @@ namespace PdfSharp.Pdf
         /// </summary>
         static string NewName()
         {
-#if DEBUG_
-            if (PdfDocument._nameCount == 57)
-                _ = typeof(int);
-#endif
             return "Document #" + ++_nameCount;
         }
 
@@ -408,10 +404,6 @@ namespace PdfSharp.Pdf
                         cancellationToken.ThrowIfCancellationRequested();
 
                     PdfReference iref = irefs[idx];
-#if DEBUG_
-                    if (iref.ObjectNumber == 18)
-                        _ = typeof(int);
-#endif
                     iref.Position = writer.Position;
 
                     var obj = iref.Value;
@@ -519,15 +511,7 @@ namespace PdfSharp.Pdf
                 Info.Creator = PdfSharpProductVersionInformation.Producer;
 
             // We set Producer if it is not yet set.
-#if true // TODO clean up
             var pdfProducer = DefaultProducer;
-#else
-            var pdfProducer = PdfSharpProductVersionInformation.Creator;
-#if DEBUG
-            // Add OS suffix only in DEBUG build.
-            pdfProducer += $" under {RuntimeInformation.OSDescription}";
-#endif
-#endif
             // Keep original producer if file was imported. This is “PDF created by” in Adobe Reader.
             string producer = Info.Producer;
             if (producer.Length == 0)
@@ -552,7 +536,6 @@ namespace PdfSharp.Pdf
             // #PDF-UA  // TODO rewrite
             // Create PdfMetadata now to include the final document information in XMP generation.
             //Catalog.Elements.SetReference(PdfCatalog.Keys.Metadata, new PdfMetadata(this));
-#if true
             // Remove all unreachable objects (e.g. from deleted pages).
             int removed = IrefTable.Compact();
             if (removed != 0 && PdfSharpLogHost.Logger.IsEnabled(LogLevel.Information))
@@ -562,7 +545,6 @@ namespace PdfSharp.Pdf
             }
 
             IrefTable.Renumber();
-#endif
         }
 
         /// <summary>
@@ -658,15 +640,7 @@ namespace PdfSharp.Pdf
             {
                 EnsureNotYetSaved();
 
-#if true
                 return Pages.Count;
-#else
-                if (CanModify)
-                    return Pages.Count;
-                // PdfOpenMode is InformationOnly.
-                var pageTreeRoot = (PdfDictionary?)Catalog.Elements.GetObject(PdfCatalog.Keys.Pages);
-                return pageTreeRoot?.Elements.GetInteger(PdfPages.Keys.Count) ?? 0;
-#endif
             }
         }
 
@@ -1116,7 +1090,6 @@ namespace PdfSharp.Pdf
 
         //internal static GlobalObjectTable Gob = new GlobalObjectTable();
 
-#if true
         /// <summary>
         /// Gets the ThreadLocalStorage object. It is used for caching objects that should be created
         /// only once.
@@ -1124,7 +1097,6 @@ namespace PdfSharp.Pdf
         internal static ThreadLocalStorage Tls => tls ??= new ThreadLocalStorage();
 
         [ThreadStatic] static ThreadLocalStorage? tls;
-#endif
 
         [DebuggerDisplay("(ID={ID}, alive={IsAlive})")]
         internal class DocumentHandle(PdfDocument document)

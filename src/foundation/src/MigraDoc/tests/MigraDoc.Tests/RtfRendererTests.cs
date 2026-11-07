@@ -61,20 +61,10 @@ namespace MigraDoc.Tests
             // Save the document…
             var filename = IOUtility.GetTempFullFileName("HelloWorld", null);
 
-#if DEBUG___
-            MigraDoc.DocumentObjectModel.IO.DdlWriter dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_0.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
 
             // Layout and render document to RTF.
             rtfRenderer.Render(document, filename + ".rtf", Environment.CurrentDirectory);
 
-#if DEBUG___
-            dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_1.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
             //// … and start a viewer.
             //PdfFileUtility.ShowDocumentIfDebugging(filename);
         }
@@ -543,20 +533,10 @@ namespace MigraDoc.Tests
             // Save the document…
             var filename = IOUtility.GetTempFullFileName("HelloWorld", null);
 
-#if DEBUG___
-            MigraDoc.DocumentObjectModel.IO.DdlWriter dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_0.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
 
             // Layout and render document to PDF.
             rtfRenderer.Render(document, filename + ".rtf", Environment.CurrentDirectory);
 
-#if DEBUG___
-            dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_1.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
 
             //// … and start a viewer.
             //PdfFileUtility.ShowDocumentIfDebugging(filename);
@@ -579,20 +559,10 @@ namespace MigraDoc.Tests
             // Save the document…
             var filename = IOUtility.GetTempFullFileName("HelloWorldEmbeddedBase64", null);
 
-#if DEBUG___
-            MigraDoc.DocumentObjectModel.IO.DdlWriter dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_0.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
 
             // Layout and render document to PDF.
             rtfRenderer.Render(document, filename + ".rtf", Environment.CurrentDirectory);
 
-#if DEBUG___
-            dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_1.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
 
             //// … and start a viewer.
             //PdfFileUtility.ShowDocumentIfDebugging(filename);
@@ -697,20 +667,10 @@ VeP/8gP+s//MzMQAAAAASUVORK5CYII=
             // Save the document…
             var filename = IOUtility.GetTempFullFileName("HelloWorldBase64", null);
 
-#if DEBUG___
-            MigraDoc.DocumentObjectModel.IO.DdlWriter dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_0.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
 
             // Layout and render document to PDF.
             rtfRenderer.Render(document, filename + ".rtf", Environment.CurrentDirectory);
 
-#if DEBUG___
-            dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_1.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
 
             //// … and start a viewer.
             //PdfFileUtility.ShowDocumentIfDebugging(filename);

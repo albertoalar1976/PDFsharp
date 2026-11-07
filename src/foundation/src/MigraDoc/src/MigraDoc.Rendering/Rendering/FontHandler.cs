@@ -15,9 +15,6 @@ namespace MigraDoc.Rendering
     /// </summary>
     static class FontHandler
     {
-#if DEBUG_
-        internal static int CreateFontCounter;
-#endif
         /// <summary>
         /// Converts a DOM Font to an XFont, using the XFont cache of the document renderer.
         /// Formerly, this class cached the last conversion in static fields shared by all renderers.
@@ -39,68 +36,40 @@ namespace MigraDoc.Rendering
 
         internal static XUnitPt GetDescent(XFont font)
         {
-#if PSGFX
-            var descent = (font.FontFace.Height - font.FontFace.Baseline) * font.Size;
-            return new(descent);
-#else
             // Use the units per em of the font itself. FontFamily.GetEmHeight looked up the font descriptor by
             // family name in a global cache on every call, which took a global lock for every word.
             XUnitPt descent = font.Metrics.Descent;
             descent *= font.Size;
             descent /= font.Metrics.UnitsPerEm;
             return descent;
-#endif
         }
 
         internal static XUnitPt GetAscent(XFont font)
         {
-#if PSGFX
-            var descent = font.FontFace.Baseline * font.Size;
-            return new(descent);
-#else
             XUnitPt ascent = font.Metrics.Ascent;
             ascent *= font.Size;
             ascent /= font.Metrics.UnitsPerEm;
             return ascent;
-#endif
         }
 
         internal static double GetSubSuperScaling(XFont font)
         {
-#if PSGFX
-            return 0.8 * font.Size;  // TODO #PSG
-#else
             return 0.8 * GetAscent(font) / font.GetHeight();
-#endif
         }
 
         internal static XFont ToSubSuperFont(XFont font)
         {
-#if PSGFX
-            double size = font.Size * GetSubSuperScaling(font);
-            return new XFont(font.FontFace.FamilyName, size, font.Style/*, font.PdfOptions*/);  // TODO #PSG
-#else
             double size = font.Size * GetSubSuperScaling(font);
             return new XFont(font.Name, size, font.Style, font.PdfOptions);
-#endif
         }
 
         internal static XBrush FontColorToXBrush(Font font)
         {
-#if PSGFX
             Debug.Assert(font.Document != null, "font.Document != null");
             return new XSolidBrush(ColorHelper.ToXColor(font.Color, font.Document.UseCmykColor));
-#else
-#if noCMYK
-            return new XSolidBrush(XColor.FromArgb((int)font.Color.A, (int)font.Color.R, (int)font.Color.G, (int)font.Color.B));
-#else
-            Debug.Assert(font.Document != null, "font.Document != null");
-            return new XSolidBrush(ColorHelper.ToXColor(font.Color, font.Document.UseCmykColor));
-#endif
-#endif
         }
 
-#if CACHE_FONTS || true_
+#if CACHE_FONTS
         static XFont XFontFromCache(Font font, bool unicode, PdfFontEmbedding fontEmbedding)
         {
             XFont xFont = null;

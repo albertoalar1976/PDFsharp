@@ -16,12 +16,6 @@ namespace PdfSharp.Pdf.Advanced
         public PdfCrossReferenceStream(PdfDocument document)
             : base(document)
         {
-#if DEBUG_
-            if (Internal.PdfDiagnostics.TraceXrefStreams)
-            {
-                Debug.WriteLine("PdfCrossReferenceStream created.");
-            }
-#endif
         }
 
         /// <summary>

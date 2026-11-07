@@ -39,11 +39,7 @@ namespace PdfSharp.Charting.Renderers
 
                 if (lri.Legend._lineFormat != null)
                     lri.BorderPen = Converter.ToXPen(lri.Legend._lineFormat, XColors.Black, DefaultLineWidth,
-#if PSGFX
-                        XDashStyles.Solid);
-#else
                         XDashStyle.Solid);
-#endif
 
                 XSeries? xseries = null;
                 if (cri.Chart._xValues != null)

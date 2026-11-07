@@ -21,13 +21,8 @@ namespace PdfSharp.Snippets.Font
             // Load all system fonts.
 
             // Check fonts.
-#if true // Check all system fonts.
             bool allFonts = true;
             foreach (var fontName in systemFonts)
-#else // Check only list "fonts".
-            bool allFonts = false;
-            foreach (var fontName in fonts)
-#endif
             {
                 var emHeightPix = 16;
                 XFont xFont;
