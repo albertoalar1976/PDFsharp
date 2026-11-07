@@ -540,7 +540,7 @@ namespace MigraDoc.Tests
 
             var sect = document.AddSection();
 
-            sect.AddImage(IOUtility.GetAssetsPath(@"PDFsharp\images\samples\bmp\Color4A.bmp")!); // Fails: Cannot load resources.
+            sect.AddImage(IOUtility.GetAssetsPath(@"pdfsharp\images\samples\bmp\Color4A.bmp")!); // Fails: Cannot load resources.
             //sect.AddImage(IOUtility.GetAssetsPath(@"\PDFsharp\images\samples\png\color8A.png")!); // OK
             //sect.AddImage(IOUtility.GetAssetsPath(@"\PDFsharp\images\samples\jpeg\color8A.jpg")!); // OK
 
@@ -685,7 +685,7 @@ VeP/8gP+s//MzMQAAAAASUVORK5CYII=
 
             var sect = document.AddSection();
 
-            var imagePath = IOUtility.GetAssetsPath(@"PDFsharp\images\samples\" + assetName)!;
+            var imagePath = IOUtility.GetAssetsPath(@"pdfsharp\images\samples\" + assetName)!;
 
             if (!PdfSharp.Capabilities.OperatingSystem.IsWindows)
                 imagePath = imagePath.Replace('\\', '/');

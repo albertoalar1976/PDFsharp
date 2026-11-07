@@ -19,7 +19,10 @@ namespace MigraDoc.GrammarByExample
             DeploymentDirectory = Path.GetDirectoryName(assembly.GetOriginalLocation())!;
             //Console.WriteLine($"DeploymentDirectory {DeploymentDirectory})");
 
-            var folder0 = @"D:\GBE-Output\";
+            // The output folder can be set with the environment variable PDFSHARP_GBE_OUTPUT.
+            // Default on Windows: D:\GBE-Output. On Linux and macOS, e.g. in CI: a folder in the temp directory.
+            var folder0 = Environment.GetEnvironmentVariable("PDFSHARP_GBE_OUTPUT")
+                ?? (OperatingSystem.IsWindows() ? @"D:\GBE-Output\" : Path.Combine(Path.GetTempPath(), "GBE-Output"));
             Directory.CreateDirectory(DdlGbeTestBase.WslPathHack(folder0));
             var now = DateTimeOffset.Now;
             //Console.WriteLine($"Now {now})");
@@ -40,7 +43,7 @@ namespace MigraDoc.GrammarByExample
             const string tag2 = "NET100";
 #endif
             var folder = $"Testrun-{tag}-{tag2}-" + now.ToString("yyyy-MM-dd_HH-mm-ss");
-            OutputDirectory = folder0 + folder;
+            OutputDirectory = Path.Combine(folder0, folder);
             //Console.WriteLine($"OutputDirectory {OutputDirectory})");
             Directory.CreateDirectory(DdlGbeTestBase.WslPathHack(OutputDirectory));
             //TempDirectory = OutputDirectory + @"\Temp";

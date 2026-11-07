@@ -89,7 +89,9 @@ namespace MigraDoc.Tests
                 // Get all text content split by white-space.
                 var texts = new List<string>();
                 while (streamEnumerator.Text.MoveAndGetNext(true, out var textInfo))
-                    texts.AddRange(textInfo!.Text.Split(' '));
+                    // Split at any white-space. On Linux and macOS (ICU) the en-US time format contains a
+                    // narrow no-break space (U+202F) before AM/PM instead of a space.
+                    texts.AddRange(textInfo!.Text.Split((char[]?)null));
 
                 var isEnUs = cultureInfo?.Name.ToLower() == "en-us";
                 var isDeDe = cultureInfo?.Name.ToLower() == "de-de";

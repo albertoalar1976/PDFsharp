@@ -118,13 +118,9 @@ namespace GdiGrammarByExample
             {
                 return path;
             }
-            if (OperatingSystem.IsLinux())
-            {
-                // Assume WSL and use drive C:\ instead of D:\.
-                return path.Replace(@"D:\", "/mnt/c/").Replace('\\', '/');
-            }
-
-            throw new NotSupportedException($"Platform {Environment.OSVersion} not yet supported.");
+            // Linux, macOS: Windows paths like D:\... are mapped to WSL drive C:\ (/mnt/c/).
+            // Native paths, e.g. in the temp directory, are returned unchanged.
+            return path.Replace(@"D:\", "/mnt/c/").Replace('\\', '/');
         }
 
         //const string PathSource = @"D:\MigraDocAssets\GBE\GBE-DDL";
