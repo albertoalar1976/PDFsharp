@@ -543,11 +543,27 @@ namespace MigraDoc.DocumentObjectModel.IO
         }
 
         /// <summary>
+        /// The maximum nesting level of formatted text, e.g. \bold{\italic{...}}.
+        /// </summary>
+        const int MaxNestingLevel = 256;
+
+        /// <summary>
         /// Parses the inner text of a paragraph. Parsing ends if '}' is reached or an empty
         /// line occurs on nesting level 0.
         /// </summary>
         void ParseFormattedText(ParagraphElements elements, int nestingLevel)
         {
+            // Security: The parser is recursive. Without a limit, deeply nested formatting like
+            // '\bold{\bold{\bold{...' from untrusted input ends in a StackOverflowException,
+            // which cannot be caught and terminates the process.
+            if (nestingLevel > MaxNestingLevel)
+            {
+                var error = new DdlReaderError(DdlErrorLevel.Error,
+                    Invariant($"Formatted text is nested deeper than {MaxNestingLevel} levels."), 0,
+                    _scanner.DocumentFileName, _scanner.CurrentLine, _scanner.CurrentLinePos);
+                throw new DdlParserException(error, null);
+            }
+
             MoveToParagraphContent();
 
             bool loop = true;
@@ -2563,24 +2579,29 @@ namespace MigraDoc.DocumentObjectModel.IO
         /// </summary>
         void AdjustToNextBlock()
         {
-            bool skipClosingBraceOrBracket = Symbol is Symbol.BraceLeft or Symbol.BracketLeft;
+            // Implemented without recursion: the former recursive implementation called itself for every
+            // nested block and overflowed the stack for deeply nested input (e.g. after the nesting limit
+            // of formatted text was exceeded). Each entry of the stack tells whether the closing brace or
+            // bracket of that level must be skipped.
+            var skipClosingBraceOrBracket = new Stack<bool>();
+            skipClosingBraceOrBracket.Push(Symbol is Symbol.BraceLeft or Symbol.BracketLeft);
             ReadCode();
 
-            bool finish = false;
-            while (!finish)
+            while (skipClosingBraceOrBracket.Count > 0)
             {
                 switch (Symbol)
                 {
                     case Symbol.BraceLeft:
                     case Symbol.BracketLeft:
-                        AdjustToNextBlock();
+                        // A nested block. Its closing brace or bracket is always skipped.
+                        skipClosingBraceOrBracket.Push(true);
+                        ReadCode();
                         break;
 
                     case Symbol.BraceRight:
                     case Symbol.BracketRight:
-                        if (skipClosingBraceOrBracket)
+                        if (skipClosingBraceOrBracket.Pop())
                             ReadCode();
-                        finish = true;
                         break;
 
                     case Symbol.Eof:

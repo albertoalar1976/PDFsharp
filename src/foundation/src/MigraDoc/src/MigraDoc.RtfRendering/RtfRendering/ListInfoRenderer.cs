@@ -102,7 +102,7 @@ namespace MigraDoc.RtfRendering
 
         string GetBulletItemText2(char c)
         {
-            var text2 = Invariant($"u{(int)c} ?");
+            var text2 = "u" + RtfWriter.UnicodeParameter(c) + " ?";
             return text2;
         }
 

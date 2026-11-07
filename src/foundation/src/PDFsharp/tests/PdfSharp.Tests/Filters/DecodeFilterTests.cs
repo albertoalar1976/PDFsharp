@@ -1,6 +1,9 @@
 // PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+#if WPF
+using System.IO;
+#endif
 using System.Text;
 using FluentAssertions;
 using PdfSharp.Pdf.Filters;
@@ -102,6 +105,32 @@ namespace PdfSharp.Tests.Filters
             // The default limit (256 MiB) is large enough for this stream.
             var decoded = new FlateDecode().Decode(bomb);
             decoded.Length.Should().Be(10 * 1024 * 1024);
+        }
+
+        [Fact]
+        public void FlateDecode_writes_zlib_stream_with_Adler32_checksum()
+        {
+            // RFC 1950: a zlib stream ends with the Adler-32 checksum of the uncompressed data.
+            // The former implementation omitted it.
+            var data = CreateCompressibleData(10_000, seed: 3);
+
+            var encoded = new FlateDecode().Encode(data);
+
+            uint a = 1, b = 0;
+            foreach (var value in data)
+            {
+                a = (a + value) % 65521;
+                b = (b + a) % 65521;
+            }
+            var adler32 = (b << 16) | a;
+            var trailer = (uint)(encoded[^4] << 24 | encoded[^3] << 16 | encoded[^2] << 8 | encoded[^1]);
+            trailer.Should().Be(adler32);
+
+            // A strict decoder that verifies the checksum accepts the stream.
+            using var zlib = new System.IO.Compression.ZLibStream(new MemoryStream(encoded), System.IO.Compression.CompressionMode.Decompress);
+            var decoded = new MemoryStream();
+            zlib.CopyTo(decoded);
+            decoded.ToArray().Should().Equal(data);
         }
 
         [Fact]

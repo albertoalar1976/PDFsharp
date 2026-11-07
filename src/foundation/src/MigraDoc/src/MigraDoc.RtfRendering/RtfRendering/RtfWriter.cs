@@ -74,7 +74,7 @@ namespace MigraDoc.RtfRendering
                         else
                         {
                             strBuilder.Append(@"\u");
-                            strBuilder.Append(((int)ch).ToString(CultureInfo.InvariantCulture));
+                            strBuilder.Append(UnicodeParameter(ch));
                             strBuilder.Append('?');
                         }
                         break;
@@ -83,6 +83,14 @@ namespace MigraDoc.RtfRendering
             _textWriter.Write(strBuilder.ToString());
             _lastWasControl = false;
         }
+
+        /// <summary>
+        /// Returns the parameter of the \u control word for a UTF-16 code unit.
+        /// RTF parameters are signed 16-bit integers, so code units from U+8000 on must be written as negative
+        /// numbers, e.g. U+8A9E as -30050. Characters outside the BMP are written as two code units (surrogates).
+        /// </summary>
+        internal static string UnicodeParameter(char ch)
+            => ((short)ch).ToString(CultureInfo.InvariantCulture);
 
         /// <summary>
         /// Indicates whether the specified Unicode character is available in the Ansi code page 1252.

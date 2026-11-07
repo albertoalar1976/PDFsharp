@@ -46,6 +46,17 @@ namespace MigraDoc.DocumentObjectModel
         protected override object DeepCopy()
         {
             var document = (Document)base.DeepCopy();
+
+            // A clone is a new document that is not yet bound to a renderer, even if the original was
+            // already rendered. BindToRenderer recommends cloning, so the clone must be renderable.
+            document._renderer = null;
+
+            if (document.Values.EmbeddedFiles != null)
+            {
+                document.Values.EmbeddedFiles = (EmbeddedFiles)document.Values.EmbeddedFiles.Clone();
+                document.Values.EmbeddedFiles.Parent = document;
+            }
+
             if (document.Values.Info != null)
             {
                 document.Values.Info = document.Values.Info.Clone();

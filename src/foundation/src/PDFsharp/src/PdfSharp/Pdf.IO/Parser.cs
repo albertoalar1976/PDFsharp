@@ -593,7 +593,17 @@ namespace PdfSharp.Pdf.IO
                 Debug.Assert(scanWindow >= oldLength);
             }
 
-            streamLength = _lexer.DetermineStreamLength(streamStart, scanWindow, suppressObjectOrderExceptions);
+            // First look for 'endstream' close to the reported length.
+            var probe = new SuppressExceptions();
+            streamLength = _lexer.DetermineStreamLength(streamStart, scanWindow, probe);
+            if (SuppressExceptions.HasError(probe))
+            {
+                // The reported length is far too small. Search up to the next object or the end of the file,
+                // like for a stream without /Length. Formerly, such streams could not be read.
+                var behindPosition = _document.IrefTable.GetPositionOfObjectBehind(dict, streamStart);
+                var searchEnd = behindPosition > streamStart ? behindPosition : _lexer.PdfLength;
+                streamLength = _lexer.DetermineStreamLength(streamStart, (int)(searchEnd - streamStart), suppressObjectOrderExceptions);
+            }
             if (SuppressExceptions.HasError(suppressObjectOrderExceptions))
                 return false;
 #if DEBUG

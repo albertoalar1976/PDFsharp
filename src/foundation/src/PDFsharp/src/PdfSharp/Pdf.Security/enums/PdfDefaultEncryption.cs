@@ -15,7 +15,8 @@ namespace PdfSharp.Pdf.Security
         None,
 
         /// <summary>
-        /// Use V4UsingAES, the most recent encryption method not requiring PDF 2.0.
+        /// Use V5 (AES-256, PDF 2.0), the encryption method recommended by PDF 2.0.
+        /// Before PDFsharp 7 (this fork), the default was V4UsingAES.
         /// </summary>
         Default,
 
