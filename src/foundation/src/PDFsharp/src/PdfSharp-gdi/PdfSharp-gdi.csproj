@@ -456,11 +456,6 @@
     <Compile Include="..\PdfSharp\UniversalAccessibility\UAManager.cs" Link="UniversalAccessibility\UAManager.cs" />
   </ItemGroup>
 
-  <!-- Needed for the preserialized (non-string) resources, see GenerateResourceUsePreserializedResources. -->
-  <ItemGroup>
-    <PackageReference Include="System.Resources.Extensions" />
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\..\shared\src\PdfSharp.Imaging\PdfSharp.Imaging.csproj" />
     <ProjectReference Include="..\..\..\shared\src\PdfSharp.OpenType\PdfSharp.OpenType.csproj" />
