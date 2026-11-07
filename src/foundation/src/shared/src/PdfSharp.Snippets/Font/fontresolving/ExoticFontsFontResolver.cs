@@ -63,7 +63,7 @@ namespace PdfSharp.Snippets.Font
 
             // In this sample family names are case-sensitive. You can relax this in your own implementation
             // and make them case-insensitive.
-            switch (familyName.ToLower())
+            switch (familyName.ToLowerInvariant())
             {
                 case FamilyNames.Oblivious:
                     faceName = FaceNames.Oblivious;

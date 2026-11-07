@@ -41,22 +41,6 @@ namespace PdfSharp.DotNetFrameworkExtensions
             //[MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool NullOrEmpty => String.IsNullOrEmpty(s);
 
-#if !NET8_0_OR_GREATER
-
-            // Extensions for .NET functionality missing in .NET Standard/Framework.
-
-            /// <summary>
-            /// Brings "bool StartsWith(char value)" to String class.
-            /// </summary>
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool StartsWith(char ch) => s?.Length != 0 && s?[0] == ch;
-
-            /// <summary>
-            /// Brings "bool EndsWith(char value)" to String class.
-            /// </summary>
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public bool EndsWith(char ch) => s?.Length != 0 && s?[^1] == ch;
-#endif
         }
     }
 }

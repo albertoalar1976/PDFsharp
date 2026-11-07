@@ -1,9 +1,6 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
-#if !NET8_0_OR_GREATER
-using System.Text;
-#endif
 using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf.Annotations;
 using PdfSharp.Pdf.Forms;
@@ -114,16 +111,7 @@ namespace PdfSharp.Pdf.Signatures
 
         string FormatHex(byte[] bytes)  // ...use RawEncoder
         {
-#if NET8_0_OR_GREATER
             return Convert.ToHexString(bytes);
-#else
-            var result = new StringBuilder();
-
-            for (int idx = 0; idx < bytes.Length; idx++)
-                result.AppendFormat("{0:X2}", bytes[idx]);
-
-            return result.ToString();
-#endif
         }
 
         /// <summary>

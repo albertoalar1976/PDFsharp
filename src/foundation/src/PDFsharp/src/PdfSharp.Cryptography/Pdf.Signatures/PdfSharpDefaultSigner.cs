@@ -1,9 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
-#if NET8_0_OR_GREATER
 using System.Net.Http.Headers;
-#endif
 using System.Security.Cryptography;
 using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
@@ -16,10 +14,8 @@ namespace PdfSharp.Pdf.Signatures
     public class PdfSharpDefaultSigner : IDigitalSigner
     {
         static readonly Oid SignatureTimeStampOid = new("1.2.840.113549.1.9.16.2.14");
-#if NET8_0_OR_GREATER
         const string TimestampQueryContentType = "application/timestamp-query";
         const string TimestampReplyContentType = "application/timestamp-reply";
-#endif
 
         /// <summary>
         /// Creates a new instance of the PdfSharpDefaultSigner class.
@@ -28,19 +24,37 @@ namespace PdfSharp.Pdf.Signatures
         /// <param name="digestType"></param>
         /// <param name="timeStampAuthorityUri"></param>
         public PdfSharpDefaultSigner(X509Certificate2 certificate, PdfMessageDigestType digestType, Uri? timeStampAuthorityUri = null)
+            : this(certificate, digestType, timeStampAuthorityUri, null)
+        { }
+
+        /// <summary>
+        /// Creates a new instance of the PdfSharpDefaultSigner class that uses the specified HttpClient
+        /// to request time stamps, e.g. a client created by IHttpClientFactory in ASP.NET Core.
+        /// </summary>
+        /// <param name="certificate">The certificate used for signing.</param>
+        /// <param name="digestType">The digest algorithm.</param>
+        /// <param name="timeStampAuthorityUri">The URI of the time stamp authority, or null for no time stamp.</param>
+        /// <param name="httpClient">The HttpClient for time stamp requests. If null, a shared client is used.</param>
+        public PdfSharpDefaultSigner(X509Certificate2 certificate, PdfMessageDigestType digestType, Uri? timeStampAuthorityUri, HttpClient? httpClient)
         {
             Certificate = certificate;
             DigestType = digestType;
-#if NET8_0_OR_GREATER
             TimeStampAuthorityUri = timeStampAuthorityUri;
-#else
-            // We don’t know how to get a time stamp with .NET Standard.
-            // If you need it you must implement your own signer.
-            if (timeStampAuthorityUri != null)
-                throw new ArgumentException(nameof(timeStampAuthorityUri) + " must be null when using .NET Framework or .NET Standard.");
-#endif
             MustAddTimeStamp = timeStampAuthorityUri is not null;
+            _httpClient = httpClient ?? SharedHttpClient;
         }
+
+        /// <summary>
+        /// The HttpClient used when none is specified. HttpClient is meant to be reused: creating one per request,
+        /// as the former implementation did, can exhaust the available sockets under load. PooledConnectionLifetime
+        /// makes the long-lived client pick up DNS changes of the time stamp authority.
+        /// </summary>
+        static readonly HttpClient SharedHttpClient = new(new SocketsHttpHandler { PooledConnectionLifetime = TimeSpan.FromMinutes(5) })
+        {
+            Timeout = TimeSpan.FromSeconds(30)
+        };
+
+        readonly HttpClient _httpClient;
 
         /// <summary>
         /// Gets the name of the certificate.
@@ -83,10 +97,8 @@ namespace PdfSharp.Pdf.Signatures
         {
             var content = new byte[stream.Length];
             stream.Position = 0;
-            // ReSharper disable once MethodHasAsyncOverload
-            int read = stream.Read(content, 0, content.Length);
-            if (read != content.Length)
-                throw new InvalidOperationException($"Tried to read {content.Length} bytes but got {read} bytes.");
+            // A single Read call may return fewer bytes than requested. ReadExactly reads until the buffer is full.
+            await stream.ReadExactlyAsync(content).ConfigureAwait(false);
 
             // Sign the byte range.
             var contentInfo = new ContentInfo(content);
@@ -109,12 +121,7 @@ namespace PdfSharp.Pdf.Signatures
 
             if (TimeStampAuthorityUri is not null)
             {
-#if NET8_0_OR_GREATER
                 await AddTimestampFromTSAAsync(signedCms).ConfigureAwait(false);
-#else
-                // Already checked in constructor.
-                await Task.CompletedTask.ConfigureAwait(false);
-#endif
             }
             var bytes = signedCms.Encode();
 
@@ -129,7 +136,6 @@ namespace PdfSharp.Pdf.Signatures
 
         bool MustAddTimeStamp { get; init; }
 
-#if NET8_0_OR_GREATER
         async Task AddTimestampFromTSAAsync(SignedCms signedCms)
         {
             // Generate our nonce to identify the pair request-response.
@@ -161,10 +167,9 @@ namespace PdfSharp.Pdf.Signatures
                 requestSignerCertificates: true, // Ask TSA to embed its signing certificate in the timestamp token.
                 nonce: nonce);
 
-            var client = new HttpClient();
-            var content = new ReadOnlyMemoryContent(request.Encode());
+            using var content = new ReadOnlyMemoryContent(request.Encode());
             content.Headers.ContentType = new MediaTypeHeaderValue(TimestampQueryContentType);
-            var httpResponse = await client.PostAsync(TimeStampAuthorityUri, content).ConfigureAwait(false);
+            using var httpResponse = await _httpClient.PostAsync(TimeStampAuthorityUri, content).ConfigureAwait(false);
 
             // Process our response.
             if (!httpResponse.IsSuccessStatusCode)
@@ -183,6 +188,5 @@ namespace PdfSharp.Pdf.Signatures
             // The RFC3161 sign certificate is separate to the contents that was signed, we need to add it to the unsigned attributes.
             newSignerInfo.AddUnsignedAttribute(new AsnEncodedData(SignatureTimeStampOid, timestampToken.AsSignedCms().Encode()));
         }
-#endif
     }
 }

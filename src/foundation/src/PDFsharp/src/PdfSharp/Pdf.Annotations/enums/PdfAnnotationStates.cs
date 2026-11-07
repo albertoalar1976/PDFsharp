@@ -8,7 +8,7 @@ namespace PdfSharp.Pdf.Annotations
     /// <summary>
     /// Specifies the annotation types.
     /// </summary>
-    [Flags]
+    // Not a [Flags] enum: the values are sequential, so combinations like Marked | Unmarked would equal Accepted.
     public enum PdfAnnotationStates
     {
         // Reference 2.0: Table 174 — Annotation states / Page 481

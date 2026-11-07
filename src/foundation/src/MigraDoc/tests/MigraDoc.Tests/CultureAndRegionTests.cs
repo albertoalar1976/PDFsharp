@@ -43,6 +43,26 @@ namespace MigraDoc.Tests
             //var isMetric1 = region1.IsMetric;
         }
 
+        /// <summary>
+        /// ICU (Linux, macOS) uses a narrow no-break space (U+202F) in some time formats, e.g. before AM/PM in en-US.
+        /// Text with such characters is written with glyph IDs, which the text extraction used by this test
+        /// cannot read back. Use normal spaces, so that the test checks the same on all platforms.
+        /// </summary>
+        static CultureInfo WithNormalSpaces(CultureInfo culture)
+        {
+            var result = (CultureInfo)culture.Clone();
+            var format = result.DateTimeFormat;
+            format.ShortTimePattern = Normalize(format.ShortTimePattern);
+            format.LongTimePattern = Normalize(format.LongTimePattern);
+            format.ShortDatePattern = Normalize(format.ShortDatePattern);
+            format.LongDatePattern = Normalize(format.LongDatePattern);
+            format.FullDateTimePattern = Normalize(format.FullDateTimePattern);
+            return result;
+
+            static string Normalize(string pattern)
+                => pattern.Replace((char)0x202F, ' ').Replace((char)0x00A0, ' ');
+        }
+
         [Fact]
         public void DateTimeTest()
         {
@@ -56,7 +76,7 @@ namespace MigraDoc.Tests
             var filenamePattern = IOUtility.GetTempFullFileName("DateTime{0}", "pdf");
 
             // Create one result file per cultureInfo.
-            var cultureInfos = new[] { null, CultureInfo.GetCultureInfo("en-us"), CultureInfo.GetCultureInfo("de-de") };
+            var cultureInfos = new[] { null, WithNormalSpaces(CultureInfo.GetCultureInfo("en-us")), WithNormalSpaces(CultureInfo.GetCultureInfo("de-de")) };
             foreach (var cultureInfo in cultureInfos)
             {
                 var document = new Document { Culture = cultureInfo };
@@ -89,7 +109,9 @@ namespace MigraDoc.Tests
                 // Get all text content split by white-space.
                 var texts = new List<string>();
                 while (streamEnumerator.Text.MoveAndGetNext(true, out var textInfo))
-                    texts.AddRange(textInfo!.Text.Split(' '));
+                    // Split at any white-space. On Linux and macOS (ICU) the en-US time format contains a
+                    // narrow no-break space (U+202F) before AM/PM instead of a space.
+                    texts.AddRange(textInfo!.Text.Split((char[]?)null));
 
                 var isEnUs = cultureInfo?.Name.ToLower() == "en-us";
                 var isDeDe = cultureInfo?.Name.ToLower() == "de-de";

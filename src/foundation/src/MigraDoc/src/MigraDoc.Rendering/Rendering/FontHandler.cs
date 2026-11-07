@@ -19,39 +19,12 @@ namespace MigraDoc.Rendering
         internal static int CreateFontCounter;
 #endif
         /// <summary>
-        /// Converts a DOM Font to an XFont.
+        /// Converts a DOM Font to an XFont, using the XFont cache of the document renderer.
+        /// Formerly, this class cached the last conversion in static fields shared by all renderers.
         /// </summary>
-        internal static XFont FontToXFont(Font font)
-        {
-            // Check if both WeakReferences are still valid and point to the font we need.
-            if (_lastXFont != null && _lastFont != null &&
-                _lastFont.TryGetTarget(out var lastFont) && font == lastFont &&
-                _lastXFont.TryGetTarget(out var lastXFont))
-                return lastXFont;
-
-            XFontStyleEx style = GetXStyle(font);
-#if DEBUG_
-            if (StringComparer.OrdinalIgnoreCase.Compare(font.Name, "Segoe UI Semilight") == 0
-                && (style & XFontStyleEx.BoldItalic) == XFontStyleEx.Italic)
-                _ = typeof(int);
-#endif
-            var xFont = new XFont(font.Name, font.Size.Point, style);
-#if DEBUG_
-            CreateFontCounter++;
-#endif
-            _lastFont = new(font);
-            _lastXFont = new(xFont);
-#if FORCE_MEMORYLEAK
-            _lastFont2 = font;
-#endif
-            return xFont;
-        }
-
-        static WeakReference<XFont>? _lastXFont;
-        static WeakReference<Font>? _lastFont;
-#if FORCE_MEMORYLEAK
-        static Font? _lastFont2;
-#endif
+        internal static XFont FontToXFont(Font font, DocumentRenderer? documentRenderer)
+            // Renderers that are not (yet) attached to a document renderer create the XFont directly.
+            => documentRenderer?.GetXFont(font) ?? new XFont(font.Name, font.Size.Point, GetXStyle(font));
 
         internal static XFontStyleEx GetXStyle(Font font)
         {
@@ -70,9 +43,11 @@ namespace MigraDoc.Rendering
             var descent = (font.FontFace.Height - font.FontFace.Baseline) * font.Size;
             return new(descent);
 #else
+            // Use the units per em of the font itself. FontFamily.GetEmHeight looked up the font descriptor by
+            // family name in a global cache on every call, which took a global lock for every word.
             XUnitPt descent = font.Metrics.Descent;
             descent *= font.Size;
-            descent /= font.FontFamily.GetEmHeight(font.Style);
+            descent /= font.Metrics.UnitsPerEm;
             return descent;
 #endif
         }
@@ -85,7 +60,7 @@ namespace MigraDoc.Rendering
 #else
             XUnitPt ascent = font.Metrics.Ascent;
             ascent *= font.Size;
-            ascent /= font.FontFamily.GetEmHeight(font.Style);
+            ascent /= font.Metrics.UnitsPerEm;
             return ascent;
 #endif
         }

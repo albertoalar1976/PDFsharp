@@ -142,7 +142,6 @@ namespace PdfSharp.Tests.Build
             var result35 = typeof(C).IsAssignableFrom(typeof(A));
             result35.Should().BeFalse();
 
-#if NET8_0_OR_GREATER
             var result41 = typeof(A).IsAssignableTo(typeof(A));
             result41.Should().BeTrue();
             var result42 = typeof(A).IsAssignableTo(typeof(B));
@@ -153,7 +152,6 @@ namespace PdfSharp.Tests.Build
             result44.Should().BeFalse();
             var result45 = typeof(C).IsAssignableTo(typeof(A));
             result45.Should().BeFalse();
-#endif
         }
 
         [Fact]

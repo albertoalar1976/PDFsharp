@@ -193,7 +193,7 @@ namespace PdfSharp.Internal.Imaging
                 } while (idx < length);
 
                 var id = identifier.ToString();
-                if (!id.Equals("ICC_PROFILE"))
+                if (!id.Equals("ICC_PROFILE", StringComparison.Ordinal))
                 {
                     return false;
                 }
@@ -224,7 +224,7 @@ namespace PdfSharp.Internal.Imaging
                 } while (idx < length);
 
                 var id = identifier.ToString();
-                if (!id.StartsWith("Photoshop ") && !id.StartsWith("Adobe_Photoshop")) // "Photoshop 3.0", "Adobe_Photoshop2.5:", etc.
+                if (!id.StartsWith("Photoshop ", StringComparison.Ordinal) && !id.StartsWith("Adobe_Photoshop", StringComparison.Ordinal)) // "Photoshop 3.0", "Adobe_Photoshop2.5:", etc.
                 {
                     return false;
                 }

@@ -492,10 +492,14 @@ namespace PdfSharp.Drawing.Pdf
             //bool strikeout = (font.Style & XFontStyleEx.Strikeout) != 0;
             //bool underline = (font.Style & XFontStyleEx.Underline) != 0;
 
-            // Invoke PrepareTextEvent.
-            var args2 = new PrepareTextEventArgs(Owner, font, s);
-            Owner.RenderEvents.OnPrepareTextEvent(this, args2);
-            s = args2.Text;
+            // Invoke PrepareTextEvent. Allocate event arguments only if somebody listens.
+            var renderEvents = Owner.RenderEvents;
+            if (renderEvents.HasPrepareTextHandlers)
+            {
+                var args2 = new PrepareTextEventArgs(Owner, font, s);
+                renderEvents.OnPrepareTextEvent(this, args2);
+                s = args2.Text;
+            }
 
             //var otDescriptor = font.OpenTypeDescriptor;
             //var ids = otDescriptor.GlyphIndicesFromCodepoints(codePoints);
@@ -508,14 +512,16 @@ namespace PdfSharp.Drawing.Pdf
             var codePointsWithGlyphIndices = otDescriptor.GlyphIndicesFromCodePoints(codePoints);
 
             // Invoke RenderTextEvent.
-            var args = new RenderTextEventArgs(Owner, font, codePointsWithGlyphIndices);
-
-            Owner.RenderEvents.OnRenderTextEvent(this, args);
-            codePointsWithGlyphIndices = args.CodePointGlyphIndexPairs;
-            if (args.ReevaluateGlyphIndices)
+            if (renderEvents.HasRenderTextHandlers)
             {
-                codePoints = args.CodePointGlyphIndexPairs.Select(pair => pair.CodePoint).ToArray();
-                codePointsWithGlyphIndices = otDescriptor.GlyphIndicesFromCodePoints(codePoints);
+                var args = new RenderTextEventArgs(Owner, font, codePointsWithGlyphIndices);
+                renderEvents.OnRenderTextEvent(this, args);
+                codePointsWithGlyphIndices = args.CodePointGlyphIndexPairs;
+                if (args.ReevaluateGlyphIndices)
+                {
+                    codePoints = args.CodePointGlyphIndexPairs.Select(pair => pair.CodePoint).ToArray();
+                    codePointsWithGlyphIndices = otDescriptor.GlyphIndicesFromCodePoints(codePoints);
+                }
             }
 
             // Decide text encoding.

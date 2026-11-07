@@ -66,7 +66,7 @@ namespace MigraDoc.Rendering
             {
                 MigraDocLogHost.PdfRenderingLogger.LogWarning(MdPdfMsgs.NumberTooLargeForLetters(number).Message);
                 //Debug.WriteLine(Messages2.NumberTooLargeForLetters(number));
-                return number.ToString();
+                return number.ToString(CultureInfo.InvariantCulture);
             }
 
             if (number == 0)

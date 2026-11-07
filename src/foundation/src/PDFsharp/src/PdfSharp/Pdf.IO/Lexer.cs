@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using PdfSharp.Logging;
@@ -1275,7 +1276,7 @@ namespace PdfSharp.Pdf.IO
                     if (idx == tagIndex)
                         result.Append('‼');
 
-                    result.Append(((int)bytes[idx]).ToString("X2"));
+                    result.Append(((int)bytes[idx]).ToString("X2", CultureInfo.InvariantCulture));
                     result.Append(' ');
                 }
                 else
@@ -1306,14 +1307,14 @@ namespace PdfSharp.Pdf.IO
                         //Chars.SP => "・",  // U+30FB
 
                         //<= ' ' => $"⁌((int)ch).ToString(\"X2\")⁍",
-                        <= ' ' => $"""⟬{(((int)ch).ToString("X2"))}⟭""",
+                        <= ' ' => $"""⟬{(((int)ch).ToString("X2", CultureInfo.InvariantCulture))}⟭""",
 
                         _ => ch.ToString()
                     };
                     result.Append(s);
                 }
             }
-            result.Append($"\r\nPosition marked with ‼ is {position}");
+            result.Append(CultureInfo.InvariantCulture, $"\r\nPosition marked with ‼ is {position}");
             return result.ToString();
         }
 

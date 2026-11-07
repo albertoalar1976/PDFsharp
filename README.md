@@ -9,7 +9,15 @@
 Version **7.0.0 Preview 2**  
 Published **2026-10-13**
 
-This is a preview version of the **PDFsharp** project, the main project of PDFsharp & MigraDoc 7 with updates for C# 12 and .NET 8, .NET 9, and .NET 10.
+This is a preview version of the **PDFsharp** project, the main project of PDFsharp & MigraDoc 7.
+
+### Target framework
+
+This fork targets **.NET 10** only.
+
+* The Core build (`net10.0`, NuGet packages `PDFsharp` and `PDFsharp-MigraDoc`) runs on **Windows, Linux, and macOS**.
+* The GDI and WPF builds (`net10.0-windows`) are for Windows desktop applications.
+* .NET Framework, .NET Standard, and .NET 8/9 (end of support on 2026-11-10) are no longer supported.
 
 PDFsharp: Copyright (c) 2005-2026 empira Software GmbH, Troisdorf (Cologne Area), Germany
 MigraDoc: Copyright (c) 2001-2026 empira Software GmbH, Troisdorf (Cologne Area), Germany

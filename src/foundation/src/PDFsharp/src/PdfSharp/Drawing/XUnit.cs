@@ -1,6 +1,7 @@
 // PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using System.ComponentModel;
 using Microsoft.Extensions.Logging;
 using PdfSharp.Logging;
@@ -302,7 +303,7 @@ namespace PdfSharp.Drawing
                 throw new ArgumentException(message, ex);
             }
 
-            string typeStr = value.Substring(valLen).Trim().ToLower();
+            string typeStr = value.Substring(valLen).Trim().ToLowerInvariant();
             unit.Type = XGraphicsUnit.Point;
             unit.Type = typeStr switch
             {

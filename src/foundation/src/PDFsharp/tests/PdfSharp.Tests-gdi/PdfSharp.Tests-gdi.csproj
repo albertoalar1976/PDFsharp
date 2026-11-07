@@ -29,7 +29,6 @@
 
   <ItemGroup>
     <!--<Compile Include="..\..\..\shared\src\PdfSharp.System\System\CompilerServices.cs" Link="Build\CompilerServices.cs" />-->
-    <Compile Include="..\..\..\shared\src\PdfSharp.Shared\dotnet\GetSubArray.cs" Link="Properties\GetSubArray(included).cs" />
     <Compile Include="..\PdfSharp.Tests\Initializer.cs" Link="Initializer.cs" />
     <Compile Include="..\PdfSharp.Tests\Pdf.Annotations\AnnotationTestBase.cs" Link="Pdf.Annotations\AnnotationTestBase.cs" />
     <Compile Include="..\PdfSharp.Tests\Properties\GlobalDeclarations.cs" Link="Properties\GlobalDeclarations.cs" />
@@ -53,6 +52,8 @@
     <Compile Include="..\PdfSharp.Tests\IO\CLexerTests.cs" Link="IO\CLexerTests.cs" />
     <Compile Include="..\PdfSharp.Tests\IO\LexerTests.cs" Link="IO\LexerTests.cs" />
     <Compile Include="..\PdfSharp.Tests\IO\ReaderTests.cs" Link="IO\ReaderTests.cs" />
+    <Compile Include="..\PdfSharp.Tests\IO\HostilePdfTests.cs" Link="IO\HostilePdfTests.cs" />
+    <Compile Include="..\PdfSharp.Tests\Filters\DecodeFilterTests.cs" Link="Filters\DecodeFilterTests.cs" />
     <Compile Include="..\PdfSharp.Tests\IO\WriterTests.cs" Link="IO\WriterTests.cs" />
     <Compile Include="..\PdfSharp.Tests\Pdf\creation\CreationTests.cs" Link="PDF\creation\CreationTests.cs" />
     <Compile Include="..\PdfSharp.Tests\Structs\XUnitTests.cs" Link="Structs\XUnitTests.cs" />

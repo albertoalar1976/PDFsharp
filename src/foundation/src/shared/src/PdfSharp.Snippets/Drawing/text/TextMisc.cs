@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using PdfSharp.Pdf;
 using PdfSharp.Drawing;
 using PdfSharp.Quality;
@@ -25,8 +26,8 @@ namespace PdfSharp.Snippets.Drawing
                 var fontRegular = new XFont(facename, 20, XFontStyleEx.Regular, options);
                 var fontBold = new XFont(facename, 20, XFontStyleEx.Bold, options);
 
-                gfx.DrawString(String.Format("{0} (regular)", facename), fontRegular, XBrushes.DarkSlateGray, 0, 75);
-                gfx.DrawString(String.Format("{0} (bold)", facename), fontBold, XBrushes.DarkSlateGray, 0, 112.5);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0} (regular)", facename), fontRegular, XBrushes.DarkSlateGray, 0, 75);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0} (bold)", facename), fontBold, XBrushes.DarkSlateGray, 0, 112.5);
             }
             EndBox(gfx);
 
@@ -38,18 +39,18 @@ namespace PdfSharp.Snippets.Drawing
 
                 // TODO_OLD: Define if XFontStyleEx.Bold should have an effect for bold fonts. For Segoe UI Semibold and Black it currently (15-12-01) has an effect in CORE and GDI, but not in WPF. $MaOs
 
-                var fontLight = new XFont(String.Format("{0} light", facename), 20, XFontStyleEx.Regular, options);
-                var fontSemilight = new XFont(String.Format("{0} semilight", facename), 20, XFontStyleEx.Regular, options);
-                var fontRegular = new XFont(String.Format("{0}", facename), 20, XFontStyleEx.Regular, options);
-                var fontSemibold = new XFont(String.Format("{0} semibold", facename), 20, XFontStyleEx.Bold, options);
-                var fontBlack = new XFont(String.Format("{0} black", facename), 20, XFontStyleEx.Bold, options);
+                var fontLight = new XFont(String.Format(CultureInfo.CurrentCulture, "{0} light", facename), 20, XFontStyleEx.Regular, options);
+                var fontSemilight = new XFont(String.Format(CultureInfo.CurrentCulture, "{0} semilight", facename), 20, XFontStyleEx.Regular, options);
+                var fontRegular = new XFont(String.Format(CultureInfo.CurrentCulture, "{0}", facename), 20, XFontStyleEx.Regular, options);
+                var fontSemibold = new XFont(String.Format(CultureInfo.CurrentCulture, "{0} semibold", facename), 20, XFontStyleEx.Bold, options);
+                var fontBlack = new XFont(String.Format(CultureInfo.CurrentCulture, "{0} black", facename), 20, XFontStyleEx.Bold, options);
 
                 // The default alignment is baseline left (that differs from GDI+)
-                gfx.DrawString(String.Format("{0} light", facename), fontLight, XBrushes.DarkSlateGray, 0, 25);
-                gfx.DrawString(String.Format("{0} semilight", facename), fontSemilight, XBrushes.DarkSlateGray, 0, 50);
-                gfx.DrawString(String.Format("{0}", facename), fontRegular, XBrushes.DarkSlateGray, 0, 75);
-                gfx.DrawString(String.Format("{0} semibold", facename), fontSemibold, XBrushes.DarkSlateGray, 0, 100);
-                gfx.DrawString(String.Format("{0} black", facename), fontBlack, XBrushes.DarkSlateGray, 0, 125);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0} light", facename), fontLight, XBrushes.DarkSlateGray, 0, 25);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0} semilight", facename), fontSemilight, XBrushes.DarkSlateGray, 0, 50);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0}", facename), fontRegular, XBrushes.DarkSlateGray, 0, 75);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0} semibold", facename), fontSemibold, XBrushes.DarkSlateGray, 0, 100);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0} black", facename), fontBlack, XBrushes.DarkSlateGray, 0, 125);
             }
             EndBox(gfx);
 
@@ -67,11 +68,11 @@ namespace PdfSharp.Snippets.Drawing
                 var fontStrikeout = new XFont(facename, 20, XFontStyleEx.Strikeout, options);
                 var fontIUS = new XFont(facename, 20, XFontStyleEx.Italic | XFontStyleEx.Underline | XFontStyleEx.Strikeout, options);
 
-                gfx.DrawString(String.Format("{0} (regular)", facename), fontRegular, XBrushes.DarkSlateGray, 0, 25);
-                gfx.DrawString(String.Format("{0} (italic)", facename), fontItalic, XBrushes.DarkSlateGray, 0, 50);
-                gfx.DrawString(String.Format("{0} (underline)", facename), fontUnderline, XBrushes.DarkSlateGray, 0, 75);
-                gfx.DrawString(String.Format("{0} (strokeout)", facename), fontStrikeout, XBrushes.DarkSlateGray, 0, 100);
-                gfx.DrawString(String.Format("{0} (ita, und, str)", facename), fontIUS, XBrushes.DarkSlateGray, 0, 125);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0} (regular)", facename), fontRegular, XBrushes.DarkSlateGray, 0, 25);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0} (italic)", facename), fontItalic, XBrushes.DarkSlateGray, 0, 50);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0} (underline)", facename), fontUnderline, XBrushes.DarkSlateGray, 0, 75);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0} (strokeout)", facename), fontStrikeout, XBrushes.DarkSlateGray, 0, 100);
+                gfx.DrawString(String.Format(CultureInfo.CurrentCulture, "{0} (ita, und, str)", facename), fontIUS, XBrushes.DarkSlateGray, 0, 125);
             }
             EndBox(gfx);
 

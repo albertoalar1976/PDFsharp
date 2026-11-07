@@ -39,31 +39,7 @@ namespace PdfSharp.Tests.Build
         public void Check_CS_files_for_non_ASCII_characters()
         {
             // This tests only runs in GDI build under .NET 4.6.2.
-#if NET8_0_OR_GREATER || CORE || WPF
             return;
-#else
-            // Set dryRun to true to just check the files.
-            // Set dryRun to false and files will be updated.
-            const bool dryRun = true;
-#if DEBUG
-            _ = BuildInformation.BuildVersionNumber;
-#endif
-            var folder = IOUtility.GetAssetsPath();
-            folder.Should().NotBeNull();
-            Debug.Assert(folder != null);
-
-            folder = Path.Combine(folder, "../src/");
-
-            var list = new List<string>();
-            GetFiles(folder, ref list);
-            int updateNecessary = 0;
-            foreach (var file in list)
-            {
-                var result = CheckFile(file, dryRun);
-                updateNecessary += result;
-            }
-            updateNecessary.Should().Be(0);
-#endif
         }
 
         static int CheckFile(string file, bool dryRun)

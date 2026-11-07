@@ -30,6 +30,10 @@ namespace PdfSharp.Fonts
             font.GlyphTypeface.CheckVersion();
 
             string fontDescriptorKey = font.GlyphTypeface.Key;
+            // Fast path: The cache is a ConcurrentDictionary, so looking up an existing descriptor needs
+            // no lock. Only creating a new one does. Formerly, every lookup took the global font lock.
+            if (OtGlobals.Global.OTFonts.FontDescriptorCache.TryGetValue(fontDescriptorKey, out var cachedDescriptor))
+                return cachedDescriptor;
             try
             {
                 var cache = OtGlobals.Global.OTFonts.FontDescriptorCache;  // TODO HACK
@@ -52,6 +56,10 @@ namespace PdfSharp.Fonts
             glyphTypeface.CheckVersion();
 
             string fontDescriptorKey = glyphTypeface.Key;
+            // Fast path: The cache is a ConcurrentDictionary, so looking up an existing descriptor needs
+            // no lock. Only creating a new one does. Formerly, every lookup took the global font lock.
+            if (OtGlobals.Global.OTFonts.FontDescriptorCache.TryGetValue(fontDescriptorKey, out var cachedDescriptor))
+                return cachedDescriptor;
             try
             {
                 var cache = OtGlobals.Global.OTFonts.FontDescriptorCache;
@@ -80,6 +88,10 @@ namespace PdfSharp.Fonts
 
             //FontSelector1 selector = new FontSelector1(fontFamilyName, style);
             string fontDescriptorKey = KeyHelper.ComputeFdKey(fontFamilyName, (OTFontStyleHack)style);
+            // Fast path: The cache is a ConcurrentDictionary, so looking up an existing descriptor needs
+            // no lock. Only creating a new one does. Formerly, every lookup took the global font lock.
+            if (OtGlobals.Global.OTFonts.FontDescriptorCache.TryGetValue(fontDescriptorKey, out var cachedDescriptor))
+                return cachedDescriptor;
             try
             {
                 //var cache = Globals.Global.Fonts.FontDescriptorCache;

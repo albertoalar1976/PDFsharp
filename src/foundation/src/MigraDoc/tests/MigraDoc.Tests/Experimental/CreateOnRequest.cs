@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using Xunit;
 
-#if NET8_0_OR_GREATER
 namespace MigraDoc.Tests.Experimental.CreateOnRequest
 {
     public class Paragraph
@@ -328,4 +327,3 @@ namespace MigraDoc.Tests.Experimental.CreateOnRequest
         }
     }
 }
-#endif

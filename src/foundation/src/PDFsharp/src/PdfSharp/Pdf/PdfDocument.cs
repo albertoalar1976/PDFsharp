@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using Microsoft.Extensions.Logging;
 using PdfSharp.Internal;
 using PdfSharp.Internal.OpenType;
@@ -106,13 +107,8 @@ namespace PdfSharp.Pdf
             Trailer.CreateNewDocumentIDs();
         }
 
-        /// <summary>
-        /// Why we need XML documentation here?
-        /// </summary>
-        ~PdfDocument()
-        {
-            Dispose(false);
-        }
+        // No finalizer: a PdfDocument holds no unmanaged resources. The former finalizer only put every
+        // document on the finalization queue and raised the user’s Disposed event on the finalizer thread.
 
         /// <summary>
         /// Disposes all references to this document stored in other documents. This function should be called
@@ -121,23 +117,14 @@ namespace PdfSharp.Pdf
         /// </summary>
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        void Dispose(bool disposing)
-        {
             if (State != DocumentState.Disposed)
             {
                 Events.OnDisposed(this, new DocumentEventArgs(this)); // MaOs4StLa Review.
 
-                if (disposing)
+                // Dispose managed resources.
+                if (OutStream is not null)
                 {
-                    // Dispose managed resources.
-                    if (OutStream is not null)
-                    {
-                        ((IDisposable)OutStream).Dispose();
-                    }
+                    ((IDisposable)OutStream).Dispose();
                 }
                 //PdfDocument.Gob.DetachDocument(Handle);
             }
@@ -225,7 +212,7 @@ namespace PdfSharp.Pdf
                 var writer = new PdfWriter(OutStream, this, effectiveSecurityHandler);
                 try
                 {
-                    DoSaveAsync(writer).GetAwaiter().GetResult();
+                    DoSaveAsync(writer, CancellationToken.None).GetAwaiter().GetResult();
                 }
                 finally
                 {
@@ -248,7 +235,13 @@ namespace PdfSharp.Pdf
         /// The async version of save is useful if you want to create a signed PDF file with a time stamp.
         /// A time stamp server should be accessed asynchronously, and therefore we introduced this function.
         /// </summary>
-        public async Task SaveAsync(string path)
+        public Task SaveAsync(string path)
+            => SaveAsync(path, CancellationToken.None);
+
+        /// <summary>
+        /// Saves the document async to the specified path. If a file already exists, it will be overwritten.
+        /// </summary>
+        public async Task SaveAsync(string path, CancellationToken cancellationToken)
         {
             EnsureNotYetSaved();
 
@@ -258,9 +251,10 @@ namespace PdfSharp.Pdf
             // We need ReadWrite when adding a signature. Write is sufficient if not adding a signature.
             var fileAccess = DigitalSignatureHandler == null ? FileAccess.Write : FileAccess.ReadWrite;
 
+            // PdfWriter writes synchronously, so the file is not opened for asynchronous I/O.
             // ReSharper disable once UseAwaitUsing because we need no DisposeAsync for a simple FileStream.
             using var stream = new FileStream(path, FileMode.Create, fileAccess, FileShare.None);
-            await SaveAsync(stream).ConfigureAwait(false);
+            await SaveAsync(stream, false, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -277,8 +271,19 @@ namespace PdfSharp.Pdf
         /// The async version of save is useful if you want to create a signed PDF file with a time stamp.
         /// A time stamp server should be accessed asynchronously, and therefore we introduced this function.
         /// </summary>
-        public async Task SaveAsync(Stream stream, bool closeStream = false)
+        public Task SaveAsync(Stream stream, bool closeStream = false)
+            => SaveAsync(stream, closeStream, CancellationToken.None);
+
+        /// <summary>
+        /// Saves the document to the specified stream.
+        /// The stream need not support seeking. If it does not, or if it does not start at position 0,
+        /// the document is created in memory first and then copied asynchronously to the stream.
+        /// This makes it possible to write directly to streams like HttpResponse.Body in ASP.NET Core,
+        /// which neither support seeking nor allow synchronous writing.
+        /// </summary>
+        public async Task SaveAsync(Stream stream, bool closeStream, CancellationToken cancellationToken)
         {
+            ArgumentNullException.ThrowIfNull(stream);
             EnsureNotYetSaved();
 
             if (!stream.CanWrite)
@@ -286,6 +291,29 @@ namespace PdfSharp.Pdf
 
             if (!SaveAnyway && !CanModify)
                 throw new InvalidOperationException(PsMsgs.CannotModify);
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            // PdfWriter uses the stream position for the byte offsets of the cross-reference table, and signing
+            // reads back what was written. So write to memory first if the stream cannot seek, does not start at
+            // position 0 (the offsets would be wrong), or cannot be read back for signing.
+            if (!stream.CanSeek || stream.Position != 0 || (DigitalSignatureHandler != null && !stream.CanRead))
+            {
+                var buffer = new MemoryStream();
+                await SaveAsync(buffer, false, cancellationToken).ConfigureAwait(false);
+                buffer.Position = 0;
+                try
+                {
+                    await buffer.CopyToAsync(stream, cancellationToken).ConfigureAwait(false);
+                    await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
+                }
+                finally
+                {
+                    if (closeStream)
+                        await stream.DisposeAsync().ConfigureAwait(false);
+                }
+                return;
+            }
 
             // #PDF-A
             if (IsPdfA)
@@ -303,7 +331,7 @@ namespace PdfSharp.Pdf
             try
             {
                 writer = new(stream, this, effectiveSecurityHandler);
-                await DoSaveAsync(writer).ConfigureAwait(false);
+                await DoSaveAsync(writer, cancellationToken).ConfigureAwait(false);
             }
             finally
             {
@@ -327,7 +355,7 @@ namespace PdfSharp.Pdf
         /// <summary>
         /// Implements saving a PDF file.
         /// </summary>
-        async Task DoSaveAsync(PdfWriter writer)
+        async Task DoSaveAsync(PdfWriter writer, CancellationToken cancellationToken)
         {
             PdfSharpLogHost.Logger.PdfDocumentSaved(Name);
 
@@ -378,6 +406,10 @@ namespace PdfSharp.Pdf
                 int count = irefs.Length;
                 for (int idx = 0; idx < count; idx++)
                 {
+                    // Check every 100 objects; checking a CancellationToken is cheap, but not free.
+                    if (idx % 100 == 0)
+                        cancellationToken.ThrowIfCancellationRequested();
+
                     PdfReference iref = irefs[idx];
 #if DEBUG_
                     if (iref.ObjectNumber == 18)
@@ -1195,7 +1227,7 @@ namespace PdfSharp.Pdf
 
             readonly WeakReference _weakRef = new(document);
 
-            public readonly string ID = document.Guid.ToString("B").ToUpper();
+            public readonly string ID = document.Guid.ToString("B", CultureInfo.InvariantCulture).ToUpperInvariant();
 
 
 

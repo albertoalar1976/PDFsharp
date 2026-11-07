@@ -1,0 +1,13 @@
+# Analyzer rules for code that is shipped in the PDFsharp and MigraDoc NuGet packages.
+# Included by Directory.Build.props for all projects in foundation/src/*/src/.
+is_global = true
+
+# Globalization: PDF and RTF files must not depend on the culture of the machine that creates them.
+# Examples of bugs these rules found: PDF dates written with the Thai or Hijri calendar (year 2569 or 1448),
+# and unit or color names not recognized under Turkish culture because "IN".ToLower() is "ın".
+# Use the invariant culture for file formats and an explicit CultureInfo.CurrentCulture for text shown to users.
+dotnet_diagnostic.CA1304.severity = warning
+dotnet_diagnostic.CA1305.severity = warning
+dotnet_diagnostic.CA1309.severity = warning
+dotnet_diagnostic.CA1310.severity = warning
+dotnet_diagnostic.CA1311.severity = warning

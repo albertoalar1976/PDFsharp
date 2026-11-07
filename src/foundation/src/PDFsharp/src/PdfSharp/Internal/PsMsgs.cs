@@ -2,6 +2,7 @@
 // PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 
@@ -118,7 +119,7 @@ namespace PdfSharp.Internal
 
         public static string ImportPageNumberOutOfRange(int pageNumber, int maxPage, string path)
         {
-            return String.Format("The page cannot be imported from document '{2}', because the page number is out of range. " +
+            return String.Format(CultureInfo.InvariantCulture, "The page cannot be imported from document '{2}', because the page number is out of range. " +
               "The specified page number is {0}, but it must be in the range from 1 to {1}.", pageNumber, maxPage, path);
         }
 

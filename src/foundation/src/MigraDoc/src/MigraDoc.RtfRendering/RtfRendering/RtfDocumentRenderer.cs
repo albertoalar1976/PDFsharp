@@ -101,8 +101,8 @@ namespace MigraDoc.RtfRendering
                     {
                         if (closeStream)
                             streamWriter.Close();
-                        else
-                            stream.Position = 0; // Reset the stream position if the stream is kept open.
+                        else if (stream.CanSeek)
+                            stream.Position = 0; // Reset the stream position if the stream is kept open (if it can seek).
                     }
                 }
             }
@@ -168,8 +168,8 @@ namespace MigraDoc.RtfRendering
             _colorList.Clear();
             _colorList.Add(Colors.Black);//!!necessary for borders!!
             _listList.Clear();
-            ListInfoRenderer.Clear();
-            ListInfoOverrideRenderer.Clear();
+            // Each rendering starts with fresh list numbering.
+            Lists = new();
             CollectTables(Document);
         }
 
@@ -520,5 +520,62 @@ namespace MigraDoc.RtfRendering
         readonly List<Color> _colorList = new();
         readonly List<string> _fontList = new();
         readonly List<ListInfo> _listList = new();
+
+        /// <summary>
+        /// Gets the list numbering state of the current rendering.
+        /// </summary>
+        internal ListNumbering Lists { get; private set; } = new();
+
+        /// <summary>
+        /// The list numbering state of one rendering, used by ListInfoRenderer (\listtable)
+        /// and ListInfoOverrideRenderer (\listoverridetable).
+        /// Formerly, this state was kept in static fields. Documents rendered to RTF in parallel
+        /// corrupted each other’s list numbers, and the previous list of the last rendered document
+        /// leaked into the next one via ContinuePreviousList.
+        /// </summary>
+        internal sealed class ListNumbering
+        {
+            /// <summary>
+            /// The \listid of each ListInfo.
+            /// </summary>
+            public Dictionary<ListInfo, int> ListIDs { get; } = new();
+
+            /// <summary>
+            /// The ListInfo rendered last and its \listid. Used for ContinuePreviousList.
+            /// </summary>
+            public KeyValuePair<ListInfo, int> PreviousListInfoID { get; set; }
+
+            /// <summary>
+            /// The \listid for the next list.
+            /// </summary>
+            public int NextListID { get; set; } = 1;
+
+            /// <summary>
+            /// The \leveltemplateid for the next list.
+            /// </summary>
+            public int NextTemplateID { get; set; } = 2;
+
+            /// <summary>
+            /// The \ls number of each ListInfo in the \listoverridetable.
+            /// </summary>
+            public Dictionary<ListInfo, int> ListNumbers { get; } = new();
+
+            /// <summary>
+            /// The \ls number for the next list in the \listoverridetable.
+            /// </summary>
+            public int NextListNumber { get; set; } = 1;
+
+            /// <summary>
+            /// Gets the \listid of the ListInfo, or -1 if it has none.
+            /// </summary>
+            public int GetListID(ListInfo listInfo)
+                => ListIDs.TryGetValue(listInfo, out var id) ? id : -1;
+
+            /// <summary>
+            /// Gets the \ls number of the ListInfo, or -1 if it has none.
+            /// </summary>
+            public int GetListNumber(ListInfo listInfo)
+                => ListNumbers.TryGetValue(listInfo, out var number) ? number : -1;
+        }
     }
 }

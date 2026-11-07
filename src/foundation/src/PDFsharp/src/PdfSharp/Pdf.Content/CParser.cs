@@ -3,6 +3,7 @@
 
 using PdfSharp.Internal;
 using PdfSharp.Pdf.Advanced;
+using PdfSharp.Pdf.IO;
 using PdfSharp.Pdf.Content.Objects;
 
 // v7.0.0  REVIEW
@@ -69,10 +70,29 @@ namespace PdfSharp.Pdf.Content
         /// </summary>
         void ParseArray(CArray array)
         {
-            var sequence = new CSequence();
-            ParseObject(sequence, CSymbol.EndArray);
-            array.Add(sequence);
+            // Security: ParseArray and ParseObject call each other recursively. Without a limit, a content stream
+            // like '[[[[[...' from a hostile file would crash the process with a StackOverflowException,
+            // which cannot be caught.
+            if (_arrayNestingDepth >= PdfReaderOptions.DefaultMaxNestingDepth)
+            {
+                ContentReaderDiagnostics.ThrowContentReaderException(
+                    Invariant($"Arrays in the content stream are nested deeper than {PdfReaderOptions.DefaultMaxNestingDepth} levels."));
+            }
+
+            _arrayNestingDepth++;
+            try
+            {
+                var sequence = new CSequence();
+                ParseObject(sequence, CSymbol.EndArray);
+                array.Add(sequence);
+            }
+            finally
+            {
+                _arrayNestingDepth--;
+            }
         }
+
+        int _arrayNestingDepth;
 
         /// <summary>
         /// Parses whatever comes until the specified stop symbol is reached.

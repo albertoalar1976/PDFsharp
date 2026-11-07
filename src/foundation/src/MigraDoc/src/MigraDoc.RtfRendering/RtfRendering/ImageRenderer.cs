@@ -1,6 +1,7 @@
 // MigraDoc - Creating Documents on the Fly
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using System;
 using System.Diagnostics;
 using System.Reflection;
@@ -330,7 +331,7 @@ namespace MigraDoc.RtfRendering
             }
 
             // Simple case: We have a filename.
-            return _extension = Path.GetExtension(_filePath).ToLower();
+            return _extension = Path.GetExtension(_filePath).ToLowerInvariant();
         }
 
         /// <summary>
@@ -344,7 +345,7 @@ namespace MigraDoc.RtfRendering
                 int byteVal;
                 while ((byteVal = _imageFile.ReadByte()) != -1)
                 {
-                    string strVal = byteVal.ToString("x");
+                    string strVal = byteVal.ToString("x", CultureInfo.InvariantCulture);
                     if (strVal.Length == 1)
                         _rtfWriter.WriteText("0");
                     _rtfWriter.WriteText(strVal);

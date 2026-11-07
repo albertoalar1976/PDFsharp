@@ -100,6 +100,14 @@ namespace MigraDoc.DocumentObjectModel
         protected override object DeepCopy()
         {
             Hyperlink hyperlink = (Hyperlink)base.DeepCopy();
+            // The font must be copied, too. Otherwise, the clone shares it with the original,
+            // and the font’s parent is still the original hyperlink.
+            if (hyperlink.Values.Font is not null)
+            {
+                hyperlink.Values.Font = hyperlink.Values.Font.Clone();
+                hyperlink.Values.Font.Parent = hyperlink;
+            }
+
             if (hyperlink.Values.Elements is not null)
             {
                 hyperlink.Values.Elements = hyperlink.Values.Elements.Clone();

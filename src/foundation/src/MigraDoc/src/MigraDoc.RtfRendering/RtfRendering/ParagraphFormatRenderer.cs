@@ -100,7 +100,7 @@ namespace MigraDoc.RtfRendering
             var listInfo = GetValueAsIntended("ListInfo");
             if (listInfo != null)
             {
-                int nr = ListInfoOverrideRenderer.GetListNumber((ListInfo)listInfo);
+                int nr = _docRenderer.Lists.GetListNumber((ListInfo)listInfo);
                 if (nr > 0)
                     _rtfWriter.WriteControl("ls", nr);
             }

@@ -32,7 +32,10 @@ namespace PdfSharp.Pdf.Security
 
         void SetDefaultEncryption()
         {
-            SetEncryptionToV4UsingAES(); // Initialize with the most recent encryption method not requiring PDF 2.0.
+            // AES-256 (V5, revision 6). PDF 2.0 deprecates the older methods: V4 derives the key from the password
+            // with MD5 and RC4, which makes brute-forcing passwords much easier. V5 requires PDF 2.0, so the
+            // document version is raised to 2.0. Call SetEncryptionToV4UsingAES for PDF 1.x readers.
+            SetEncryptionToV5();
         }
 
         /// <summary>

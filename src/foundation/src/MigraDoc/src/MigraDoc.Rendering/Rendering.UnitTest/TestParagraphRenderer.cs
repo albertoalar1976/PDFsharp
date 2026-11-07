@@ -1,6 +1,7 @@
 // MigraDoc - Creating Documents on the Fly
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using MigraDoc.DocumentObjectModel;
 
 namespace MigraDoc.Rendering.UnitTest
@@ -21,11 +22,11 @@ namespace MigraDoc.Rendering.UnitTest
             for (int idx = 0; idx <= 40; idx++)
             {
                 par.AddCharacter(SymbolName.Blank);
-                par.AddText(idx.ToString());
+                par.AddText(idx.ToString(CultureInfo.CurrentCulture));
                 par.AddCharacter(SymbolName.Blank);
-                par.AddText((idx + 1).ToString());
+                par.AddText((idx + 1).ToString(CultureInfo.CurrentCulture));
                 par.AddCharacter(SymbolName.Blank);
-                par.AddText((idx + 2).ToString());
+                par.AddText((idx + 2).ToString(CultureInfo.CurrentCulture));
             }
             var renderer = new PdfDocumentRenderer { Document = document };
             renderer.RenderDocument();
@@ -52,18 +53,18 @@ namespace MigraDoc.Rendering.UnitTest
             {
                 if (idx < 60)
                 {
-                    var formText = par.AddFormattedText((idx).ToString(), TextFormat.Bold);
+                    var formText = par.AddFormattedText((idx).ToString(CultureInfo.CurrentCulture), TextFormat.Bold);
                     formText.Font.Size = 16;
                     formText.AddText(" ");
                 }
                 else if (idx < 100)
                 {
-                    par.AddText((idx).ToString());
+                    par.AddText((idx).ToString(CultureInfo.CurrentCulture));
                     par.AddText(" ");
                 }
                 else
                 {
-                    var formText = par.AddFormattedText((idx).ToString(), TextFormat.Italic);
+                    var formText = par.AddFormattedText((idx).ToString(CultureInfo.CurrentCulture), TextFormat.Italic);
                     formText.Font.Size = 6;
                     formText.AddText(" ");
                 }

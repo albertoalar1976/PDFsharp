@@ -105,10 +105,8 @@ namespace PdfSharp.Tests.Pdf.ObjectModel
             var parsed1 = Single.Parse(((double)Single.MaxValue).ToString("#"));
             var parsed2 = Double.Parse(((double)Single.MaxValue).ToString("#"));
 
-#if NET8_0_OR_GREATER
             // Throws in .NET Framework
             var parsed3 = Single.Parse("3402823466385288598117041834845169259990");
-#endif
             var parsed4 = Double.Parse(((double)Single.MaxValue).ToString("#"));
             var xxxx = new PdfReal(Single.MaxValue);
             var yyyy = new PdfReal(Single.MinValue);

@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using PdfSharp.Pdf.IO;
@@ -56,7 +57,7 @@ namespace PdfSharp.Pdf.Advanced
 
             var guid = new StringBuilder();
             for (int idx = 0; idx < 16; idx++)
-                guid.AppendFormat("{0:X2}", (byte)id[idx]);
+                guid.AppendFormat(CultureInfo.InvariantCulture, "{0:X2}", (byte)id[idx]);
 
             return new Guid(guid.ToString());
         }

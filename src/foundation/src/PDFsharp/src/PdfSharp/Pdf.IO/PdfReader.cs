@@ -249,6 +249,71 @@ namespace PdfSharp.Pdf.IO
         }
 
         /// <summary>
+        /// Opens an existing PDF document asynchronously.
+        /// The whole stream is read asynchronously into memory first, then the document is parsed.
+        /// Use this function in ASP.NET Core and Blazor Server, e.g. with IFormFile.OpenReadStream(),
+        /// where synchronous I/O blocks a thread or is not allowed at all.
+        /// The stream is read from its beginning if it supports seeking, otherwise from its current position.
+        /// </summary>
+        public static Task<PdfDocument> OpenAsync(Stream stream, PdfDocumentOpenMode openMode = PdfDocumentOpenMode.Modify,
+            PdfReaderOptions? options = null, CancellationToken cancellationToken = default)
+            => OpenAsync(stream, null, openMode, null, options, cancellationToken);
+
+        /// <summary>
+        /// Opens an existing PDF document asynchronously.
+        /// The whole stream is read asynchronously into memory first, then the document is parsed.
+        /// The stream is read from its beginning if it supports seeking, otherwise from its current position.
+        /// </summary>
+        public static async Task<PdfDocument> OpenAsync(Stream stream, string? password, PdfDocumentOpenMode openMode,
+            PdfPasswordProvider? passwordProvider, PdfReaderOptions? options = null, CancellationToken cancellationToken = default)
+        {
+            ArgumentNullException.ThrowIfNull(stream);
+
+            var buffer = await ReadIntoMemoryAsync(stream, cancellationToken).ConfigureAwait(false);
+            return Open(buffer, password, openMode, passwordProvider, options);
+        }
+
+        /// <summary>
+        /// Opens an existing PDF file asynchronously.
+        /// The whole file is read asynchronously into memory first, then the document is parsed.
+        /// </summary>
+        public static async Task<PdfDocument> OpenAsync(string path, PdfDocumentOpenMode openMode = PdfDocumentOpenMode.Modify,
+            PdfReaderOptions? options = null, CancellationToken cancellationToken = default)
+        {
+            MemoryStream buffer;
+            await using (var file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true))
+                buffer = await ReadIntoMemoryAsync(file, cancellationToken).ConfigureAwait(false);
+
+            var document = Open(buffer, null, openMode, null, options);
+            if (document != null!)
+                document.FullPath = Path.GetFullPath(path);
+            return document!;
+        }
+
+        static async Task<MemoryStream> ReadIntoMemoryAsync(Stream stream, CancellationToken cancellationToken)
+        {
+            if (!stream.CanRead)
+                throw new PdfReaderException("PdfReader needs a stream that supports reading.");
+
+            MemoryStream buffer;
+            if (stream.CanSeek)
+            {
+                // Like Open, read the whole stream from its beginning.
+                stream.Position = 0;
+                var length = stream.Length;
+                buffer = length <= Int32.MaxValue ? new MemoryStream((int)length) : new MemoryStream();
+            }
+            else
+            {
+                buffer = new MemoryStream();
+            }
+
+            await stream.CopyToAsync(buffer, cancellationToken).ConfigureAwait(false);
+            buffer.Position = 0;
+            return buffer;
+        }
+
+        /// <summary>
         /// Opens a PDF document from a file.
         /// </summary>
         PdfDocument OpenFromFile(string path, string? password, PdfDocumentOpenMode openMode, PdfPasswordProvider? passwordProvider)
@@ -284,7 +349,14 @@ namespace PdfSharp.Pdf.IO
                 if (!stream.CanRead)
                     throw new PdfReaderException("PdfReader needs a stream that supports reading.");
                 if (!stream.CanSeek)
-                    throw new PdfReaderException("PdfReader needs a stream that supports seeking.");
+                {
+                    // The parser needs random access. Copy a forward-only stream, e.g. a network stream or
+                    // the body of an HTTP request, into memory. Use OpenAsync to copy it asynchronously.
+                    var buffer = new MemoryStream();
+                    stream.CopyTo(buffer);
+                    buffer.Position = 0;
+                    stream = buffer;
+                }
 
                 var lexer = new Lexer(stream, _logger);
                 _document = new PdfDocument(lexer);
@@ -494,6 +566,9 @@ namespace PdfSharp.Pdf.IO
                 _logger.LogError(ex, "Reading PDF document failed.");
                 throw;
             }
+            // All objects are read now. Release the lexer, so that it does not keep the input stream
+            // (often a large MemoryStream) alive as long as the document is in use.
+            _document._lexer = null;
             return _document;
         }
 

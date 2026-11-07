@@ -97,7 +97,7 @@ namespace PdfSharp.Internal.OpenType
             familyKeys.CopyTo(keys, 0);
             Array.Sort(keys, StringComparer.OrdinalIgnoreCase);
             foreach (string key in keys)
-                state.AppendFormat("  {0}: {1}\n", key, _storage.FontFaceCache[key].DebuggerDisplay);
+                state.AppendFormat(CultureInfo.InvariantCulture, "  {0}: {1}\n", key, _storage.FontFaceCache[key].DebuggerDisplay);
             state.Append("\n");
             return state.ToString();
         }

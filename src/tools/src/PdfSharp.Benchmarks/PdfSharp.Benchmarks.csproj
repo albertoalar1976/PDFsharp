@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Measures time and allocated memory of typical PDFsharp and MigraDoc workloads.
+    Run with:  dotnet run -c Release (in this folder)
+    The fonts come from the assets folder (run dev/download-assets.ps1 first).
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>$(PDFsharpTargetFrameworks_NetOnly_Exe)</TargetFramework>
+    <RootNamespace>PdfSharp.Benchmarks</RootNamespace>
+    <ServerGarbageCollection>false</ServerGarbageCollection>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\foundation\src\MigraDoc\src\MigraDoc.Rendering\MigraDoc.Rendering.csproj" />
+    <ProjectReference Include="..\..\..\foundation\src\shared\src\PdfSharp.Quality\PdfSharp.Quality.csproj" />
+  </ItemGroup>
+
+</Project>

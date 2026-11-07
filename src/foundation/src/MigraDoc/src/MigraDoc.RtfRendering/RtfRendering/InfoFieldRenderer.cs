@@ -25,7 +25,7 @@ namespace MigraDoc.RtfRendering
         {
             StartField();
             _rtfWriter.WriteText("INFO ");
-            switch (_infoField.Name.ToLower())
+            switch (_infoField.Name.ToLowerInvariant())
             {
                 case "author":
                     _rtfWriter.WriteText("Author");

@@ -1,7 +1,6 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
-#if NET8_0_OR_GREATER
 using System.Diagnostics;
 using System.Text;
 using PdfSharp.Pdf;
@@ -278,4 +277,3 @@ namespace PdfSharp.Tests.Pdf.Forms // TODO: FormsCleanUp: Folder Pdf.Forms can b
         }
     }
 }
-#endif

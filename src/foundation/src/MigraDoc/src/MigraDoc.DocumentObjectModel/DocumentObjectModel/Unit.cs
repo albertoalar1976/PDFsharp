@@ -313,9 +313,9 @@ namespace MigraDoc.DocumentObjectModel
         public string ToString(string format)
         {
             if (IsNull)
-                return 0.ToString(format);
+                return 0.ToString(format, CultureInfo.CurrentCulture);
 
-            var value = _value.ToString(format) + GetSuffix();
+            var value = _value.ToString(format, CultureInfo.CurrentCulture) + GetSuffix();
             return value;
         }
 
@@ -467,7 +467,7 @@ namespace MigraDoc.DocumentObjectModel
                 throw new ArgumentException(MdDomMsgs.InvalidUnitValue(value).Message, ex);
             }
 
-            var typeStr = value[valLen..].Trim().ToLower();
+            var typeStr = value[valLen..].Trim().ToLowerInvariant();
             unit._type = UnitType.Point;
             switch (typeStr)
             {

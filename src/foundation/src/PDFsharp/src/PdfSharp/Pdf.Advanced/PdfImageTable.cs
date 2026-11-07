@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using System.Runtime.InteropServices;
 using PdfSharp.Drawing;
 #if CORE
@@ -139,14 +140,10 @@ namespace PdfSharp.Pdf.Advanced
                 // Use full path plus value of interpolate to identify an image.
                 // Path must be at start because '*' identifies pseudo path names.
                 // We assume a case-insensitive filesystem under Windows.
-#if NET462
-                Path = selector.ToLowerInvariant() + '|' + image.Interpolate;
-#else
                 if (Capabilities.OperatingSystem.IsWindows)
                     Path = selector.ToLowerInvariant() + '|' + image.Interpolate;
                 else
                     Path = selector + '|' + image.Interpolate;
-#endif
                 // Path must be set. Leading '*' indicates pseudo-paths.
                 if (image._path == null!)
                     image._path = Path;
@@ -203,7 +200,7 @@ namespace PdfSharp.Pdf.Advanced
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < hash.Length; i++)
                 {
-                    sb.Append(hash[i].ToString("X2"));
+                    sb.Append(hash[i].ToString("X2", CultureInfo.InvariantCulture));
                 }
                 return sb.ToString();
             }

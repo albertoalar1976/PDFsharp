@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using System.Collections.Concurrent;
 using System.Text;
 using PdfSharp.Internal;
@@ -301,7 +302,7 @@ namespace PdfSharp.Fonts
             keyCollection.CopyTo(keys, 0);
             Array.Sort(keys, StringComparer.OrdinalIgnoreCase);
             foreach (string key in keys)
-                state.AppendFormat("  {0}: {1}\n", key, PsGlobals.Global.Fonts.FontResolverInfosByName[key].DebuggerDisplay);
+                state.AppendFormat(CultureInfo.InvariantCulture, "  {0}: {1}\n", key, PsGlobals.Global.Fonts.FontResolverInfosByName[key].DebuggerDisplay);
             state.Append('\n');
 
             // FontSource by key.
@@ -312,14 +313,14 @@ namespace PdfSharp.Fonts
             fontSourceKeys.CopyTo(ulKeys, 0);
             Array.Sort(ulKeys, (x, y) => x == y ? 0 : (x > y ? 1 : -1));
             foreach (ulong ul in ulKeys)
-                state.AppendFormat("  {0}: {1}\n", ul, PsGlobals.Global.Fonts.FontSourcesByKey[ul].DebuggerDisplay);
+                state.AppendFormat(CultureInfo.InvariantCulture, "  {0}: {1}\n", ul, PsGlobals.Global.Fonts.FontSourcesByKey[ul].DebuggerDisplay);
             var fontSourceNames = PsGlobals.Global.Fonts.FontSourcesByName.Keys;
             count = fontSourceNames.Count;
             keys = new string[count];
             fontSourceNames.CopyTo(keys, 0);
             Array.Sort(keys, StringComparer.OrdinalIgnoreCase);
             foreach (string key in keys)
-                state.AppendFormat("  {0}: {1}\n", key, PsGlobals.Global.Fonts.FontSourcesByName[key].DebuggerDisplay);
+                state.AppendFormat(CultureInfo.InvariantCulture, "  {0}: {1}\n", key, PsGlobals.Global.Fonts.FontSourcesByName[key].DebuggerDisplay);
             state.Append("--------------------\n\n");
 
             // FontFamilyInternal by name.

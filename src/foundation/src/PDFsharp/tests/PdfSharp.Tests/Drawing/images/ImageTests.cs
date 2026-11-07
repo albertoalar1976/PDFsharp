@@ -75,47 +75,47 @@ namespace PdfSharp.Tests.Drawing
             gfx.DrawString("Hello, World!", font, XBrushes.Black,
                 new XRect(0, 0, width, height), XStringFormats.Center);
 
-            //var imagePath = "PDFsharp/images/samples/jpeg/windows7problem.jpg"; // OK
-            //var imagePath = "PDFsharp/images/samples/jpeg/TruecolorNoAlpha.jpg"; // OK
-            //var imagePath = "PDFsharp/images/samples/jpeg/truecolorA.jpg"; // OK
-            //var imagePath = "PDFsharp/images/samples/jpeg/PowerBooks_CMYK.jpg"; // OK. Starts with EXIF header, not JFIF header.
-            //var imagePath = "PDFsharp/images/samples/jpeg/indexedmonoA.jpg"; // OK
-            //var imagePath = "PDFsharp/images/samples/jpeg/grayscaleNoAlpha.jpg"; // OK
-            //var imagePath = "PDFsharp/images/samples/jpeg/grayscaleA.jpg"; // OK
-            //var imagePath = "PDFsharp/images/samples/jpeg/color8A.jpg"; // OK
-            //var imagePath = "PDFsharp/images/samples/jpeg/color4A.jpg"; // OK
-            //var imagePath = "PDFsharp/images/samples/jpeg/blackwhiteA.jpg"; // OK
-            //var imagePath = "PDFsharp/images/samples/jpeg/Balloons_CMYK.jpg"; // OK
-            //var imagePath = "PDFsharp/images/samples/jpeg/Balloons_CMYK - Copy.jpg"; // OK
+            //var imagePath = "pdfsharp/images/samples/jpeg/windows7problem.jpg"; // OK
+            //var imagePath = "pdfsharp/images/samples/jpeg/TruecolorNoAlpha.jpg"; // OK
+            //var imagePath = "pdfsharp/images/samples/jpeg/truecolorA.jpg"; // OK
+            //var imagePath = "pdfsharp/images/samples/jpeg/PowerBooks_CMYK.jpg"; // OK. Starts with EXIF header, not JFIF header.
+            //var imagePath = "pdfsharp/images/samples/jpeg/indexedmonoA.jpg"; // OK
+            //var imagePath = "pdfsharp/images/samples/jpeg/grayscaleNoAlpha.jpg"; // OK
+            //var imagePath = "pdfsharp/images/samples/jpeg/grayscaleA.jpg"; // OK
+            //var imagePath = "pdfsharp/images/samples/jpeg/color8A.jpg"; // OK
+            //var imagePath = "pdfsharp/images/samples/jpeg/color4A.jpg"; // OK
+            //var imagePath = "pdfsharp/images/samples/jpeg/blackwhiteA.jpg"; // OK
+            //var imagePath = "pdfsharp/images/samples/jpeg/Balloons_CMYK.jpg"; // OK
+            //var imagePath = "pdfsharp/images/samples/jpeg/Balloons_CMYK - Copy.jpg"; // OK
 
-            //var imagePath = "PDFsharp/images/samples/bmp/BlackwhiteA.bmp"; // OK
-            //var imagePath = "PDFsharp/images/samples/bmp/BlackwhiteA2.bmp"; // OK
-            //var imagePath = "PDFsharp/images/samples/bmp/BlackwhiteTXT.bmp"; // OK
-            //var imagePath = "PDFsharp/images/samples/bmp/Color4A.bmp"; // OK
-            //var imagePath = "PDFsharp/images/samples/bmp/Color8A.bmp"; // OK
-            //var imagePath = "PDFsharp/images/samples/bmp/GrayscaleA.bmp"; // OK
-            //var imagePath = "PDFsharp/images/samples/bmp/IndexedmonoA.bmp"; // OK
-            //var imagePath = "PDFsharp/images/samples/bmp/Test_OS2.bmp"; // NYI!
-            //var imagePath = "PDFsharp/images/samples/bmp/TruecolorA.bmp"; // OK
-            //var imagePath = "PDFsharp/images/samples/bmp/TruecolorMSPaint.bmp"; // OK
+            //var imagePath = "pdfsharp/images/samples/bmp/BlackwhiteA.bmp"; // OK
+            //var imagePath = "pdfsharp/images/samples/bmp/BlackwhiteA2.bmp"; // OK
+            //var imagePath = "pdfsharp/images/samples/bmp/BlackwhiteTXT.bmp"; // OK
+            //var imagePath = "pdfsharp/images/samples/bmp/Color4A.bmp"; // OK
+            //var imagePath = "pdfsharp/images/samples/bmp/Color8A.bmp"; // OK
+            //var imagePath = "pdfsharp/images/samples/bmp/GrayscaleA.bmp"; // OK
+            //var imagePath = "pdfsharp/images/samples/bmp/IndexedmonoA.bmp"; // OK
+            //var imagePath = "pdfsharp/images/samples/bmp/Test_OS2.bmp"; // NYI!
+            //var imagePath = "pdfsharp/images/samples/bmp/TruecolorA.bmp"; // OK
+            //var imagePath = "pdfsharp/images/samples/bmp/TruecolorMSPaint.bmp"; // OK
 
-            //var imagePath = "PDFsharp/images/samples/png/windows7problem.png"; // NYI
-            //var imagePath = "PDFsharp/images/samples/png/truecolorAlpha.png"; // OK
-            //var imagePath = "PDFsharp/images/samples/png/truecolorA.png"; // OK
-            //var imagePath = "PDFsharp/images/samples/png/indexedmonoA.png"; // NYI
-            //var imagePath = "PDFsharp/images/samples/png/grayscaleAlpha.png"; // NYI
-            //var imagePath = "PDFsharp/images/samples/png/grayscaleA.png"; // NYI
-            //var imagePath = "PDFsharp/images/samples/png/color8A.png"; // OK
-            //var imagePath = "PDFsharp/images/samples/png/color4A.png"; // NYI
-            //var imagePath = "PDFsharp/images/samples/png/blackwhiteA.png"; // NYI
+            //var imagePath = "pdfsharp/images/samples/png/windows7problem.png"; // NYI
+            //var imagePath = "pdfsharp/images/samples/png/truecolorAlpha.png"; // OK
+            //var imagePath = "pdfsharp/images/samples/png/truecolorA.png"; // OK
+            //var imagePath = "pdfsharp/images/samples/png/indexedmonoA.png"; // NYI
+            //var imagePath = "pdfsharp/images/samples/png/grayscaleAlpha.png"; // NYI
+            //var imagePath = "pdfsharp/images/samples/png/grayscaleA.png"; // NYI
+            //var imagePath = "pdfsharp/images/samples/png/color8A.png"; // OK
+            //var imagePath = "pdfsharp/images/samples/png/color4A.png"; // NYI
+            //var imagePath = "pdfsharp/images/samples/png/blackwhiteA.png"; // NYI
 
-            //var imagePath = "PDFsharp/images/samples/MigraDoc.bmp"; // ARGB32
-            //var imagePath = "PDFsharp/images/samples/Logo landscape.bmp"; // RGB24
-            //var imagePath = "PDFsharp/images/samples/Logo landscape MS Paint.bmp"; // RGB24
-            //var imagePath = "PDFsharp/images/samples/Logo landscape 256.bmp"; // Palette8
-            //var imagePath = "PDFsharp/images/samples/MigraDoc.png"; // ARGB32
-            //var imagePath = "PDFsharp/images/samples/Logo landscape.png"; // RGB24
-            //var imagePath = "PDFsharp/images/samples/Logo landscape 256.png"; // Palette8
+            //var imagePath = "pdfsharp/images/samples/MigraDoc.bmp"; // ARGB32
+            //var imagePath = "pdfsharp/images/samples/Logo landscape.bmp"; // RGB24
+            //var imagePath = "pdfsharp/images/samples/Logo landscape MS Paint.bmp"; // RGB24
+            //var imagePath = "pdfsharp/images/samples/Logo landscape 256.bmp"; // Palette8
+            //var imagePath = "pdfsharp/images/samples/MigraDoc.png"; // ARGB32
+            //var imagePath = "pdfsharp/images/samples/Logo landscape.png"; // RGB24
+            //var imagePath = "pdfsharp/images/samples/Logo landscape 256.png"; // Palette8
 
             var imagePath = "pdfsharp-6.x/images/jpeg/extern/Zoo_JPEG_8BIM.jpg"; // OK
 
@@ -170,18 +170,18 @@ namespace PdfSharp.Tests.Drawing
 
             var imagePaths = new[]
             {
-                "PDFsharp/images/samples/jpeg/Balloons_CMYK - Copy.jpg",
-                "PDFsharp/images/samples/jpeg/Balloons_CMYK.jpg",
-                "PDFsharp/images/samples/jpeg/blackwhiteA.jpg",
-                "PDFsharp/images/samples/jpeg/color4A.jpg",
-                "PDFsharp/images/samples/jpeg/color8A.jpg",
-                "PDFsharp/images/samples/jpeg/grayscaleA.jpg",
-                "PDFsharp/images/samples/jpeg/grayscaleNoAlpha.jpg",
-                "PDFsharp/images/samples/jpeg/indexedmonoA.jpg",
-                "PDFsharp/images/samples/jpeg/PowerBooks_CMYK.jpg",
-                "PDFsharp/images/samples/jpeg/truecolorA.jpg",
-                "PDFsharp/images/samples/jpeg/TruecolorNoAlpha.jpg",
-                "PDFsharp/images/samples/jpeg/windows7problem.jpg"
+                "pdfsharp/images/samples/jpeg/Balloons_CMYK - Copy.jpg",
+                "pdfsharp/images/samples/jpeg/Balloons_CMYK.jpg",
+                "pdfsharp/images/samples/jpeg/blackwhiteA.jpg",
+                "pdfsharp/images/samples/jpeg/color4A.jpg",
+                "pdfsharp/images/samples/jpeg/color8A.jpg",
+                "pdfsharp/images/samples/jpeg/grayscaleA.jpg",
+                "pdfsharp/images/samples/jpeg/grayscaleNoAlpha.jpg",
+                "pdfsharp/images/samples/jpeg/indexedmonoA.jpg",
+                "pdfsharp/images/samples/jpeg/PowerBooks_CMYK.jpg",
+                "pdfsharp/images/samples/jpeg/truecolorA.jpg",
+                "pdfsharp/images/samples/jpeg/TruecolorNoAlpha.jpg",
+                "pdfsharp/images/samples/jpeg/windows7problem.jpg"
             };
 
             // Attempt to avoid "Out of memory" under .NET 4.6.2.
@@ -273,7 +273,7 @@ namespace PdfSharp.Tests.Drawing
                 var page = document.AddPage();
                 var gfx = XGraphics.FromPdfPage(page);
 
-                var imagePath = IOUtility.GetAssetsPath("PDFsharp/images/samples/jpeg/truecolorA.jpg")!;
+                var imagePath = IOUtility.GetAssetsPath("pdfsharp/images/samples/jpeg/truecolorA.jpg")!;
 
                 // WPF stores a reference to the stream internally.
                 // We must not destroy the stream before the PDF has been written, otherwise rendering the PDF will fail.
@@ -307,7 +307,7 @@ namespace PdfSharp.Tests.Drawing
                 var page = document.AddPage();
                 var gfx = XGraphics.FromPdfPage(page);
 
-                var imagePath = IOUtility.GetAssetsPath("PDFsharp/images/samples/jpeg/truecolorA.jpg")!;
+                var imagePath = IOUtility.GetAssetsPath("pdfsharp/images/samples/jpeg/truecolorA.jpg")!;
                 var pngBytes = File.ReadAllBytes(imagePath);
 
                 // Create a MemoryStream that does not allow GetBuffer.
@@ -340,7 +340,7 @@ namespace PdfSharp.Tests.Drawing
                 var page = document.AddPage();
                 var gfx = XGraphics.FromPdfPage(page);
 
-                var imagePath = IOUtility.GetAssetsPath("PDFsharp/images/samples/jpeg/truecolorA.jpg")!;
+                var imagePath = IOUtility.GetAssetsPath("pdfsharp/images/samples/jpeg/truecolorA.jpg")!;
                 var pngBytes = File.ReadAllBytes(imagePath);
 
                 // Create a MemoryStream that allows GetBuffer.
@@ -402,7 +402,6 @@ namespace PdfSharp.Tests.Drawing
 
 #endif
 
-#if NET8_0_OR_GREATER
         [Fact]
         public async Task PDF_with_Image_from_http_stream()
         {
@@ -435,6 +434,5 @@ namespace PdfSharp.Tests.Drawing
 
             }
         }
-#endif
     }
 }

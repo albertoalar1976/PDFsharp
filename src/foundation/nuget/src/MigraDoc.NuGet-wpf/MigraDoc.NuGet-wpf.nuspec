@@ -18,47 +18,20 @@
         <repository type="git" url="https://github.com/empira/PDFsharp" branch="master" commit="" />
         <title>$title$</title>
         <dependencies>
-            <group targetFramework="net8.0-windows7.0">
-                <dependency id="Microsoft.Extensions.Logging.Abstractions" version="$Logging_Abstractions_PackageVersion$" />
-                <dependency id="System.Security.Cryptography.Pkcs" version="$Cryptography_PackageVersion$" />
-                <dependency id="PDFsharp-WPF$pdfsharpnugetpackagetag$" version="$version$" />
-            </group>
-            <group targetFramework="net9.0-windows7.0">
-                <dependency id="Microsoft.Extensions.Logging.Abstractions" version="$Logging_Abstractions_PackageVersion$" />
-                <dependency id="System.Security.Cryptography.Pkcs" version="$Cryptography_PackageVersion$" />
-                <dependency id="PDFsharp-WPF$pdfsharpnugetpackagetag$" version="$version$" />
-            </group>
             <group targetFramework="net10.0-windows7.0">
-                <dependency id="Microsoft.Extensions.Logging.Abstractions" version="$Logging_Abstractions_PackageVersion$" />
-                <dependency id="System.Security.Cryptography.Pkcs" version="$Cryptography_PackageVersion$" />
-                <dependency id="PDFsharp-WPF$pdfsharpnugetpackagetag$" version="$version$" />
-            </group>
-            <group targetFramework="net462">
                 <dependency id="Microsoft.Extensions.Logging.Abstractions" version="$Logging_Abstractions_PackageVersion$" />
                 <dependency id="System.Security.Cryptography.Pkcs" version="$Cryptography_PackageVersion$" />
                 <dependency id="PDFsharp-WPF$pdfsharpnugetpackagetag$" version="$version$" />
             </group>
         </dependencies>
         <frameworkReferences>
-            <group targetFramework="net8.0-windows7.0">
-                <frameworkReference name="Microsoft.WindowsDesktop.App.WPF" />
-            </group>
-            <group targetFramework="net9.0-windows7.0">
-                <frameworkReference name="Microsoft.WindowsDesktop.App.WPF" />
-            </group>
             <group targetFramework="net10.0-windows7.0">
                 <frameworkReference name="Microsoft.WindowsDesktop.App.WPF" />
-            </group>
-            <group targetFramework="net462">
-                <!--<frameworkReference name="Microsoft.WindowsDesktop.App.WPF" />-->
             </group>
         </frameworkReferences>
     </metadata>
     <files>
-        <file src="bin\$config$\net8.0-windows\**\MigraDoc*.*" target="lib\net8.0-windows7.0\" exclude="**\*NuGet*"/>
-        <file src="bin\$config$\net9.0-windows\**\MigraDoc*.*" target="lib\net9.0-windows7.0\" exclude="**\*NuGet*"/>
         <file src="bin\$config$\net10.0-windows\**\MigraDoc*.*" target="lib\net10.0-windows7.0\" exclude="**\*NuGet*"/>
-        <file src="bin\$config$\net462\**\MigraDoc*.*" target="lib\net462\" exclude="**\*NuGet*"/>
         <file src="README.md" />
         <file src="..\..\..\..\..\assets\migradoc\images\MigraDoc-128x128.png" target="images\" />
     </files>

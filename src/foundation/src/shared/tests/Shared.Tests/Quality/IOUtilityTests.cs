@@ -37,13 +37,19 @@ namespace Shared.Tests.Quality
             path3.Should().Be("Foo/bar/");
         }
 
+        /// <summary>
+        /// File systems on Linux are case-sensitive, those on Windows and macOS usually are not.
+        /// Match file names case-insensitively, so that the tests pass on all platforms.
+        /// </summary>
+        static readonly EnumerationOptions CaseInsensitive = new() { MatchCasing = MatchCasing.CaseInsensitive };
+
         [Fact]
         public void GetSolutionRoot_Test()
         {
             var root = IOUtility.GetSolutionRoot();
             root.Should().NotBeNull();
 
-            var files = Directory.GetFiles(root!, "PDFsharp.sln"); // Case-sensitive under Linux.
+            var files = Directory.GetFiles(root!, "PDFsharp.sln", CaseInsensitive); // The file is named 'PdfSharp.sln'.
             files.Length.Should().Be(1);
         }
 
@@ -64,7 +70,7 @@ namespace Shared.Tests.Quality
             result.Should().NotBeNull();
             //Debug.Assert(result != null);
             result = Directory.GetParent(result!)?.FullName ?? "";
-            var files = Directory.GetFiles(result!, "PDFsharp.sln"); // Case-sensitive under Linux.
+            var files = Directory.GetFiles(result!, "PDFsharp.sln", CaseInsensitive); // The file is named 'PdfSharp.sln'.
             files.Length.Should().Be(1);
         }
 

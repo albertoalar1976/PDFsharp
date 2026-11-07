@@ -45,10 +45,10 @@ namespace PdfSharp.Tests.Pdf
         [Theory]
         [InlineData(20, 10, Chars.LF, false)]
         [InlineData(20, 10, 'x', false)]
-        [InlineData(6000, 10, Chars.LF, true)] // Should work, but does not yet work with 6.2.0 Preview 2.
-        [InlineData(6000, 10, 'X', true)] // Should work, but does not yet work with 6.2.0 Preview 2.
+        [InlineData(6000, 10, Chars.LF, false)] // Works now: the parser searches 'endstream' up to the next object if /Length is far too small.
+        [InlineData(6000, 10, 'X', false)] // Works now: the parser searches 'endstream' up to the next object if /Length is far too small.
         [InlineData(0, 5555, Chars.NUL, false)]
-        [InlineData(5555, 0, Chars.SP, true)] // Should work, but does not yet work with 6.2.0 Preview 2.
+        [InlineData(5555, 0, Chars.SP, false)] // Works now: the parser searches 'endstream' up to the next object if /Length is far too small.
         public void Create_and_read_a_raw_stream(int size, int reportedLength, char content, bool shouldFail)
         {
 #pragma warning disable CS0162 // Unreachable code detected
@@ -137,7 +137,7 @@ namespace PdfSharp.Tests.Pdf
         [InlineData(100, 1, 'x', false)]
         [InlineData(100, 512, 'x', false)]
         [InlineData(100, -1, Chars.NumberSign, false)] // -1 means use correct length.
-        [InlineData(100, 1, Chars.NumberSign, true)] // Should work, but does not yet work with 6.2.0 Preview 2.
+        [InlineData(100, 1, Chars.NumberSign, false)] // Works now: the parser searches 'endstream' up to the next object if /Length is far too small.
         [InlineData(100, 512, Chars.NumberSign, false)]
         public void Create_and_read_a_flate_decoded_raw_stream(int size, int reportedLength, char content, bool shouldFail)
         {

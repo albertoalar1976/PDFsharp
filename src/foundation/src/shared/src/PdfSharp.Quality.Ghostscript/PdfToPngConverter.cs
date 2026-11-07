@@ -1,6 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
+using System.Globalization;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -116,7 +117,7 @@ namespace PdfSharp.Quality.Ghostscript
             // List of pages to be printed. We support a single page or a single range.
             var pages = pageCount > 1 ?
                 $"{page}-{page + pageCount - 1}" :
-                page.ToString();
+                page.ToString(CultureInfo.InvariantCulture);
 
             var si = new ProcessStartInfo(toolExe);
             si.Arguments = $"-dNOPAUSE -dBATCH -r{dpi} -sDEVICE=png16m -sOutputFile=\"{outputFile}\" -sPageList={pages} {options} \"{pdf}\"";

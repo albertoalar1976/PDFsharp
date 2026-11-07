@@ -3,9 +3,7 @@
 
 using System;
 using System.Diagnostics;
-#if NET8_0_OR_GREATER
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-#endif
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.GrammarByExample;
 #if CORE
@@ -116,22 +114,13 @@ namespace GdiGrammarByExample
 
         internal static string WslPathHack(string path)
         {
-#if !NET8_0_OR_GREATER
-            // .NET 4.6.2 or .NETStandard 2.0, for Windows only.
-            return path;
-#else
             if (OperatingSystem.IsWindows())
             {
                 return path;
             }
-            if (OperatingSystem.IsLinux())
-            {
-                // Assume WSL and use drive C:\ instead of D:\.
-                return path.Replace(@"D:\", "/mnt/c/").Replace('\\', '/');
-            }
-
-            throw new NotSupportedException($"Platform {Environment.OSVersion} not yet supported.");
-#endif
+            // Linux, macOS: Windows paths like D:\... are mapped to WSL drive C:\ (/mnt/c/).
+            // Native paths, e.g. in the temp directory, are returned unchanged.
+            return path.Replace(@"D:\", "/mnt/c/").Replace('\\', '/');
         }
 
         //const string PathSource = @"D:\MigraDocAssets\GBE\GBE-DDL";

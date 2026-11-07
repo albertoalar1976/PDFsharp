@@ -2507,7 +2507,7 @@ namespace PdfSharp.Pdf
                 get
                 {
                     var sb = new StringBuilder();
-                    sb.AppendFormat(Invariant($"count={_elements.Count} ["));
+                    sb.Append(Invariant($"count={_elements.Count} ["));
                     var addSpace = false;
                     ICollection<string> keys = _elements.Keys;
                     foreach (var key in keys)
@@ -2885,14 +2885,14 @@ namespace PdfSharp.Pdf
                 {
                     if (r != null)
                     {
-                        if (l.Value.Equals("/Type"))
+                        if (l.Value.Equals("/Type", StringComparison.Ordinal))
                             return -1;
-                        if (r.Value.Equals("/Type"))
+                        if (r.Value.Equals("/Type", StringComparison.Ordinal))
                             return 1;
 
-                        if (l.Value.Equals("/Subtype"))
+                        if (l.Value.Equals("/Subtype", StringComparison.Ordinal))
                             return -1;
-                        if (r.Value.Equals("/Subtype"))
+                        if (r.Value.Equals("/Subtype", StringComparison.Ordinal))
                             return 1;
 
                         return String.Compare(l.Value, r.Value, StringComparison.Ordinal);
