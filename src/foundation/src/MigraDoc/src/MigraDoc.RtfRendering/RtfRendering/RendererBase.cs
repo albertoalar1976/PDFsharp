@@ -53,10 +53,6 @@ namespace MigraDoc.RtfRendering
         /// </summary>
         internal RendererBase(DocumentObject domObj, RtfDocumentRenderer docRenderer)
         {
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (_enumTranslationTable == null)
-                CreateEnumTranslationTable();
-
             _docObject = domObj;
             _docRenderer = docRenderer;
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
@@ -68,141 +64,143 @@ namespace MigraDoc.RtfRendering
         /// <summary>
         /// Helps translating MigraDoc DOM enumerations to an RTF control word.
         /// </summary>
-        static void CreateEnumTranslationTable()
+        static Dictionary<object, object> CreateEnumTranslationTable()
         {
-            _enumTranslationTable = new();
+            // Fill a local table and publish it only when it is complete (see _enumTranslationTable).
+            var table = new Dictionary<object, object>();
             //ParagraphAlignment
-            _enumTranslationTable.Add(ParagraphAlignment.Left, "l");
-            _enumTranslationTable.Add(ParagraphAlignment.Right, "r");
-            _enumTranslationTable.Add(ParagraphAlignment.Center, "c");
-            _enumTranslationTable.Add(ParagraphAlignment.Justify, "j");
+            table.Add(ParagraphAlignment.Left, "l");
+            table.Add(ParagraphAlignment.Right, "r");
+            table.Add(ParagraphAlignment.Center, "c");
+            table.Add(ParagraphAlignment.Justify, "j");
 
             //LineSpacingRule
-            _enumTranslationTable.Add(LineSpacingRule.AtLeast, 0);
-            _enumTranslationTable.Add(LineSpacingRule.Exactly, 0);
-            _enumTranslationTable.Add(LineSpacingRule.Double, 1);
-            _enumTranslationTable.Add(LineSpacingRule.OnePtFive, 1);
-            _enumTranslationTable.Add(LineSpacingRule.Multiple, 1);
-            _enumTranslationTable.Add(LineSpacingRule.Single, 1);
+            table.Add(LineSpacingRule.AtLeast, 0);
+            table.Add(LineSpacingRule.Exactly, 0);
+            table.Add(LineSpacingRule.Double, 1);
+            table.Add(LineSpacingRule.OnePtFive, 1);
+            table.Add(LineSpacingRule.Multiple, 1);
+            table.Add(LineSpacingRule.Single, 1);
 
             //OutLineLevel
             //BodyText rendered by leaving away rtf control word.
-            _enumTranslationTable.Add(OutlineLevel.Level1, 0);
-            _enumTranslationTable.Add(OutlineLevel.Level2, 1);
-            _enumTranslationTable.Add(OutlineLevel.Level3, 2);
-            _enumTranslationTable.Add(OutlineLevel.Level4, 3);
-            _enumTranslationTable.Add(OutlineLevel.Level5, 4);
-            _enumTranslationTable.Add(OutlineLevel.Level6, 5);
-            _enumTranslationTable.Add(OutlineLevel.Level7, 6);
-            _enumTranslationTable.Add(OutlineLevel.Level8, 7);
-            _enumTranslationTable.Add(OutlineLevel.Level9, 8);
+            table.Add(OutlineLevel.Level1, 0);
+            table.Add(OutlineLevel.Level2, 1);
+            table.Add(OutlineLevel.Level3, 2);
+            table.Add(OutlineLevel.Level4, 3);
+            table.Add(OutlineLevel.Level5, 4);
+            table.Add(OutlineLevel.Level6, 5);
+            table.Add(OutlineLevel.Level7, 6);
+            table.Add(OutlineLevel.Level8, 7);
+            table.Add(OutlineLevel.Level9, 8);
 
             //UnderlineType
-            _enumTranslationTable.Add(Underline.Dash, "dash");
-            _enumTranslationTable.Add(Underline.DotDash, "dashd");
-            _enumTranslationTable.Add(Underline.DotDotDash, "dashdd");
-            _enumTranslationTable.Add(Underline.Dotted, "d");
-            _enumTranslationTable.Add(Underline.None, "none");
-            _enumTranslationTable.Add(Underline.Single, "");
-            _enumTranslationTable.Add(Underline.Words, "w");
+            table.Add(Underline.Dash, "dash");
+            table.Add(Underline.DotDash, "dashd");
+            table.Add(Underline.DotDotDash, "dashdd");
+            table.Add(Underline.Dotted, "d");
+            table.Add(Underline.None, "none");
+            table.Add(Underline.Single, "");
+            table.Add(Underline.Words, "w");
 
             //BorderStyle
-            _enumTranslationTable.Add(BorderStyle.DashDot, "dashd");
-            _enumTranslationTable.Add(BorderStyle.DashDotDot, "dashdd");
-            _enumTranslationTable.Add(BorderStyle.DashLargeGap, "dash");
-            _enumTranslationTable.Add(BorderStyle.DashSmallGap, "dashsm");
-            _enumTranslationTable.Add(BorderStyle.Dot, "dot");
-            _enumTranslationTable.Add(BorderStyle.Single, "s");
+            table.Add(BorderStyle.DashDot, "dashd");
+            table.Add(BorderStyle.DashDotDot, "dashdd");
+            table.Add(BorderStyle.DashLargeGap, "dash");
+            table.Add(BorderStyle.DashSmallGap, "dashsm");
+            table.Add(BorderStyle.Dot, "dot");
+            table.Add(BorderStyle.Single, "s");
             //BorderType.None simply not rendered.
 
             //TabLeader
-            _enumTranslationTable.Add(TabLeader.Dashes, "hyph");
-            _enumTranslationTable.Add(TabLeader.Dots, "dot");
-            _enumTranslationTable.Add(TabLeader.Heavy, "th");
-            _enumTranslationTable.Add(TabLeader.Lines, "ul");
-            _enumTranslationTable.Add(TabLeader.MiddleDot, "mdot");
+            table.Add(TabLeader.Dashes, "hyph");
+            table.Add(TabLeader.Dots, "dot");
+            table.Add(TabLeader.Heavy, "th");
+            table.Add(TabLeader.Lines, "ul");
+            table.Add(TabLeader.MiddleDot, "mdot");
             //TabLeader.Spaces rendered by leaving away the tab leader control
 
             //TabAlignment
-            _enumTranslationTable.Add(TabAlignment.Center, "c");
-            _enumTranslationTable.Add(TabAlignment.Decimal, "dec");
-            _enumTranslationTable.Add(TabAlignment.Right, "r");
-            _enumTranslationTable.Add(TabAlignment.Left, "l");
+            table.Add(TabAlignment.Center, "c");
+            table.Add(TabAlignment.Decimal, "dec");
+            table.Add(TabAlignment.Right, "r");
+            table.Add(TabAlignment.Left, "l");
 
             //FootnoteNumberStyle
-            _enumTranslationTable.Add(FootnoteNumberStyle.Arabic, "ar");
-            _enumTranslationTable.Add(FootnoteNumberStyle.LowercaseLetter, "alc");
-            _enumTranslationTable.Add(FootnoteNumberStyle.LowercaseRoman, "rlc");
-            _enumTranslationTable.Add(FootnoteNumberStyle.UppercaseLetter, "auc");
-            _enumTranslationTable.Add(FootnoteNumberStyle.UppercaseRoman, "ruc");
+            table.Add(FootnoteNumberStyle.Arabic, "ar");
+            table.Add(FootnoteNumberStyle.LowercaseLetter, "alc");
+            table.Add(FootnoteNumberStyle.LowercaseRoman, "rlc");
+            table.Add(FootnoteNumberStyle.UppercaseLetter, "auc");
+            table.Add(FootnoteNumberStyle.UppercaseRoman, "ruc");
 
             //FootnoteNumberingRule
-            _enumTranslationTable.Add(FootnoteNumberingRule.RestartContinuous, "rstcont");
-            _enumTranslationTable.Add(FootnoteNumberingRule.RestartPage, "rstpg");
-            _enumTranslationTable.Add(FootnoteNumberingRule.RestartSection, "restart");
+            table.Add(FootnoteNumberingRule.RestartContinuous, "rstcont");
+            table.Add(FootnoteNumberingRule.RestartPage, "rstpg");
+            table.Add(FootnoteNumberingRule.RestartSection, "restart");
 
             //FootnoteLocation
-            _enumTranslationTable.Add(FootnoteLocation.BeneathText, "tj");
-            _enumTranslationTable.Add(FootnoteLocation.BottomOfPage, "bj");
+            table.Add(FootnoteLocation.BeneathText, "tj");
+            table.Add(FootnoteLocation.BottomOfPage, "bj");
 
             //(Section) BreakType
-            _enumTranslationTable.Add(BreakType.BreakEvenPage, "even");
-            _enumTranslationTable.Add(BreakType.BreakOddPage, "odd");
-            _enumTranslationTable.Add(BreakType.BreakNextPage, "page");
+            table.Add(BreakType.BreakEvenPage, "even");
+            table.Add(BreakType.BreakOddPage, "odd");
+            table.Add(BreakType.BreakNextPage, "page");
 
             //TODO_OLD:  ListType under construction.
-            _enumTranslationTable.Add(ListType.BulletList1, 23);
-            _enumTranslationTable.Add(ListType.BulletList2, 23);
-            _enumTranslationTable.Add(ListType.BulletList3, 23);
-            _enumTranslationTable.Add(ListType.NumberList1, 0);
-            _enumTranslationTable.Add(ListType.NumberList2, 0);
-            _enumTranslationTable.Add(ListType.NumberList3, 4);
+            table.Add(ListType.BulletList1, 23);
+            table.Add(ListType.BulletList2, 23);
+            table.Add(ListType.BulletList3, 23);
+            table.Add(ListType.NumberList1, 0);
+            table.Add(ListType.NumberList2, 0);
+            table.Add(ListType.NumberList3, 4);
 
             //RowAlignment
-            _enumTranslationTable.Add(RowAlignment.Center, "c");
-            _enumTranslationTable.Add(RowAlignment.Left, "l");
-            _enumTranslationTable.Add(RowAlignment.Right, "r");
+            table.Add(RowAlignment.Center, "c");
+            table.Add(RowAlignment.Left, "l");
+            table.Add(RowAlignment.Right, "r");
 
             //VerticalAlignment
-            _enumTranslationTable.Add(VerticalAlignment.Top, "t");
-            _enumTranslationTable.Add(VerticalAlignment.Center, "c");
-            _enumTranslationTable.Add(VerticalAlignment.Bottom, "b");
+            table.Add(VerticalAlignment.Top, "t");
+            table.Add(VerticalAlignment.Center, "c");
+            table.Add(VerticalAlignment.Bottom, "b");
 
             //RelativeHorizontal
-            _enumTranslationTable.Add(RelativeHorizontal.Character, "margin");
-            _enumTranslationTable.Add(RelativeHorizontal.Column, "margin");
-            _enumTranslationTable.Add(RelativeHorizontal.Margin, "margin");
-            _enumTranslationTable.Add(RelativeHorizontal.Page, "page");
+            table.Add(RelativeHorizontal.Character, "margin");
+            table.Add(RelativeHorizontal.Column, "margin");
+            table.Add(RelativeHorizontal.Margin, "margin");
+            table.Add(RelativeHorizontal.Page, "page");
 
             //RelativeVertical
-            _enumTranslationTable.Add(RelativeVertical.Line, "para");
-            _enumTranslationTable.Add(RelativeVertical.Margin, "margin");
-            _enumTranslationTable.Add(RelativeVertical.Page, "page");
-            _enumTranslationTable.Add(RelativeVertical.Paragraph, "para");
+            table.Add(RelativeVertical.Line, "para");
+            table.Add(RelativeVertical.Margin, "margin");
+            table.Add(RelativeVertical.Page, "page");
+            table.Add(RelativeVertical.Paragraph, "para");
 
             //WrapStyle
-            _enumTranslationTable.Add(WrapStyle.None, 3);
+            table.Add(WrapStyle.None, 3);
             //Caution: Word imterpretates "Through" (in rtf value "5") slightly different!
-            _enumTranslationTable.Add(WrapStyle.Through, 3);
-            _enumTranslationTable.Add(WrapStyle.TopBottom, 1);
+            table.Add(WrapStyle.Through, 3);
+            table.Add(WrapStyle.TopBottom, 1);
 
             //LineStyle
-            _enumTranslationTable.Add(LineStyle.Single, 0);
+            table.Add(LineStyle.Single, 0);
 
             //DashStyle
-            _enumTranslationTable.Add(DashStyle.Solid, 0);
-            _enumTranslationTable.Add(DashStyle.Dash, 1);
-            _enumTranslationTable.Add(DashStyle.SquareDot, 2);
-            _enumTranslationTable.Add(DashStyle.DashDot, 3);
-            _enumTranslationTable.Add(DashStyle.DashDotDot, 4);
+            table.Add(DashStyle.Solid, 0);
+            table.Add(DashStyle.Dash, 1);
+            table.Add(DashStyle.SquareDot, 2);
+            table.Add(DashStyle.DashDot, 3);
+            table.Add(DashStyle.DashDotDot, 4);
 
             //DashStyle
-            _enumTranslationTable.Add(TextOrientation.Downward, 3);
-            _enumTranslationTable.Add(TextOrientation.Horizontal, 0);
-            _enumTranslationTable.Add(TextOrientation.HorizontalRotatedFarEast, 0);
-            _enumTranslationTable.Add(TextOrientation.Upward, 2);
-            _enumTranslationTable.Add(TextOrientation.Vertical, 3);
-            _enumTranslationTable.Add(TextOrientation.VerticalFarEast, 3);
+            table.Add(TextOrientation.Downward, 3);
+            table.Add(TextOrientation.Horizontal, 0);
+            table.Add(TextOrientation.HorizontalRotatedFarEast, 0);
+            table.Add(TextOrientation.Upward, 2);
+            table.Add(TextOrientation.Vertical, 3);
+            table.Add(TextOrientation.VerticalFarEast, 3);
+            return table;
         }
 
         /// <summary>
@@ -390,8 +388,11 @@ namespace MigraDoc.RtfRendering
 
         /// <summary>
         /// The translation table.
+        /// It is created by the type initializer, which the runtime executes exactly once and thread-safely.
+        /// Formerly, the table was created lazily by the first renderer and assigned before it was filled,
+        /// so a renderer on another thread could see an incomplete table and fail with a KeyNotFoundException.
         /// </summary>
-        protected static Dictionary<object, object> _enumTranslationTable = null!;
+        protected static readonly Dictionary<object, object> _enumTranslationTable = CreateEnumTranslationTable();
 
         /// <summary>
         /// Specifies whether to use the effective value.

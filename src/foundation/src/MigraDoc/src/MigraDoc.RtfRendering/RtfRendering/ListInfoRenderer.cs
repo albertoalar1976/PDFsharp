@@ -18,25 +18,22 @@ namespace MigraDoc.RtfRendering
             _listInfo = (ListInfo)domObj;
         }
 
-        public static void Clear()
-        {
-            _idList.Clear();
-            _listID = 1;
-            _templateID = 2;
-        }
-
         /// <summary>
         /// Renders a ListIfo to RTF.
         /// </summary>
         internal override void Render()
         {
+            // The numbering state belongs to the current rendering, not to the process.
+            var lists = _docRenderer.Lists;
+
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (_prevListInfoID.Key != null && _listInfo.ContinuePreviousList)
+            if (lists.PreviousListInfoID.Key != null && _listInfo.ContinuePreviousList)
             {
-                _idList.Add(_listInfo, _prevListInfoID.Value);
+                lists.ListIDs.Add(_listInfo, lists.PreviousListInfoID.Value);
                 return;
             }
-            _idList.Add(_listInfo, _listID);
+            var listID = lists.NextListID;
+            lists.ListIDs.Add(_listInfo, listID);
 
             _rtfWriter.StartContent();
             _rtfWriter.WriteControl("list");
@@ -44,30 +41,15 @@ namespace MigraDoc.RtfRendering
             _rtfWriter.WriteControl("listsimple", 1);
             WriteListLevel();
             _rtfWriter.WriteControl("listrestarthdn", 0);
-            _rtfWriter.WriteControl("listid", _listID.ToString());
+            _rtfWriter.WriteControl("listid", listID.ToString());
             _rtfWriter.EndContent();
 
-            _prevListInfoID = new KeyValuePair<ListInfo, int>(_listInfo, _listID);
-            _listID += 2;
-            _templateID += 2;
+            lists.PreviousListInfoID = new KeyValuePair<ListInfo, int>(_listInfo, listID);
+            lists.NextListID += 2;
+            lists.NextTemplateID += 2;
         }
 
-        static KeyValuePair<ListInfo, int> _prevListInfoID = new KeyValuePair<ListInfo, int>();
         readonly ListInfo _listInfo;
-        static int _listID = 1;
-        static int _templateID = 2;
-        static readonly Dictionary<ListInfo, int> _idList = new Dictionary<ListInfo, int>();
-
-        /// <summary>
-        /// Gets the corresponding List ID of the ListInfo Object.
-        /// </summary>
-        internal static int GetListID(ListInfo li)
-        {
-            if (_idList.ContainsKey(li))
-                return (int)_idList[li];
-
-            return -1;
-        }
 
         void WriteListLevel()
         {
@@ -137,7 +119,7 @@ namespace MigraDoc.RtfRendering
 
             _rtfWriter.StartContent();
             _rtfWriter.WriteControl("leveltext");
-            _rtfWriter.WriteControl("leveltemplateid", _templateID);
+            _rtfWriter.WriteControl("leveltemplateid", _docRenderer.Lists.NextTemplateID);
             _rtfWriter.WriteControl(levelText1);
             if (levelText2 != "")
                 _rtfWriter.WriteControl(levelText2);
