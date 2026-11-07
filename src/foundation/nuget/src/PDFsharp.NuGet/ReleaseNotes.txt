@@ -1,6 +1,4 @@
-﻿This is a version of PDFsharp compatible with .NET 8 and higher.
-The package ‘PdfSharp’ can be used on any platform including Windows and Linux. The Target Frameworks are ‘net8.0’, ‘net9.0’, ‘net10.0’ and ‘netstandard2.0’.
-The packages ‘PDFsharp-gdi’ and ‘PDFsharp-wpf’ can be used under Windows only. The Target Frameworks are ‘net8.0-windows’, ‘net9.0-windows’, ‘net10.0-windows’ and ‘net462’.
-We also publish packages that contain PDFsharp plus MigraDoc.
-See the project docs site for further information:
-https://docs.pdfsharp.net/link/readme-v7.0.html
+﻿PDFsharp for .NET 10. The package 'PDFsharp' runs on Windows, Linux, and macOS with the same code. The target framework is 'net10.0'.
+There are no Windows-only GDI or WPF packages anymore.
+We also publish a package that contains PDFsharp plus MigraDoc.
+See https://github.com/albertoalar1976/PDFsharp for further information.

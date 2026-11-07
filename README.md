@@ -1,33 +1,32 @@
-﻿[![Maintained by PDFsharp Team](https://img.shields.io/badge/Maintained%20by-PDFsharp%20Team-blue?style=flat)](https://www.pdfsharp.com) 
-[![Commercial Support Available](https://img.shields.io/badge/Commercial%20Support-Available-blue?style=flat)](https://www.pdfsharp.com/Offers)
+﻿# PDFsharp & MigraDoc 7 – MIT fork
 
-> This project is actively maintained by the PDFsharp Team.  
-> Professional assistance for production is available upon request.
+> **This is an independent fork under the MIT license.**  
+> It is based on the last version of PDFsharp & MigraDoc that was published under the MIT license:
+> **7.0.0 Preview 1** (upstream commit `8d818d5`, 2026-05-05).
+> Later upstream versions are licensed under the AGPL and are **not** part of this fork.  
+> This fork is not affiliated with or endorsed by empira Software GmbH.  
+> **Never merge or "Sync fork" with the upstream repository**: that would bring AGPL-licensed code into this fork.
 
-# PDFsharp & MigraDoc 7
+### Platforms and target framework
 
-Version **7.0.0 Preview 1**  
-Published **2026-03-24**
+There is **one code base for Windows, Linux, and macOS**. All projects target **.NET 10** (`net10.0`) only.
 
-This is a preview version of the **PDFsharp** project, the main project of PDFsharp & MigraDoc 7.
+* The same build and the same NuGet packages (`PDFsharp` and `PDFsharp-MigraDoc`) run on all three operating systems.
+* The former Windows-only GDI and WPF builds (System.Drawing and WPF rendering, desktop preview controls, and printing) are not part of this fork.
+* .NET Framework, .NET Standard, and .NET 8/9 are not supported.
 
-### Target framework
+### License
 
-This fork targets **.NET 10** only.
-
-* The Core build (`net10.0`, NuGet packages `PDFsharp` and `PDFsharp-MigraDoc`) runs on **Windows, Linux, and macOS**.
-* The GDI and WPF builds (`net10.0-windows`) are for Windows desktop applications.
-* .NET Framework, .NET Standard, and .NET 8/9 (end of support on 2026-11-10) are no longer supported.
+Published Open Source under the MIT license, see [LICENSE](LICENSE).
+The copyright notices of the original authors must be kept:
 
 PDFsharp: Copyright (c) 2005-2026 empira Software GmbH, Troisdorf (Cologne Area), Germany  
-MigraDoc: Copyright (c) 2001-2026 empira Software GmbH, Troisdorf (Cologne Area), Germany  
-Published Open Source under the [MIT License](https://docs.pdfsharp.net/LICENSE.html)
-
-For more information see [docs.pdfsharp.net](https://docs.pdfsharp.net/)
+MigraDoc: Copyright (c) 2001-2026 empira Software GmbH, Troisdorf (Cologne Area), Germany
 
 ## Read this FIRST
 
-Project documentation can be found on our DOCS site: <https://docs.pdfsharp.net>.
+The documentation of the original project can be found at <https://docs.pdfsharp.net>.
+Note that it describes the upstream versions, which may differ from this fork.
 
 Note that PowerShell 7 is required to execute the PowerShell scripts that come with PDFsharp.
 

@@ -15,7 +15,7 @@
     <NuspecFile>$(MSBuildThisFileDirectory)$(MSBuildProjectName).nuspec</NuspecFile>
     <NuGetId>PDFsharp</NuGetId>
     <NuGetId Condition=" '$(Configuration)'=='Debug' ">$(NuGetId)-DEBUG</NuGetId>
-    <NuGetTitle>PDFsharp for Windows and Linux</NuGetTitle>
+    <NuGetTitle>PDFsharp for Windows, Linux, and macOS</NuGetTitle>
     <NuGetDescription Condition=" '$(Configuration)'=='Debug' ">$(DebugBuildMessage)%0D$(NuGetDescription)</NuGetDescription>
     <NuGetSummary>A .NET library for processing PDF.</NuGetSummary>
     <NuGetTags>$(NuGetTags_PdfSharp)</NuGetTags>
