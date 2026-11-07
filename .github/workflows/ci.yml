@@ -37,9 +37,14 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      # PdfSharp.BuildConfig downloads the test assets (fonts, images, PDF files) and generates
-      # the version information. It needs PowerShell, which all runners provide.
-      - name: Download assets and create build configuration
+      # The tests need fonts, images, and PDF files. The script checks the SHA-256 hash of every file.
+      - name: Download test assets
+        shell: pwsh
+        run: ./dev/download-assets.ps1
+
+      # PdfSharp.BuildConfig generates the version information from the git history.
+      # It needs PowerShell, which all runners provide. It does not download anything.
+      - name: Create build configuration
         run: dotnet build src/foundation/src/shared/src/PdfSharp.BuildConfig/PdfSharp.BuildConfig.csproj -c Release
 
       # One code base and one solution: the same steps run on Linux, macOS, and Windows.

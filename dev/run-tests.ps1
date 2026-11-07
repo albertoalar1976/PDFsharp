@@ -42,8 +42,13 @@ $solution = Join-Path $root 'PdfSharp.sln'
 
 $env:PDFsharpTests = if ($RunAllTests) { 'runalltests' } else { $null }
 
+# The tests need the assets. Download them once; dev/download-assets.ps1 updates them on demand.
+if (-not (Test-Path (Join-Path $root 'assets/.assets-version'))) {
+    & (Join-Path $PSScriptRoot 'download-assets.ps1')
+}
+
 if (-not $SkipBuild) {
-    # PdfSharp.BuildConfig downloads the assets if necessary and generates the version information.
+    # PdfSharp.BuildConfig generates the version information.
     dotnet build (Join-Path $root 'src/foundation/src/shared/src/PdfSharp.BuildConfig/PdfSharp.BuildConfig.csproj') -c $Config
     if ($LASTEXITCODE -ne 0) { throw 'Building PdfSharp.BuildConfig failed.' }
 

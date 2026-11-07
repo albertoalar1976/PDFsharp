@@ -14,9 +14,7 @@
     </PackageReference>
   </ItemGroup>-->
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="pwsh ./WaitForDownloadAssets.ps1 -InvokeDownload $(TargetFramework) $(RequiredAssetsVersion)" />
-  </Target>
+  <!-- The build does not download anything. The assets are needed by tests only, see dev/download-assets.ps1. -->
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="pwsh CreateBuildConfiguration.ps1" />

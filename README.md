@@ -30,17 +30,21 @@ Note that it describes the upstream versions, which may differ from this fork.
 
 Note that PowerShell 7 is required to execute the PowerShell scripts that come with PDFsharp.
 
-### Download assets first
+### Assets for tests
 
-Assets like bitmaps, fonts, or PDF files are not part of the repository anymore.
-You must download them before compiling the solution for the first time.
-Use `download-assets.ps1` in the `dev` folder to create `assets` folder required for some unit tests and needed by some projects.
-
-Execute
+Assets like bitmaps, fonts, or PDF files are not part of the repository.
+Building the solution does not need them and does not download anything.
+The tests, test apps, and samples need them: run `download-assets.ps1` in the `dev` folder to create the `assets` folder.
 
 ```ps
-.\dev\download-assets.ps1
+./dev/download-assets.ps1
 ```
+
+The script downloads the assets from the server of the upstream project and checks the SHA-256 hash of every file.
+If a file on the server has changed, the script stops. To use your own copy of the files,
+set the environment variable `PDFSHARP_ASSETS_URL` or use the parameter `-Source`.
+
+`./dev/run-tests.ps1` downloads the assets if necessary, builds the solution, and runs all tests.
 
 ### Build the solution
 
