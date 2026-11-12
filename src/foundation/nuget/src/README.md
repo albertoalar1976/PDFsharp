@@ -24,22 +24,8 @@ PDFsharp is the Open Source .NET library that easily creates and processes PDF d
 #### PDFsharp Core
 
 This is the PDFsharp Core package.
-This package does not rely on Windows components and can be used on any platform including Linux.
-Image formats supported by this package include Windows BMP, PNG, and JPEG.
-See Project Information for details.
-
-#### PDFsharp GDI
-
-This is the PDFsharp GDI package.
-This package relies on Windows GDI+ components and can be used under Windows only.
-This package supports image formats handled by GDI+ like Windows BMP, GIF, TIFF, PNG, and JPEG.
-See Project Information for details.
-
-#### PDFsharp WPF
-
-This is the PDFsharp WPF package.
-This package relies on Windows WPF components and can be used under Windows only.
-This package supports image formats handled by WPF like Windows BMP, GIF, TIFF, PNG, and JPEG.
+This package does not rely on Windows components and runs on Windows, Linux, and macOS with the same code.
+Image formats supported by this package include Windows BMP, PNG, JPEG, GIF, and TIFF.
 See Project Information for details.
 
 ### MigraDoc
@@ -52,21 +38,7 @@ MigraDoc - the Open Source .NET library that easily creates documents based on a
 #### MigraDoc Core
 
 This is the MigraDoc Core package.
-This package does not rely on Windows components and can be used on any platform including Linux.
-Image formats supported by this package include Windows BMP, PNG, and JPEG.
-See Project Information for details.
-
-#### MigraDoc GDI
-
-This is the MigraDoc GDI package.
-This package relies on Windows GDI+ components and can be used under Windows only.
-This package supports image formats handled by GDI+ like Windows BMP, GIF, TIFF, PNG, and JPEG.
-See Project Information for details.
-
-#### MigraDoc WPF
-
-This is the MigraDoc WPF package.
-This package relies on Windows WPF components and can be used under Windows only.
-This package supports image formats handled by WPF like Windows BMP, GIF, TIFF, PNG, and JPEG.
+This package does not rely on Windows components and runs on Windows, Linux, and macOS with the same code.
+Image formats supported by this package include Windows BMP, PNG, JPEG, GIF, and TIFF.
 See Project Information for details.
 

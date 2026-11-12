@@ -682,7 +682,6 @@ namespace MigraDoc.Rendering
         {
             get
             {
-#if true
                 // New code with StartXPosition independent of _currentYPosition.
 
                 XUnitPt xPos = 0;
@@ -718,54 +717,6 @@ namespace MigraDoc.Rendering
                     }
                 }
                 return xPos;
-#else
-                // Old code with StartXPosition dependent on _currentYPosition.
-
-                // Why should StartXPosition be dependent on GetFittingRect() and _currentYPosition? 
-                // GetFittingRect() always returns the X and Width from the area it was called for.
-                // Or it returns null. In that case the original area’s X and width was used in rendering phase
-                // and an exception occurred in formatting phase. What was the purpose?
-
-                XUnitPt xPos = 0;
-
-                if (_phase == Phase.Formatting)
-                {
-                    xPos = _formattingArea.GetFittingRect(_currentYPosition, _currentVerticalInfo.Height)?.X ?? NRT.ThrowOnNull<XUnitPt>();
-                    xPos += LeftIndent;
-                }
-                else //if (phase == Phase.Rendering)
-                {
-                    Area contentArea = _renderInfo.LayoutInfo.ContentArea;
-                    // Next lines for non-fitting lines that produce an empty fitting rect:
-                    XUnitPt rectX = contentArea.X;
-                    XUnitPt rectWidth = contentArea.Width;
-
-                    var fittingRect = contentArea.GetFittingRect(_currentYPosition, _currentVerticalInfo.Height);
-                    if (fittingRect != null)
-                    {
-                        rectX = fittingRect.X;
-                        rectWidth = fittingRect.Width;
-                    }
-                    switch (_paragraph.Format.Alignment)
-                    {
-                        case ParagraphAlignment.Left:
-                        case ParagraphAlignment.Justify:
-                            xPos = rectX;
-                            xPos += LeftIndent;
-                            break;
-
-                        case ParagraphAlignment.Right:
-                            xPos = rectX + rectWidth - RightIndent;
-                            xPos -= _currentLineWidth;
-                            break;
-
-                        case ParagraphAlignment.Center:
-                            xPos = rectX + (rectWidth + LeftIndent - RightIndent - _currentLineWidth) / 2.0;
-                            break;
-                    }
-                }
-                return xPos;
-#endif
             }
         }
 
@@ -2351,7 +2302,6 @@ namespace MigraDoc.Rendering
                 Vertical = _currentVerticalInfo
             };
 
-#if true
             // For lines containing only one not fitting element, HandleNonFittingLine must be called,
             // to add the element to the line and prepare for the next one.
             // The current element must have caused the line break (StoreLineInformation is called on a line break)
@@ -2361,13 +2311,6 @@ namespace MigraDoc.Rendering
             // HandleNonFittingLine. Blanks before _currentLeaf don’t have any influence.
             if (_currentLineWidth == XUnitPt.Zero && !_currentLineEndsWithLineBreak)
                 HandleNonFittingLine();
-#else
-            // This old code does not call HandleNonFittingLine for one not fitting element, if the line starts with a blank.
-            // The blank is ignored on formatting, but causes _currentLeaf not to be _startLeaf, so HandleNonFittingLine is not executed.
-            
-            if (_startLeaf != null && _startLeaf == _currentLeaf)
-                HandleNonFittingLine();
-#endif
 
             lineInfo.LastTab = _lastTab;
             _renderInfo.LayoutInfo.ContentArea = contentArea ?? NRT.ThrowOnNull<Area>();
@@ -2677,11 +2620,7 @@ namespace MigraDoc.Rendering
         {
             XUnitPt yPosition = CurrentBaselinePosition;
             yPosition += 0.33 * _currentVerticalInfo.Descent;
-#if PSGFX
-            _gfx.DrawLine(pen, new(_underlineStartPos, yPosition), new(xPosition, yPosition));
-#else
             _gfx.DrawLine(pen, _underlineStartPos, yPosition, xPosition, yPosition);
-#endif
         }
 
         XPen? _currentUnderlinePen;
@@ -2740,34 +2679,16 @@ namespace MigraDoc.Rendering
             if (underlineType == Underline.Words && !isWord)
                 return null;
 
-#if noCMYK
-            XPen pen = new XPen(XColor.FromArgb(font.Color.Argb), font.Size / 16);
-#else
             Debug.Assert(_paragraph.Document != null, "_paragraph.Document != null");
-#if PSGFX
-            var xxx = ColorHelper.ToXColor(font.Color, _paragraph.Document.UseCmykColor);
-            var pen = new XPen(new XSolidBrush(xxx), (float_)font.Size.Point / 16);
-#else
             var pen = new XPen(ColorHelper.ToXColor(font.Color, _paragraph.Document.UseCmykColor), font.Size.Point / 16);
-#endif
-#endif
             pen.DashStyle = font.Underline switch
             {
-#if PSGFX
-                Underline.DotDash => XDashStyles.DashDot,
-                Underline.DotDotDash => XDashStyles.DashDotDot,
-                Underline.Dash => XDashStyles.Dash,
-                Underline.Dotted => XDashStyles.Dot,
-                Underline.Single => XDashStyles.Solid,
-                _ => XDashStyles.Solid
-#else
                 Underline.DotDash => XDashStyle.DashDot,
                 Underline.DotDotDash => XDashStyle.DashDotDot,
                 Underline.Dash => XDashStyle.Dash,
                 Underline.Dotted => XDashStyle.Dot,
                 Underline.Single => XDashStyle.Solid,
                 _ => XDashStyle.Solid
-#endif
             };
             return pen;
         }

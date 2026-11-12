@@ -3,15 +3,10 @@
 
 using System.Reflection;
 using PdfSharp.Pdf;
+using PdfSharp.Pdf.Attachments;
 using PdfSharp.Drawing;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.Rendering.Internals;
-#if PSGFX
-using PdfSharp.Graphics.Pdf;
-using PdfSharp.Graphics.Pdf.Media;
-
-#else
-#endif
 
 namespace MigraDoc.Rendering
 {
@@ -25,25 +20,6 @@ namespace MigraDoc.Rendering
         /// </summary>
         public PdfDocumentRenderer()
         { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PdfDocumentRenderer"/> class.
-        /// </summary>
-        /// <param name="unicode">If true Unicode encoding is used for all text. If false, WinAnsi encoding is used.</param>
-        [Obsolete("Code is always Unicode.")]
-        // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
-        public PdfDocumentRenderer(bool unicode)
-        {
-            if (unicode is false)
-                throw new ArgumentException("Text is always rendered as Unicode.");
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the text is rendered as Unicode.
-        /// Returns true because text is rendered always in unicode.
-        /// </summary>
-        [Obsolete("Code is always Unicode.")]
-        public bool Unicode => true;
 
         /// <summary>
         /// Gets or sets the language.
@@ -120,20 +96,7 @@ namespace MigraDoc.Rendering
         /// </summary>
         public void RenderDocument()
         {
-#if true
             PrepareRenderPages();
-#else
-            if (this.documentRenderer == null)
-                PrepareDocumentRenderer();
-
-            if (this.pdfDocument == null)
-            {
-                this.pdfDocument = new PdfDocument();
-                this.pdfDocument.Info.Creator = VersionInfo.Creator;
-            }
-
-            WriteDocumentInformation();
-#endif
             RenderPages(1, DocumentRenderer.FormattedDocument.PageCount);
         }
 
@@ -149,9 +112,20 @@ namespace MigraDoc.Rendering
             foreach (var item in _document?.EmbeddedFiles ?? NRT.ThrowOnNull<EmbeddedFiles>())
             {
                 if (item as DocumentObjectModel.EmbeddedFile is { } embeddedFile)
-#pragma warning disable CS0618 // Type or member is obsolete
-                    pdfDocument.AddEmbeddedFile(embeddedFile.Name, embeddedFile.Path);  // TODO: Do not use this function anymore.
-#pragma warning restore CS0618 // Type or member is obsolete
+                {
+                    // The same values the former PdfDocument.AddEmbeddedFile used, but the file is closed after reading.
+                    EmbeddedFilesManager.ForDocument(pdfDocument).AddFile(new EmbeddedFileInfo
+                    {
+                        NamesKey = embeddedFile.Name,
+                        FileName = embeddedFile.Name,
+                        FileType = "",
+                        Description = "",
+                        CreationTime = DateTimeOffset.Now,
+                        ModificationTime = null,
+                        Data = File.ReadAllBytes(embeddedFile.Path),
+                        AFRelationship = PdfAFRelationship.Unspecified
+                    });
+                }
                 else
                     NRT.ThrowOnNull<DocumentObjectModel.EmbeddedFile>();
             }
@@ -212,26 +186,12 @@ namespace MigraDoc.Rendering
             {
                 var pdfPage = _pdfDocument.AddPage();
                 var pageInfo = DocumentRenderer.FormattedDocument.GetPageInfo(pageNr);
-#if PSGFX
-                pdfPage.Width = PdfSharp.Drawing.XUnit.FromPoint(pageInfo.Width);
-                pdfPage.Height = PdfSharp.Drawing.XUnit.FromPoint(pageInfo.Height);
-#else
                 pdfPage.Width = pageInfo.Width;
                 pdfPage.Height = pageInfo.Height;
-#endif
                 pdfPage.Orientation = pageInfo.Orientation;
 
-#if PSGFX
-                var pageVisual = PdfPageVisual.FromPdfPage(pdfPage);
-                var gfx = pageVisual.RenderOpen();
-#else
                 using var gfx = XGraphics.FromPdfPage(pdfPage);
-#endif
                 DocumentRenderer.RenderPage(gfx, pageNr);
-#if PSGFX
-                // DrawingContext must be closed.
-                gfx.Close();
-#endif
             }
         }
 

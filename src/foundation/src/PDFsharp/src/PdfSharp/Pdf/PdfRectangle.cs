@@ -6,12 +6,6 @@ using PdfSharp.Drawing;
 using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf.IO;
 using PdfSharp.Pdf.Internal;
-#if GDI
-using System.Drawing;
-#endif
-#if WPF
-using System.Windows;
-#endif
 
 // v7.0 Ready
 
@@ -46,33 +40,7 @@ namespace PdfSharp.Pdf
             Y2 = y2;
         }
 
-#if GDI
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PdfRectangle"/> class with two points specifying
-        /// two diagonally opposite corners.
-        /// </summary>
-        public PdfRectangle(PointF pt1, PointF pt2)
-        {
-            X1 = pt1.X;
-            Y1 = pt1.Y;
-            X2 = pt2.X;
-            Y2 = pt2.Y;
-        }
-#endif
 
-#if WPF
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PdfRectangle"/> class with two points specifying
-        /// two diagonally opposite corners.
-        /// </summary>
-        public PdfRectangle(Point pt1, Point pt2)
-        {
-            X1 = pt1.X;
-            Y1 = pt1.Y;
-            X2 = pt2.X;
-            Y2 = pt2.Y;
-        }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PdfRectangle"/> class with two points specifying
@@ -86,19 +54,6 @@ namespace PdfSharp.Pdf
             Y2 = pt2.Y;
         }
 
-#if GDI
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PdfRectangle"/> class with the specified location
-        /// and size.
-        /// </summary>
-        public PdfRectangle(PointF pt, SizeF size)
-        {
-            X1 = pt.X;
-            Y1 = pt.Y;
-            X2 = pt.X + size.Width;
-            Y2 = pt.Y + size.Height;
-        }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PdfRectangle"/> class with the specified location
@@ -163,12 +118,6 @@ namespace PdfSharp.Pdf
         /// Implements cloning this instance.
         /// </summary>
         protected override object Copy() => (PdfRectangle)base.Copy();
-
-        /// <summary>
-        /// Tests whether all coordinates are zero.
-        /// </summary>
-        [Obsolete("Use 'IsZero' instead.")]
-        public bool IsEmpty => IsZero;
 
         /// <summary>
         /// Tests whether all coordinates are zero.
@@ -256,12 +205,6 @@ namespace PdfSharp.Pdf
         /// </summary>
         public XSize Size => new(X2 - X1, Y2 - Y1);
 
-#if GDI
-        /// <summary>
-        /// Determines if the specified point is contained within this PdfRectangle.
-        /// </summary>
-        public bool Contains(PointF pt) => Contains(pt.X, pt.Y);
-#endif
 
         /// <summary>
         /// Determines if the specified point is contained within this PdfRectangle.
@@ -275,14 +218,6 @@ namespace PdfSharp.Pdf
             // Treat rectangle inclusive/inclusive.
             X1 <= x && x <= X2 && Y1 <= y && y <= Y2;
 
-#if GDI
-        /// <summary>
-        /// Determines if the rectangular region represented by rect is entirely contained within this PdfRectangle.
-        /// </summary>
-        public bool Contains(RectangleF rect) =>
-            X1 <= rect.X && (rect.X + rect.Width) <= X2 &&
-            Y1 <= rect.Y && (rect.Y + rect.Height) <= Y2;
-#endif
 
         /// <summary>
         /// Determines if the rectangular region represented by rect is entirely contained within this PdfRectangle.
@@ -321,12 +256,6 @@ namespace PdfSharp.Pdf
         /// </summary>
         internal override void WriteObject(PdfWriter writer)
             => writer.Write(this);
-
-        /// <summary>
-        /// Represents an empty PdfRectangle.
-        /// </summary>
-        [Obsolete("A rectangle defined by two points cannot be well-defined as empty. Do not use this property.")]
-        public static PdfRectangle Empty => throw new InvalidOperationException("Use 'new PdfRectangle()' instead of 'PdfRectangle.Empty'");
 
         /// <summary>
         /// Gets the DebuggerDisplayAttribute text.

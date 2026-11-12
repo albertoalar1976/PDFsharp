@@ -85,7 +85,6 @@ namespace PdfSharp.Fonts
             new("Symbol Bold", TypefaceInfo.FontSimulation.Bold, "symbol", "", "Noto Sans Symbols Regular"), // Noto Symbols may not replace exactly
             new("Symbol Italic", TypefaceInfo.FontSimulation.Italic, "symbol", "", "Noto Sans Symbols Regular"), // Noto Symbols may not replace exactly
             new("Symbol Bold Italic", TypefaceInfo.FontSimulation.Both, "symbol", "", "Noto Sans Symbols Regular"), // Noto Symbols may not replace exactly
-#if true
             //new("Wingdings", "wingding"), // No Linux substitute
 
             // Linux Substitute Fonts
@@ -128,7 +127,6 @@ namespace PdfSharp.Fonts
             // Ubuntu packages: fonts-noto-core
             new("Noto Sans Symbols Regular", TypefaceInfo.FontSimulation.None, "NotoSansSymbols-Regular"),
             new("Noto Sans Symbols Bold", TypefaceInfo.FontSimulation.None, "NotoSansSymbols-Bold")
-#endif
             // ReSharper restore StringLiteralTypo
         ];
 
@@ -152,15 +150,10 @@ namespace PdfSharp.Fonts
                 typefaces = typefaces.Where(f => f.FontFaceName.Contains("italic", StringComparison.OrdinalIgnoreCase) || f.FontFaceName.Contains("oblique", StringComparison.OrdinalIgnoreCase));
 
             var family = typefaces.FirstOrDefault();
-#if true
             if (family is not null)
                 return new PlatformFontResolverInfo(family.WindowsFileName, 
                     (family.Simulation & TypefaceInfo.FontSimulation.Bold) != 0,
                     (family.Simulation & TypefaceInfo.FontSimulation.Italic) != 0);
-#else
-            if (family is not null)
-                return new PlatformFontResolverInfo(family.WindowsFileName, false, false);
-#endif
 
             // Return null if there is no exact match.
             //if (baseFamily is not null)

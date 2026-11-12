@@ -71,26 +71,12 @@ namespace PdfSharp.Pdf.Content.Objects
         /// <param name="name">The name.</param>
         public static COperator OperatorFromName(string name)
         {
-#if true
             if (StringToOpCode.TryGetValue(name, out var opCode))
             {
                 return new(opCode);
             }
             Debug.Assert(false, "Unknown operator in PDF content stream.");
             return null!;
-#else
-            COperator? op = null;
-            OpCode? opcode = StringToOpCode[name];  // Use TryGetValue.
-            if (opcode != null)
-            {
-                op = new(opcode);
-            }
-            else
-            {
-                Debug.Assert(false, "Unknown operator in PDF content stream.");
-            }
-            return op;
-#endif
         }
 
         /// <summary>

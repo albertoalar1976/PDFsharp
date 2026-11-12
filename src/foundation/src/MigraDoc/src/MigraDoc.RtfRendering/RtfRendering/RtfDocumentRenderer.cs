@@ -276,15 +276,10 @@ namespace MigraDoc.RtfRendering
                 _rtfWriter.StartContent();
                 string name = _fontList[idx];
                 _rtfWriter.WriteControl("f", idx);
-#if true
                 //System.Drawing.Font font = new System.Drawing.Font(name, 12); //any size
                 // See https://learn.microsoft.com/de-de/dotnet/api/system.drawing.font.gdicharset?view=dotnet-plat-ext-7.0
                 // Use DEFAULT (1) anyway.
                 _rtfWriter.WriteControl("fcharset", 1);
-#else
-                System.Drawing.Font font = new System.Drawing.Font(name, 12); //any size
-                _rtfWriter.WriteControl("fcharset", (int)font.GdiCharSet);
-#endif
                 _rtfWriter.WriteText(name);
                 _rtfWriter.WriteSeparator();
                 _rtfWriter.EndContent();

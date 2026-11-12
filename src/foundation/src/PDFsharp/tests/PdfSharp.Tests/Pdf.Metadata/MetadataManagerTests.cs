@@ -226,13 +226,6 @@ namespace PdfSharp.Tests.Pdf.Metadata
             info.Keywords = "Some Keywords (Keywords)";
             info.Creator = "PDFsharp (Creator)";
             info.Elements.SetString(PdfDocumentInformation.Keys.Producer, "MigraDoc (Producer)");
-#if true_
-            info.Title = "TTTT";
-            info.Author = "AAAA";
-            info.Subject = "SSSS";
-            info.Keywords = "KKKK";
-            info.Creator = "CCCC";
-#endif
         }
     }
 }

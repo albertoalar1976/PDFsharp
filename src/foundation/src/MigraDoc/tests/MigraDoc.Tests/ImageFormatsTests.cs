@@ -11,13 +11,8 @@ using MigraDoc.DocumentObjectModel.Fields;
 using MigraDoc.Rendering;
 using PdfSharp.Diagnostics;
 using Xunit;
-#if CORE
 using PdfSharp.Fonts;
 using PdfSharp.Snippets.Font;
-#endif
-#if WPF
-using System.IO;
-#endif
 using SecurityTestHelper = PdfSharp.TestHelper.SecurityTestHelper;
 using SecurityTestHelperMD = MigraDoc.Tests.Helper.SecurityTestHelper;
 
@@ -29,9 +24,7 @@ namespace MigraDoc.Tests
         public ImageFormatsTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()
@@ -40,13 +33,7 @@ namespace MigraDoc.Tests
         }
 
         [Fact]
-#if WPF
-        public void Test_Image_Formats_Wpf()
-#elif GDI
-        public void Test_Image_Formats_Gdi()
-#else
         public void Test_Image_Formats()
-#endif
         {
             // Create a MigraDoc document.
             var document = CreateDocument(true);
@@ -69,13 +56,7 @@ namespace MigraDoc.Tests
         }
 
         [Fact]
-#if WPF
-        public void Test_Image_BASE64_Wpf()
-#elif GDI
-        public void Test_Image_BASE64_Gdi()
-#else
         public void Test_Image_BASE64()
-#endif
         {
             // Create a MigraDoc document.
             var document = CreateDocument(false);
@@ -108,13 +89,7 @@ namespace MigraDoc.Tests
         }
 
         [Fact]
-#if WPF
-        public void Test_Image_Interpolate_Wpf()
-#elif GDI
-        public void Test_Image_Interpolate_Gdi()
-#else
         public void Test_Image_Interpolate()
-#endif
         {
             // Create a MigraDoc document.
             var document = CreateDocument(false);
@@ -195,13 +170,7 @@ namespace MigraDoc.Tests
         [Theory]
         [InlineData(SecurityTestHelper.TestOptionsEnum.None)]
         [InlineData(SecurityTestHelper.TestOptionsEnum.V5)] // We only want to ensure image filters are not affected by crypt filters, so testing encryption version 5 should do it.
-#if WPF
-        public void Test_Image_Formats_Encrypted_Wpf(SecurityTestHelper.TestOptionsEnum optionsEnum)
-#elif GDI
-        public void Test_Image_Formats_Encrypted_Gdi(SecurityTestHelper.TestOptionsEnum optionsEnum)
-#else
         public void Test_Image_Formats_Encrypted(SecurityTestHelper.TestOptionsEnum optionsEnum)
-#endif
         {
             // Attempt to avoid "image file locked" under .NET 4.6.2.
             GC.Collect();
@@ -308,66 +277,6 @@ namespace MigraDoc.Tests
             public Unit? Width { get; set; }
         }
 
-#if true_
-#warning Deactivate this before publishing.
-
-        readonly TestImage[] _testImages =
-        [
-            // Test individual images.
-
-            //// JPEG
-            //new() { Path = @"jpeg\windows7problem.jpg", Comment = "JPEG image", Width = "12cm" },
-            //new() { Path = @"jpeg\TruecolorNoAlpha.jpg", Comment = "JPEG image" },
-            //new() { Path = @"jpeg\truecolorA.jpg", Comment = "JPEG image" },
-            //new() { Path = @"jpeg\PowerBooks_CMYK.jpg", Comment = "JPEG with EXIF header" },
-            //new() { Path = @"jpeg\indexedmonoA.jpg", Comment = "JPEG image" },
-            //new() { Path = @"jpeg\grayscaleNoAlpha.jpg", Comment = "JPEG image" },
-            //new() { Path = @"jpeg\grayscaleA.jpg", Comment = "JPEG image" },
-            //new() { Path = @"jpeg\color8A.jpg", Comment = "JPEG image" },
-            //new() { Path = @"jpeg\color4A.jpg", Comment = "JPEG image" },
-            //new() { Path = @"jpeg\blackwhiteA.jpg", Comment = "JPEG image" },
-            //new() { Path = @"jpeg\Balloons_CMYK.jpg", Comment = "CMYK" },
-            //new() { Path = @"jpeg\Balloons_CMYK - Copy.jpg", Comment = "CMYK?" },
-
-            //// BMP
-            //new() { Path = @"bmp\BlackwhiteA.bmp", Comment = "BMP image" },
-            //new() { Path = @"bmp\BlackwhiteA2.bmp", Comment = "BMP image" },
-            //new() { Path = @"bmp\BlackwhiteTXT.bmp", Comment = "BMP image", Width = "8cm" },
-            new() { Path = @"bmp\Color4A.bmp", Comment = "BMP image" },
-            //new() { Path = @"bmp\Color8A.bmp", Comment = "BMP image" },
-            //new() { Path = @"bmp\GrayscaleA.bmp", Comment = "BMP image" },
-            //new() { Path = @"bmp\IndexedmonoA.bmp", Comment = "BMP image" },
-            //new() { Path = @"bmp\Test_OS2.bmp", Comment = "OS/2 bitmap, not supported by Core build" },
-            //new() { Path = @"bmp\TruecolorA.bmp", Comment = "BMP image" },
-            //new() { Path = @"bmp\TruecolorMSPaint.bmp", Comment = "BMP image" },
-
-            //// PNG
-            //new() { Path = @"png\windows7problem.png", Comment = "PNG", Width = "12cm" },
-            //new() { Path = @"png\truecolorAlpha.png", Comment = "PNG" },
-            //new() { Path = @"png\truecolorA.png", Comment = "PNG" },
-            //new() { Path = @"png\indexedmonoA.png", Comment = "PNG" },
-            //new() { Path = @"png\grayscaleAlpha.png", Comment = "PNG" },
-            //new() { Path = @"png\grayscaleA.png", Comment = "PNG" },
-            //new() { Path = @"png\color8A.png", Comment = "PNG" },
-            //new() { Path = @"png\color4A.png", Comment = "PNG" },
-            //new() { Path = @"png\blackwhiteA.png", Comment = "PNG" },
-
-            //// BMP & PNG
-            //new() { Path = @"MigraDoc.bmp", Comment = "BMP image", Width = "8cm" },
-            //new() { Path = @"Logo landscape.bmp", Comment = "BMP", Width = "12cm" },
-            //new() { Path = @"Logo landscape MS Paint.bmp", Comment = "BMP", Width = "12cm" },
-            //new() { Path = @"Logo landscape 256.bmp", Comment = "BMP image", Width = "12cm" },
-            //new() { Path = @"MigraDoc.png", Comment = "PNG image", Width = "8cm" },
-            //new() { Path = @"Logo landscape.png", Comment = "PNG image", Width = "12cm" },
-            //new() { Path = @"Logo landscape 256.png", Comment = "PNG image", Width = "12cm" },
-
-            //// GIF, TIFF, PNG
-            //new() { Path = @"misc\image009.gif", Comment = "GIF, not supported by Core build" },
-            //new() { Path = @"misc\Rose (RGB 8).tif", Comment = "TIFF, not supported by Core build" },
-            //new() { Path = @"misc\Test.gif", Comment = "GIF, not supported by Core build" },
-            //new() { Path = @"misc\Test.png", Comment = "PNG image" }
-        ];
-#else
         readonly TestImage[] _testImages =
         [
             // Test all images.
@@ -424,6 +333,5 @@ namespace MigraDoc.Tests
             new() { Path = @"misc\Test.gif", Comment = "GIF, not supported by Core build" },
             new() { Path = @"misc\Test.png", Comment = "PNG image" }
         ];
-#endif
     }
 }

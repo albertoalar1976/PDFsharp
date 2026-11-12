@@ -237,73 +237,6 @@ namespace PdfSharp.Pdf.Annotations
                 return annotation;
 
             var subtype = dict.Elements.GetName(Keys.Subtype);
-#if true_
-            switch (subtype)
-            {
-                case "/" + nameof(PdfAnnotationTypes.Text):
-                    annotation = new PdfTextAnnotation(dict);
-                    break;
-
-                case "/" + nameof(PdfAnnotationTypes.Link):
-                    annotation = new PdfLinkAnnotation(dict);
-                    break;
-
-                case "/" + nameof(PdfAnnotationTypes.FreeText):
-
-                case "/" + nameof(PdfAnnotationTypes.Line):
-                    annotation = new PdfLineAnnotation(dict);
-                    break;
-
-                case "/" + nameof(PdfAnnotationTypes.Square):
-                    annotation = new PdfLineAnnotation(dict);
-                    break;
-
-                case "/" + nameof(PdfAnnotationTypes.Circle):
-                    annotation = new PdfCircleAnnotation(dict);
-                    break;
-
-                case "/" + nameof(PdfAnnotationTypes.Polygon):
-                case "/" + nameof(PdfAnnotationTypes.PolyLine):
-                case "/" + nameof(PdfAnnotationTypes.Highlight):
-                case "/" + nameof(PdfAnnotationTypes.Underline):
-                case "/" + nameof(PdfAnnotationTypes.Squiggly):
-                case "/" + nameof(PdfAnnotationTypes.StrikeOut):
-                case "/" + nameof(PdfAnnotationTypes.Caret):
-                    annotation = new PdfGenericAnnotation(dict);
-                    break;
-
-                Old code, does not compile.
-                case "/" + nameof(PdfAnnotationTypes.RubberStamp):
-                    annotation = new PdfRubberStampAnnotation(dict);
-                    break;
-
-                case "/" + nameof(PdfAnnotationTypes.Ink):
-                case "/" + nameof(PdfAnnotationTypes.Popup):
-                case "/" + nameof(PdfAnnotationTypes.FileAttachment):
-                case "/" + nameof(PdfAnnotationTypes.Sound):
-                case "/" + nameof(PdfAnnotationTypes.Movie):
-                case "/" + nameof(PdfAnnotationTypes.Screen):
-                    annotation = new PdfGenericAnnotation(dict);
-                    break;
-
-                case "/" + nameof(PdfAnnotationTypes.Widget):
-                    annotation = CreateWidget();
-                    break;
-
-                case "/" + nameof(PdfAnnotationTypes.PrinterMark):
-                case "/" + nameof(PdfAnnotationTypes.TrapNet):
-                case "/" + nameof(PdfAnnotationTypes.Watermark):
-                case "/3D" /*+ nameof(PdfAnnotationTypes.ThreeD)*/:
-                case "/" + nameof(PdfAnnotationTypes.Redact):
-                case "/" + nameof(PdfAnnotationTypes.Projection):
-                case "/" + nameof(PdfAnnotationTypes.RichMedia):
-                    annotation = new PdfGenericAnnotation(dict);
-                    break;
-
-                default:
-                    throw new InvalidOperationException($"Invalid annotation subtype '{subtype}'.");
-            }
-#else
             annotation = subtype switch
             {
                 PdfAnnotationTypeNames.Text
@@ -392,7 +325,6 @@ namespace PdfSharp.Pdf.Annotations
 
                 _ => throw new InvalidOperationException($"Invalid annotation subtype '{subtype}'.")
             };
-#endif
             if (page != null)
                 annotation.Page = page;
 
@@ -724,51 +656,6 @@ namespace PdfSharp.Pdf.Annotations
 
             // ----- Excerpt of entries specific to markup annotations ----------------------------------
 
-#if true_ // TODO Remove this. See PdfMarkupAnnotation.
-            /// <summary>
-            /// (Optional; PDF 1.1) The text label to be displayed in the title bar of the annotation’s
-            /// pop-up window when open and active. By convention, this entry identifies
-            /// the user who added the annotation.
-            /// </summary>
-            [KeyInfo(KeyType.TextString | KeyType.Optional)]
-            public const string T = "/T";
-
-            /// <summary>
-            /// (Optional; PDF 1.3) An indirect reference to a pop-up annotation for entering or
-            /// editing the text associated with this annotation.
-            /// </summary>
-            [KeyInfo(KeyType.Dictionary | KeyType.Optional)]
-            public const string Popup = "/Popup";
-
-            ///// <summary>
-            ///// (Optional; PDF 1.4) The constant opacity value to be used in painting the annotation.
-            ///// This value applies to all visible elements of the annotation in its closed state
-            ///// (including its background and border) but not to the popup window that appears when
-            ///// the annotation is opened.
-            ///// The specified value is not used if the annotation has an appearance stream; in that
-            ///// case, the appearance stream must specify any transparency. (However, if the viewer
-            ///// regenerates the annotation’s appearance stream, it may incorporate the CA value
-            ///// into the stream’s content.)
-            ///// The implicit blend mode is Normal.
-            ///// Default value: 1.0.
-            ///// </summary>
-            //[KeyInfo(KeyType.Real | KeyType.Optional)]
-            //public const string CA = "/CA";
-
-            //RC
-            //CreationDate
-            //IRT
-
-            /// <summary>
-            /// (Optional; PDF 1.5) Text representing a short description of the subject being
-            /// addressed by the annotation.
-            /// </summary>
-            [KeyInfo("1.5", KeyType.TextString | KeyType.Optional)]
-            public const string Subj = "/Subj";
-
-            //RT
-            //IT
-#endif
             // ReSharper restore InconsistentNaming
 
             internal static DictionaryMeta Meta => _meta ??= CreateMeta(typeof(Keys));

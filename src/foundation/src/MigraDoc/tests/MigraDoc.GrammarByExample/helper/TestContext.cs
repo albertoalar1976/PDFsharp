@@ -28,12 +28,8 @@ namespace MigraDoc.GrammarByExample
             //Console.WriteLine($"Now {now})");
 #if GBE
             const string tag = "GBE";
-#elif CORE
+#else
             const string tag = "Core";
-#elif GDI
-            const string tag = "GDI";
-#elif WPF
-            const string tag = "WPF";
 #endif
 #if   NET12_0
             const string tag2 = "NET120";

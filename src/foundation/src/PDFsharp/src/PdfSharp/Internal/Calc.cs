@@ -1,10 +1,6 @@
 // PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
-#if GDI
-#endif
-#if WPF
-#endif
 using PdfSharp.Drawing;
 
 namespace PdfSharp.Internal
@@ -48,31 +44,6 @@ namespace PdfSharp.Internal
                 PageSize.Quarto => new(576, 720),
                 PageSize.Size10x14 => new(720, 1008),
 
-#if true_  // Who needs this? Should be deleted.
-                PageSize.Undefined => expr,
-                PageSize.RA0 => expr,
-                PageSize.RA1 => expr,
-                PageSize.RA2 => expr,
-                PageSize.RA3 => expr,
-                PageSize.RA4 => expr,
-                PageSize.RA5 => expr,
-                PageSize.B0 => expr,
-                PageSize.B1 => expr,
-                PageSize.B2 => expr,
-                PageSize.B3 => expr,
-                PageSize.Foolscap => expr,
-                PageSize.GovernmentLetter => expr,
-                PageSize.Post => expr,
-                PageSize.Crown => expr,
-                PageSize.LargePost => expr,
-                PageSize.Demy => expr,
-                PageSize.Medium => expr,
-                PageSize.Royal => expr,
-                PageSize.Elephant => expr,
-                PageSize.DoubleDemy => expr,
-                PageSize.QuadDemy => expr,
-                PageSize.STMT => expr,
-#endif
                 _ => throw new ArgumentException("Invalid PageSize.")
             };
         }

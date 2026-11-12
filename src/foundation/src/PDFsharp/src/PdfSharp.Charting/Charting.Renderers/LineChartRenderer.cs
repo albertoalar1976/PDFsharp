@@ -1,11 +1,7 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
-#if PSGFX
-using PdfSharp.Graphics.Media;
-#else
 using PdfSharp.Drawing;
-#endif
 
 namespace PdfSharp.Charting.Renderers
 {
@@ -143,11 +139,7 @@ namespace PdfSharp.Charting.Renderers
                     sri.LineFormat = Converter.ToXPen(sri.Series._lineFormat, LineColors.Item(seriesIndex), ChartRenderer.DefaultSeriesLineWidth);
                 else
                     sri.LineFormat = Converter.ToXPen(sri.Series._lineFormat, sri.Series.MarkerBackgroundColor, ChartRenderer.DefaultSeriesLineWidth);
-#if PSGFX
-                sri.LineFormat.LineJoin = PenLineJoin.Bevel;
-#else
                 sri.LineFormat.LineJoin = XLineJoin.Bevel;
-#endif
                 MarkerRendererInfo mri = new MarkerRendererInfo();
                 sri.MarkerRendererInfo = mri;
 

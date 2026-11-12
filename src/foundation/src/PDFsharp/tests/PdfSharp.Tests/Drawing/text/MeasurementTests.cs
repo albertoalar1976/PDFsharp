@@ -8,9 +8,7 @@ using PdfSharp.Events;
 using PdfSharp.Fonts;
 using PdfSharp.Pdf;
 using PdfSharp.Snippets.Font;
-#if CORE
 using PdfSharp.Quality;
-#endif
 using Xunit;
 
 namespace PdfSharp.Tests.Drawing
@@ -21,9 +19,7 @@ namespace PdfSharp.Tests.Drawing
         public MeasurementTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()
@@ -41,12 +37,8 @@ namespace PdfSharp.Tests.Drawing
             var renderTextEventCallCount = 0;
             var renderTextEventReplacementsCount = 0;
 
-#if true
             var renderEvents = new RenderEvents();
             renderEvents.RenderTextEvent += (sender, args) =>
-#else
-            document.RenderEvents.RenderTextEvent += (sender, args) =>
-#endif
             {
                 renderTextEventCallCount++;
 

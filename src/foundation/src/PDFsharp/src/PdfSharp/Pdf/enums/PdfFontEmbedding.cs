@@ -18,33 +18,8 @@ namespace PdfSharp.Pdf
         TryComputeSubset = 0,
 
         /// <summary>
-        /// Use TryComputeSubset.
-        /// </summary>
-        [Obsolete("Renamed to TryComputeSubset.")]
-        Automatic = 0,
-
-        /// <summary>
         /// The font file is completely embedded. No subset is computed.
         /// </summary>
         EmbedCompleteFontFile = 1,
-
-        /// <summary>
-        /// Use EmbedCompleteFontFile.
-        /// </summary>
-        [Obsolete("Renamed to EmbedCompleteFontFile.")]
-        Always = 1,
-
-        /// <summary>
-        /// Fonts are not embedded. This is not an option anymore.
-        /// Treated as Automatic.
-        /// </summary>
-        [Obsolete("Fonts must always be embedded. Treated as Automatic.")]
-        None = 0,
-
-        /// <summary>
-        /// Not yet implemented. Treated as Default.
-        /// </summary>
-        [Obsolete("Treated as Automatic.")]
-        Default = 0
     }
 }

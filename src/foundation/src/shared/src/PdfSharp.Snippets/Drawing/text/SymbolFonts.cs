@@ -20,7 +20,6 @@ namespace PdfSharp.Snippets.Drawing
                 return;
             //Cleanroom = true;
 
-#if !GDI && !WPF
             var fontSourceSymbol = XFontSource.CreateFromFile("c:/Windows/Fonts/symbol.ttf");
             var glyphTypefaceSymbol = new XGlyphTypeface(fontSourceSymbol);
             var fontSymbol = new XFont(glyphTypefaceSymbol, 10);
@@ -36,23 +35,6 @@ namespace PdfSharp.Snippets.Drawing
             var fontSourceWindings3 = XFontSource.CreateFromFile("c:/Windows/Fonts/WINGDNG3.TTF");
             var glyphTypefaceWindings3 = new XGlyphTypeface(fontSourceWindings3);
             var fontWindings3 = new XFont(glyphTypefaceWindings3, 8);
-#else
-            //var fontSourceSymbol = XFontSource.CreateFromFile("c:/Windows/Fonts/symbol.ttf");
-            //var glyphTypefaceSymbol = new XGlyphTypeface(fontSourceSymbol);
-            var fontSymbol = new XFont("Symbol", 10);
-
-            //var fontSourceWindings = XFontSource.CreateFromFile("c:/Windows/Fonts/wingding.ttf");
-            //var glyphTypefaceWindings = new XGlyphTypeface(fontSourceWindings);
-            var fontWindings = new XFont("Wingdings", 8);
-
-            //var fontSourceWindings2 = XFontSource.CreateFromFile("c:/Windows/Fonts/WINGDNG2.TTF");
-            //var glyphTypefaceWindings2 = new XGlyphTypeface(fontSourceWindings2);
-            var fontWindings2 = new XFont("Wingdings 2", 8);
-
-            //var fontSourceWindings3 = XFontSource.CreateFromFile("c:/Windows/Fonts/WINGDNG3.TTF");
-            //var glyphTypefaceWindings3 = new XGlyphTypeface(fontSourceWindings3);
-            var fontWindings3 = new XFont("Wingdings 3", 8);
-#endif
 
             BeginBox(gfx, 1, BoxOptions.Tile, "Symbol");
             {

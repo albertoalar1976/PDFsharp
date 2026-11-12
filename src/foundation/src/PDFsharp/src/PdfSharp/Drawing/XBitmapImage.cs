@@ -4,13 +4,6 @@
 
 using PdfSharp.Internal;
 using PdfSharp.Internal.Threading;
-#if GDI
-#endif
-#if WPF
-#endif
-#if WUI
-using Windows.UI.Xaml.Media.Imaging;
-#endif
 
 namespace PdfSharp.Drawing
 {
@@ -26,24 +19,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         internal XBitmapImage(int width, int height)
         {
-#if GDI
-            try
-            {
-                Locks.EnterGdiPlus();
-                // Create a default 24-bit ARGB bitmap.
-                _gdiImage = new Bitmap(width, height);
-            }
-            finally { Locks.ExitGdiPlus(); }
-#endif
-#if WPF
-            DiagnosticsHelper.ThrowNotImplementedException("CreateBitmap");
-#endif
-#if WUI
-            DiagnosticsHelper.ThrowNotImplementedException("CreateBitmap");
-#endif
-#if CORE || GDI && !WPF // Prevent unreachable code error
             Initialize();
-#endif
         }
 
         /// <summary>

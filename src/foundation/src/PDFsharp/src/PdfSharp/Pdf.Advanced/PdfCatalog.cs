@@ -127,14 +127,6 @@ namespace PdfSharp.Pdf.Advanced
 
         /// <summary>
         /// Gets the metadata dictionary of this document.
-        /// An empty dictionary is created if it does not exist.
-        /// </summary>
-        [Obsolete("Use GetMetadata or GetRequiredMetadata.")]
-        public PdfMetadata Metadata
-            => Elements.GetRequiredDictionary<PdfMetadata>(Keys.Metadata, VCF.CreateIndirect);
-
-        /// <summary>
-        /// Gets the metadata dictionary of this document.
         /// Returns null if it does not exist.
         /// </summary>
         public PdfMetadata? GetMetadata() 
@@ -180,13 +172,6 @@ namespace PdfSharp.Pdf.Advanced
             => Elements.GetDictionary<PdfNamedDestinations>(Keys.Dests) != null;
 
         /// <summary>
-        /// Gets the named destinations defined in the Catalog.
-        /// </summary>
-        [Obsolete("Use GetDestinations or GetRequiredDestinations.")]
-        public PdfNamedDestinations Destinations
-            => Elements.GetRequiredDictionary<PdfNamedDestinations>(Keys.Dests, VCF.CreateIndirect);
-
-        /// <summary>
         /// Gets the named destinations dictionary of this document.
         /// Returns null if it does not exist.
         /// </summary>
@@ -204,13 +189,6 @@ namespace PdfSharp.Pdf.Advanced
         /// Gets a value indicating whether the document has a /AcroForm dictionary.
         /// </summary>
         public bool HasAcroForm => Elements.GetDictionary<PdfForm>(Keys.AcroForm) != null;
-
-        /// <summary>
-        /// Gets the interactive form (AcroForm) dictionary of this document.
-        /// </summary>
-        [Obsolete("Use GetAcroForm or GetOrCreateAcroForm.")]
-        public PdfForm AcroForm
-            => Elements.GetRequiredDictionary<PdfForm>(Keys.AcroForm, VCF.CreateIndirect);
 
         /// <summary>
         /// Gets the acro form dictionary of this document.

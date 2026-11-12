@@ -285,7 +285,6 @@ namespace PdfSharp.Pdf
             //PdfArray? destArray;
             if (dest != null)
             {
-#if true
                 if (dest is PdfArray destArray)
                 {
                     ParsePageDestination(destArray);
@@ -301,19 +300,6 @@ namespace PdfSharp.Pdf
                 {
                     Debug.Assert(false, "See what to do when this happened.");
                 }
-#else
-                destArray = dest as PdfArray;
-                if (destArray != null)
-                {
-                    ParsePageDestination(destArray);
-                    goto Done;
-                }
-                else
-                {
-                    // Do nothing here.
-                    // Debug.Assert(false, "See what to do when this happened.");  // TODO
-                }
-#endif
             }
 
             if (a != null)
@@ -460,16 +446,6 @@ namespace PdfSharp.Pdf
                 Outlines.Add(item);
 
                 current = item.Elements.GetReference(Keys.Next);
-#if DEBUG_
-                if (current == null)
-                {
-                    if (item.Reference != lastRef)
-                    {
-                        // Word produces PDFs that come to this case.
-                        _ = typeof(int);
-                    }
-                }
-#endif
             }
         }
 

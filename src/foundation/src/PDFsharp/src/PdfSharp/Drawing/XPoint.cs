@@ -2,19 +2,6 @@
 // See the LICENSE file in the solution root for more information.
 
 using System.Runtime.InteropServices;
-#if CORE
-#endif
-#if GDI
-#endif
-#if WPF
-using SysPoint = System.Windows.Point;
-using SysSize = System.Windows.Size;
-#endif
-#if WUI
-using Windows.UI.Xaml.Media;
-using SysPoint = Windows.Foundation.Point;
-using SysSize = Windows.Foundation.Size;
-#endif
 using PdfSharp.Internal;
 
 namespace PdfSharp.Drawing
@@ -37,38 +24,8 @@ namespace PdfSharp.Drawing
             _y = y;
         }
 
-#if GDI
-        /// <summary>
-        /// Initializes a new instance of the XPoint class with the specified point.
-        /// </summary>
-        public XPoint(Point point)
-        {
-            _x = point.X;
-            _y = point.Y;
-        }
-#endif
 
-#if WPF || WUI
-        /// <summary>
-        /// Initializes a new instance of the XPoint class with the specified point.
-        /// </summary>
-        public XPoint(SysPoint point)
-        {
-            _x = point.X;
-            _y = point.Y;
-        }
-#endif
 
-#if GDI
-        /// <summary>
-        /// Initializes a new instance of the XPoint class with the specified point.
-        /// </summary>
-        public XPoint(PointF point)
-        {
-            _x = point.X;
-            _y = point.Y;
-        }
-#endif
 
         /// <summary>
         /// Determines whether two points are equal.
@@ -167,19 +124,7 @@ namespace PdfSharp.Drawing
         }
         double _y;
 
-#if GDI
-        /// <summary>
-        /// Converts this XPoint to a System.Drawing.Point.
-        /// </summary>
-        public PointF ToPointF() => new((float)_x, (float)_y);
-#endif
 
-#if WPF || WUI
-        /// <summary>
-        /// Converts this XPoint to a System.Windows.Point.
-        /// </summary>
-        public SysPoint ToPoint() => new(_x, _y);
-#endif
 
         /// <summary>
         /// Converts this XPoint to a human-readable string.
@@ -254,13 +199,6 @@ namespace PdfSharp.Drawing
             => new(point1._x - point2._x, point1._y - point2._y);
 
         /// <summary>
-        /// Subtracts a size from a point.
-        /// </summary>
-        [Obsolete("Use XVector instead of XSize as second parameter.")]
-        public static XPoint operator -(XPoint point, XSize size) 
-            => new(point._x - size.Width, point._y - size.Height);
-
-        /// <summary>
         /// Subtracts a point from a point.
         /// </summary>
         public static XVector Subtract(XPoint point1, XPoint point2) 
@@ -301,17 +239,6 @@ namespace PdfSharp.Drawing
         /// </summary>
         public static explicit operator XVector(XPoint point) => new(point._x, point._y);
 
-#if WPF || WUI
-        /// <summary>
-        /// Performs an implicit conversion from XPoint to Point.
-        /// </summary>
-        public static implicit operator SysPoint(XPoint point) => new(point.X, point.Y);
-
-        /// <summary>
-        /// Performs an implicit conversion from Point to XPoint.
-        /// </summary>
-        public static implicit operator XPoint(SysPoint point) => new(point.X, point.Y);
-#endif
 
         /// <summary>
         /// Gets the DebuggerDisplayAttribute text.

@@ -11,13 +11,6 @@ namespace PdfSharp.Drawing.BarCodes
     // ReSharper disable once InconsistentNaming
     public class Code3of9Standard : ThickThinBarCode
     {
-        /// <summary>
-        /// Initializes a new instance of Standard3of9.
-        /// </summary>
-        [Obsolete("Use a constructor with 'code' parameter instead.")]
-        public Code3of9Standard()
-            : base("", XSize.Empty, CodeDirection.LeftToRight)
-        { }
 
         /// <summary>
         /// Initializes a new instance of Standard3of9.

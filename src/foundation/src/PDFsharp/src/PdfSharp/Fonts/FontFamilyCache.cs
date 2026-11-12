@@ -7,13 +7,6 @@ using System.Text;
 using PdfSharp.Internal;
 using PdfSharp.Internal.Threading;
 using PdfSharp.Fonts;
-#if GDI
-using GdiFontFamily = System.Drawing.FontFamily;
-using PdfSharp.Drawing;
-#endif
-#if WPF
-using WpfFontFamily = System.Windows.Media.FontFamily;
-#endif
 
 namespace PdfSharp.Fonts
 {

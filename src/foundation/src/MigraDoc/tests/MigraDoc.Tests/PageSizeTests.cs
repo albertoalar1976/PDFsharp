@@ -12,8 +12,6 @@ using MigraDoc.Rendering;
 using PdfSharp.Diagnostics;
 using PdfSharp.Fonts;
 using PdfSharp.Quality;
-#if CORE
-#endif
 using Xunit;
 
 namespace MigraDoc.Tests
@@ -24,9 +22,7 @@ namespace MigraDoc.Tests
         public PageSizeTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()
@@ -88,20 +84,6 @@ namespace MigraDoc.Tests
             paragraph = header.AddParagraph("Header");
             paragraph.Format.Alignment = ParagraphAlignment.Center;
 
-#if DEBUG___
-            for (PageFormat pf = PageFormat.Ledger; pf <= PageFormat.Ledger; pf++)
-            {
-                section = document.AddSection();
-                section.PageSetup.PageFormat = pf;
-                section.PageSetup.Orientation = Orientation.Portrait;
-                section.AddParagraph($"Custom section {pf.ToString()}.");
-
-                section = document.AddSection();
-                section.PageSetup.PageFormat = pf;
-                section.PageSetup.Orientation = Orientation.Landscape;
-                section.AddParagraph($"Custom section {pf.ToString()} Landscape.");
-            }
-#endif
 
             for (PageFormat pf = PageFormat.A0; pf <= PageFormat.P11x17; pf++)
             {

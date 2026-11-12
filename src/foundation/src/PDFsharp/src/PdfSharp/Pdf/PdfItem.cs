@@ -147,19 +147,6 @@ namespace PdfSharp.Pdf
         internal void SetDead()
         {
             Debug.Assert(this is PdfContainer);
-#if DEBUG_
-            //if (this is PdfObject { ObjectNumber: 96049 })
-            //    _ = typeof(int);
-
-            //if (ShouldBreak1)
-            //    Debugger.Break();
-            if (this is PdfArray array)
-            {
-                if (array.Count() == 4)
-                    Debugger.Break();
-            }
-
-#endif
 #if PDFSHARP_DEBUG
             PdfSharpDebug.Instance.AddDeadContainer((PdfContainer)this);
 #endif

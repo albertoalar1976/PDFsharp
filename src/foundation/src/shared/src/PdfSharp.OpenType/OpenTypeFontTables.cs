@@ -948,12 +948,10 @@ namespace PdfSharp.Internal.OpenType
             try
             {
                 Debug.Assert(FontData != null);
-#if DEBUG || true  // TODO_OLD
                 if (FontData!.Position != DirectoryEntry.Offset)
                     throw new InvalidOperationException("FontData!.Position != DirectoryEntry.Offset");
 
                 FontData.Position = DirectoryEntry.Offset;
-#endif
                 bytes = new byte[DirectoryEntry.PaddedLength];
                 Buffer.BlockCopy(FontData.OTFontSource.Bytes, DirectoryEntry.Offset, bytes, 0, DirectoryEntry.Length);
 

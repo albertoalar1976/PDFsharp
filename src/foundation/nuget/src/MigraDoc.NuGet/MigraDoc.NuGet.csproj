@@ -14,7 +14,7 @@
     <NuspecFile>$(MSBuildThisFileDirectory)$(MSBuildProjectName).nuspec</NuspecFile>
     <NuGetId>PDFsharp-MigraDoc</NuGetId>
     <NuGetId Condition=" '$(Configuration)'=='Debug' ">$(NuGetId)-DEBUG</NuGetId>
-    <NuGetTitle>PDFsharp plus MigraDoc for Windows and Linux</NuGetTitle>
+    <NuGetTitle>PDFsharp plus MigraDoc for Windows, Linux, and macOS</NuGetTitle>
     <NuGetDescription Condition=" '$(Configuration)'=='Debug' ">$(DebugBuildMessage)%0D$(NuGetDescription)</NuGetDescription>
     <NuGetSummary>Creating Documents on the Fly.</NuGetSummary>
     <NuGetTags>$(NuGetTags_MigraDoc)</NuGetTags>

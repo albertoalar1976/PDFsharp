@@ -4,9 +4,6 @@
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using PdfSharp.Quality;
-#if GDI
-using System.Drawing.Text;
-#endif
 
 #pragma warning disable CS1591 // Internal class
 
@@ -22,21 +19,13 @@ namespace PdfSharp.Features.Font
         protected static void RenderSnippetAsPdf(RenderInstalledFontsSnippet snippet)
         {
             snippet.RenderSnippetAsPdfMultiPage();
-#if !WUI
             snippet.SaveAndShowFile(snippet.PdfBytes, "Test_tempfile.pdf", true);
-#else
-            snippet.UwpSaveAndShowFile(snippet.PdfBytes, "Test_tempfile.pdf", true);
-#endif
         }
     }
 
     public class RenderInstalledFontsSnippet : Snippet
     {
-#if true
         static readonly XPdfFontOptions PdfOptions = XPdfFontOptions.WinAnsiDefault;
-#else
-        static readonly XPdfFontOptions PdfOptions = XPdfFontOptions.UnicodeDefault;
-#endif
         // WPF’s System.Windows.Media.Fonts.SystemFontFamilies gets fewer families than InstalledFontCollection().Families,
         // because some faces are embedded in a family here, while they are not in InstalledFontCollection().Families.
         // E.g. Arial Black is included in Arial in WPF, but not in Core and GDI.
@@ -185,19 +174,6 @@ namespace PdfSharp.Features.Font
 
         public void RenderSnippetMultiPage()
         {
-#if GDI
-            using (var fontsCollection = new InstalledFontCollection())
-            {
-                _fonts = fontsCollection.Families.Select(x => x.Name).Where(x => !String.IsNullOrEmpty(x)).ToList();
-            }
-#endif
-#if WPF
-            _fonts = _wpfFonts.Any()
-                // Use the manual font list, if it contains font names.
-                ? _wpfFonts
-                // Get the font list by WPF otherwise.
-                : System.Windows.Media.Fonts.SystemFontFamilies.Select(x => x.Source).ToList();
-#endif
 
             _fontIdx = 0;
 

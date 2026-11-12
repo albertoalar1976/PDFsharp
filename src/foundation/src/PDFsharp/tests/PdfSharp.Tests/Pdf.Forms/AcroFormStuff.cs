@@ -137,11 +137,7 @@ namespace PdfSharp.Tests.Pdf.Forms // TODO: FormsCleanUp: Folder Pdf.Forms can b
                         if (xo != null)
                         {
                             Debug.Assert(xo.IsIndirect);
-#if true
                             var xo2 = streamOrDict.Elements.GetDictionary(key, VCF.None, typeof(PdfFormXObject));
-#else
-                        TransformToXObject(xo);
-#endif
                             Debug.Assert(xo.IsDead);
                         }
                         else

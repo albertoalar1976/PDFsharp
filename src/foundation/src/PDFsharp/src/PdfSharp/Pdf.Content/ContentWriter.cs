@@ -68,7 +68,6 @@ namespace PdfSharp.Pdf.Content
 
         public void WriteRaw(string rawString)
         {
-#if true
             if (String.IsNullOrEmpty(rawString))
                 return;
             _sb.Append(rawString);
@@ -78,20 +77,10 @@ namespace PdfSharp.Pdf.Content
             //_stream?.Write(bytes, 0, bytes.Length);
             // ReSharper disable once UseIndexFromEndExpression
             _lastCat = GetCategory(rawString[rawString.Length - 1]);
-#else
-            if (String.IsNullOrEmpty(rawString))
-                return;
-            //AppendBlank(rawString[0]);
-            byte[] bytes = PdfEncoders.RawEncoding.GetBytes(rawString);
-            _stream?.Write(bytes, 0, bytes.Length);
-            // ReSharper disable once UseIndexFromEndExpression
-            _lastCat = GetCategory((char)bytes[bytes.Length - 1]);
-#endif
         }
 
         public void WriteLineRaw(string rawString)
         {
-#if true
             if (String.IsNullOrEmpty(rawString))
                 return;
             _sb.Append(rawString);
@@ -102,29 +91,14 @@ namespace PdfSharp.Pdf.Content
             //_stream!.Write([(byte)'\n'], 0, 1);
             //_lastCat = GetCategory((char)bytes[bytes.Length - 1]);
             _lastCat = GetCategory(rawString[^1]);
-#else
-            if (String.IsNullOrEmpty(rawString))
-                return;
-            //AppendBlank(rawString[0]);
-            byte[] bytes = PdfEncoders.RawEncoding.GetBytes(rawString);
-            _stream!.Write(bytes, 0, bytes.Length);
-            _stream!.Write([(byte)'\n'], 0, 1);
-            _lastCat = GetCategory((char)bytes[bytes.Length - 1]);
-#endif
         }
 
         public void WriteRaw(char ch)
         {
-#if true
             Debug.Assert(ch < 256, "Raw character greater than 255 detected.");
             _sb.Append(ch);
             //_stream?.WriteByte((byte)ch);
             _lastCat = GetCategory(ch);
-#else
-            Debug.Assert(ch < 256, "Raw character greater than 255 detected.");
-            _stream?.WriteByte((byte)ch);
-            _lastCat = GetCategory(ch);
-#endif
         }
 
         /// <summary>

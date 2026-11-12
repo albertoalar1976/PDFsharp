@@ -41,15 +41,9 @@ namespace PdfSharp.Internal.Imaging
                 int i = (int)(dpi + .5);
                 double diff = Math.Abs(dpi - (double)i);
                 // If DPI value is less than 0.1 % of the nearest integer, return the integer.
-#if true
                 // Rounding only for 72 and 96 DPI.
                 if ((i == 72 || i == 96) && diff * 1000 < i)
                     return i;
-#else
-                    // Rounding for all values.
-                    if (diff * 1000 < i)
-                        return i;
-#endif
                 return dpi;
             }
         }
@@ -96,22 +90,11 @@ namespace PdfSharp.Internal.Imaging
         public static bool TryImportImage(byte[] bitmapBytes,
             [MaybeNullWhen(false)] out ImportedImage importedImage)
         {
-#if true
             foreach (var importer in Importers)
             {
                 if (importer.TryImport(bitmapBytes, out importedImage))
                     return true;
             }
-#else
-            if (PngImporter.TryImport(bitmapBytes, out importedImage))
-                return true;
-
-            if (JpegImporter.TryImport(bitmapBytes, out importedImage))
-                return true;
-
-            if (BmpImporter.TryImport(bitmapBytes, out importedImage))
-                return true;
-#endif
             importedImage = null!;
             return false;
         }
@@ -133,7 +116,9 @@ namespace PdfSharp.Internal.Imaging
         static readonly BmpImageImporter BmpImporter = new();
         static readonly JpegImageImporter JpegImporter = new();
         static readonly PngImageImporter PngImporter = new();
-        static readonly BitmapImageImporter[] Importers = [JpegImporter, PngImporter, BmpImporter];
+        static readonly GifImageImporter GifImporter = new();
+        static readonly TiffImageImporter TiffImporter = new();
+        static readonly BitmapImageImporter[] Importers = [JpegImporter, PngImporter, BmpImporter, GifImporter, TiffImporter];
     }
 }
 
@@ -355,6 +340,42 @@ namespace PdfSharp.Internal.Imaging
 namespace PdfSharp.Internal.Imaging
 {
     /// <summary>
+    /// Represents an imported GIF image. Only the first frame of an animated GIF is used.
+    /// </summary>
+    public class ImportedGifImage : ImportedRasterImage
+    {
+    }
+
+    /// <summary>
+    /// Represents an imported TIFF image. Only the first page of a multi-page TIFF is used.
+    /// </summary>
+    public class ImportedTiffImage : ImportedRasterImage
+    {
+    }
+
+    /// <summary>
+    /// A bilevel image with CCITT Group 3 or Group 4 compressed data, which PDF supports directly.
+    /// ImageData contains the compressed data, with the most significant bit first.
+    /// </summary>
+    public class ImportedCcittImage : ImportedImage
+    {
+        /// <summary>
+        /// The K parameter of the PDF CCITTFaxDecode filter: -1 for Group 4, 0 for Group 3 one-dimensional coding.
+        /// </summary>
+        public int K { get; internal set; }
+
+        /// <summary>
+        /// True if each encoded line begins on a byte boundary.
+        /// </summary>
+        public bool EncodedByteAlign { get; internal set; }
+
+        /// <summary>
+        /// True if the colors are inverted, i.e. the CCITT "white" runs are black.
+        /// </summary>
+        public bool Inverted { get; internal set; }
+    }
+
+    /// <summary>
     /// Represents an imported JPEG image.
     /// </summary>
     /// <seealso cref="PdfSharp.Internal.Imaging.ImportedImage" />
@@ -448,6 +469,17 @@ namespace PdfSharp.Internal.Imaging
         /// JPEG file with CMYK.
         /// </summary>
         JPEGCMYK,
+
+        /// <summary>
+        /// CMYK image with 8 bits per component, e.g. from a TIFF file. Written to PDF as DeviceCMYK.
+        /// </summary>
+        Cmyk32,
+
+        /// <summary>
+        /// Bilevel image compressed with CCITT Group 3 or Group 4, e.g. from a scanned TIFF file.
+        /// Written to PDF as it is, with the CCITTFaxDecode filter.
+        /// </summary>
+        CcittFax,
     }
 }
 
@@ -794,19 +826,15 @@ namespace PdfSharp.Internal.Imaging
         /// </summary>
         public int Length { get; }
 
-#if CORE || GDI || WPF
         /// <summary>
         /// Gets the owned memory stream. Can be null if no MemoryStream was created.
         /// </summary>
         public MemoryStream? OwnedMemoryStream { get; private set; }
-#endif
 
         public void Dispose()
         {
-#if CORE || GDI || WPF
             OwnedMemoryStream?.Dispose();
             OwnedMemoryStream = null;
-#endif
         }
     }
 }

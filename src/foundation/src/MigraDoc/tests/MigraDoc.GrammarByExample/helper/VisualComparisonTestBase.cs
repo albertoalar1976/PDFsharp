@@ -38,19 +38,7 @@ namespace GdiGrammarByExample
             // Save the PDF document.
             pdfRenderer.Save(DdlGbeTestBase.WslPathHack(pdfFile));
 
-#if DEBUG____
-            // Code to generate MDDDL files.
-            var dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(pdfFile + ".mdddl");
-            dw.WriteDocument(document);
-            dw.Close(); 
-#endif
 
-#if DEBUG____
-            // Code to generate RTF files.
-            var rtf = new RtfDocumentRenderer();
-            // Set the working directory so the renderer finds the referenced images.
-            rtf.Render(document, pdfFile + ".rtf", workingDirectory);
-#endif
 
             return pdfFile;
         }
@@ -68,15 +56,7 @@ namespace GdiGrammarByExample
 
             var document = DdlReaderDocumentFromFile(file);
 
-#if CORE
             document.Info.Author += "[.NET 6.0+ Core build]";
-#elif GDI
-            document.Info.Author += "[.NET 6.0+ GDI build]";
-#elif WPF
-            document.Info.Author += "[.NET 6.0+ WPF build]";
-#else
-            document.Info.Author += "[.NET 6.0+ ??? build]";
-#endif
 
             return CreatePdfFromDocument(pdfFile, document, testName, mdddlPath, callback);
         }
@@ -130,16 +110,7 @@ namespace GdiGrammarByExample
             else
             {
                 pdfResultDocument = new PdfDocument();
-#if CORE
                 pdfResultDocument.Info.Title = "PDFsharp Unit Tests based on Core build";
-#elif GDI
-                pdfResultDocument.Info.Title = "PDFsharp Unit Tests based on GDI+";
-#elif WPF
-                pdfResultDocument.Info.Title = "PDFsharp Unit Tests based on WPF";
-#else
-                pdfResultDocument.Info.Title = "PDFsharp Unit Tests";
-#warning Unsupported platform.
-#endif
                 pdfResultDocument.Info.Author = "Stefan Lange";
             }
             return pdfResultDocument;

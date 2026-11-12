@@ -1,14 +1,6 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
-#if GDI
-using System.Globalization;
-using System.Drawing.Imaging;
-#endif
-#if WPF
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-#endif
 using Microsoft.Extensions.Logging;
 using PdfSharp.Drawing;
 using PdfSharp.Internal.Imaging;
@@ -63,7 +55,6 @@ namespace PdfSharp.Pdf.Advanced
             }
         }
 
-#if CORE
         internal PdfImage(PdfDocument document, ImportedImage importedImage)
             : base(document)
         {
@@ -76,7 +67,6 @@ namespace PdfSharp.Pdf.Advanced
             else
                 InitializeNonJpeg();
         }
-#endif
 
         /// <summary>
         /// Initializes a new instance of this class using the elements of the specified dictionary.
@@ -118,16 +108,13 @@ namespace PdfSharp.Pdf.Advanced
             byte[]? imageBits = null;
             int streamLength = 0;
 
-#if CORE || GDI || WPF
             if (ImportedImage != null)
             {
                 var idd = ImportedImage.ImageData;
                 imageBits = idd;
                 streamLength = idd.Length;
             }
-#endif
 
-#if CORE || GDI
             if (_image != null && ImportedImage == null)
             {
                 if (!_image._path.StartsWith("*", StringComparison.Ordinal))
@@ -166,13 +153,6 @@ namespace PdfSharp.Pdf.Advanced
                     }
                     else
                     {
-#if GDI
-                        // No stream, no filename, get image data from GDI image.
-                        // Save the image to a memory stream.
-                        memory = new MemoryStream();
-                        ownMemory = true;
-                        _image._gdiImage.Save(memory, System.Drawing.Imaging.ImageFormat.Jpeg);
-#endif
                     }
                 }
 
@@ -181,70 +161,7 @@ namespace PdfSharp.Pdf.Advanced
                     Debug.Assert(false, "Internal error? JPEG image, but file not found!");
                     throw new InvalidOperationException("JPEG image used, but cannot access image data!");
                 }
-#if GDI
-                {
-                    // Use ImageImporter to get meta information about JPEG image. GDI does not return correct information for CMYK images.
-                    var ii = ToBeNamed.TryImportImage(memory, out var image);
-                    if (ii && image is ImportedJpegImage)
-                    {
-                        _image._importedImage = image;
-                        ImportedImage = image;
-                    }
-                }
-#endif
             }
-#endif
-#if WPF
-            if (_image != null && !_image._path.StartsWith("*", StringComparison.Ordinal))
-            {
-                // Image does not come from a stream, so we have the path to the file - just use the path.
-                // If the image was modified in memory, those changes will be lost and the original image, as it was read from the file, will be added to the PDF.
-                if (imageBits == null)
-                {
-                    // Use ImageImporter to read the image.
-                    string filename = XImage.GetImageFilename(_image._wpfImage);
-                    var worker = new StreamReaderWorker(filename);
-                    var success = ToBeNamed.TryImportImage(worker.Data, out var image);
-
-                    imageBits = image!.GetPdfImageData();
-                    streamLength = imageBits.Length;
-
-                    if (_image._importedImage == null)
-                    {
-                        _image._importedImage = image;
-                        ImportedImage = image;
-                    }
-                }
-
-                memory = _image.Memory;
-            }
-            else
-            {
-                // If we have a stream, copy data from the stream.
-                if (_image != null && _image._stream != null! && _image._stream.CanSeek)
-                {
-                    memory = new MemoryStream();
-                    ownMemory = true;
-                    Stream stream = _image._stream;
-                    stream.Seek(0, SeekOrigin.Begin);
-                    byte[] buffer = new byte[32 * 1024]; // 32K buffer.
-                    int bytesRead;
-                    while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
-                    {
-                        memory.Write(buffer, 0, bytesRead);
-                    }
-                }
-            }
-
-            if (imageBits == null && memory == null && _image != null && _image._wpfImage != null)
-            {
-                Debug.Assert(false, "Internal error? JPEG image, but file not read!");
-            }
-#endif
-#if WUI
-            memory = new MemoryStream();
-            ownMemory = true;
-#endif
             if (imageBits == null)
             {
                 streamLength = (int)memory!.Length; // NRT
@@ -284,7 +201,6 @@ namespace PdfSharp.Pdf.Advanced
             Elements[Keys.Height] = new PdfInteger(_image?.PixelHeight ?? ImportedImage!.PixelHeight);
             Elements[Keys.BitsPerComponent] = new PdfInteger(8);
 
-#if CORE || GDI || WPF
             if (ImportedImage != null)
             {
                 if (ImportedImage.ImageFormat == PdfSharp.Internal.Imaging.ImageFormats.JPEGCMYK ||
@@ -304,50 +220,6 @@ namespace PdfSharp.Pdf.Advanced
                     Elements[Keys.ColorSpace] = new PdfName("/DeviceRGB");
                 }
             }
-#endif
-#if GDI
-            if (_image != null && ImportedImage == null)
-            {
-                if ((_image._gdiImage.Flags & ((int)ImageFlags.ColorSpaceCmyk | (int)ImageFlags.ColorSpaceYcck)) != 0)
-                {
-                    // TODO_OLD: Test with CMYK JPEG files (so far I only found ImageFlags.ColorSpaceYcck JPEG files ...)
-                    Elements[Keys.ColorSpace] = new PdfName("/DeviceCMYK");
-                    if ((_image._gdiImage.Flags & (int)ImageFlags.ColorSpaceYcck) != 0)
-                        //Elements["/Decode"] = new PdfLiteral("[1 0 1 0 1 0 1 0]"); // Invert colors because YCCK is inverted CMYK. #US309
-                        Elements["/Decode"] = new PdfArray(1, 0, 1, 0, 1, 0, 1, 0); // Invert colors because YCCK is inverted CMYK.
-                }
-                else if ((_image._gdiImage.Flags & (int)ImageFlags.ColorSpaceGray) != 0)
-                {
-                    Elements[Keys.ColorSpace] = new PdfName("/DeviceGray");
-                }
-                else
-                {
-                    Elements[Keys.ColorSpace] = new PdfName("/DeviceRGB");
-                }
-            }
-#endif
-#if WPF
-            if (_image != null && ImportedImage == null)
-            {
-                string pixelFormat = _image._wpfImage?.Format.ToString() ?? "";
-                bool isCmyk = _image.IsCmyk;
-                bool isGrey = pixelFormat == "Gray8";
-                if (isCmyk)
-                {
-                    // TODO_OLD: Test with CMYK JPEG files (so far I only found ImageFlags.ColorSpaceYcck JPEG files ...)
-                    Elements[Keys.ColorSpace] = new PdfName("/DeviceCMYK");
-                    Elements["/Decode"] = new PdfLiteral("[1 0 1 0 1 0 1 0]"); // Invert colors because YCCK is inverted CMYK.
-                }
-                else if (isGrey)
-                {
-                    Elements[Keys.ColorSpace] = new PdfName("/DeviceGray");
-                }
-                else
-                {
-                    Elements[Keys.ColorSpace] = new PdfName("/DeviceRGB");
-                }
-            }
-#endif
         }
 
         /// <summary>
@@ -355,11 +227,20 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         void InitializeNonJpeg()
         {
-#if CORE || GDI || WPF
+            if (ImportedImage is ImportedCcittImage ccittImage)
+            {
+                InitializeCcitt(ccittImage);
+                return;
+            }
+
             if (ImportedImage != null)
             {
                 switch (ImportedImage.ImageFormat)
                 {
+                    case PdfSharp.Internal.Imaging.ImageFormats.Cmyk32:
+                        CreateTrueColorMemoryBitmap(4, 8, false);
+                        break;
+
                     case PdfSharp.Internal.Imaging.ImageFormats.Bgra32:
                         CreateTrueColorMemoryBitmap(3, 8, true);
                         break;
@@ -389,100 +270,41 @@ namespace PdfSharp.Pdf.Advanced
                 }
                 return;
             }
-#endif
 
-#if GDI && !WPF
-            switch (_image!._gdiImage.PixelFormat)
-            {
-                case PixelFormat.Format24bppRgb:
-                    ReadTrueColorMemoryBitmap(3, 8, false);
-                    break;
-
-                case PixelFormat.Format32bppRgb:
-                    ReadTrueColorMemoryBitmap(4, 8, false);
-                    break;
-
-                case PixelFormat.Format32bppArgb:
-                case PixelFormat.Format32bppPArgb:
-                    ReadTrueColorMemoryBitmap(3, 8, true);
-                    break;
-
-                case PixelFormat.Format8bppIndexed:
-                    ReadIndexedMemoryBitmap(8);
-                    break;
-
-                case PixelFormat.Format4bppIndexed:
-                    ReadIndexedMemoryBitmap(4);
-                    break;
-
-                case PixelFormat.Format1bppIndexed:
-                    ReadIndexedMemoryBitmap(1);
-                    break;
-
-                default:
-                    //#if DEBUGxxx
-                    //          image.image.Save("$$$.bmp", ImageFormat.Bmp);
-                    //#endif
-                    throw new NotSupportedException("Image format not supported.");
-            }
-#endif
-#if WPF
-            // Only called for GDI and WPF.
-            // _image is not null here.
-
-            string format = _image!._wpfImage.Format.ToString();
-            switch (format)
-            {
-                case "Bgr24": //Format24bppRgb:
-                    ReadTrueColorMemoryBitmap(3, 8, false);
-                    break;
-
-                //case .PixelFormat.Format32bppRgb:
-                //  ReadTrueColorMemoryBitmap(4, 8, false);
-                //  break;
-
-                case "Bgra32":  //PixelFormat.Format32bppArgb:
-                    //case PixelFormat.Format32bppPArgb:
-                    ReadTrueColorMemoryBitmap(3, 8, true);
-                    break;
-
-                case "Bgr32":
-                    ReadTrueColorMemoryBitmap(4, 8, false);
-                    break;
-
-                case "Pbgra32":
-                    ReadTrueColorMemoryBitmap(3, 8, true);
-                    break;
-
-                case "Indexed8":  //Format8bppIndexed:
-                case "Gray8":
-                    ReadIndexedMemoryBitmap(8);
-                    break;
-
-                case "Indexed4":  //Format4bppIndexed:
-                case "Gray4":
-                    ReadIndexedMemoryBitmap(4);
-                    break;
-
-                case "Indexed2":
-                    ReadIndexedMemoryBitmap(2);
-                    break;
-
-                case "Indexed1":  //Format1bppIndexed:
-                case "BlackWhite":  //Format1bppIndexed:
-                    ReadIndexedMemoryBitmap(1);
-                    break;
-
-                default:
-#if DEBUG_
-                    image.image.Save("$$$.bmp", ImageFormat.Bmp);
-#endif
-                    throw new NotSupportedException("Image format '" + format + "' not supported.");
-            }
-#endif
         }
 
-#if CORE || GDI || WPF
+        /// <summary>
+        /// Writes a bilevel image with CCITT Group 3 or Group 4 compressed data as it is. PDF supports this compression directly.
+        /// </summary>
+        void InitializeCcitt(ImportedCcittImage image)
+        {
+            var data = image.ImageData;
+            Stream = new PdfStream(data, this);
+            Elements.SetInteger(PdfStream.Keys.Length, data.Length);
+            Elements.SetName(PdfStream.Keys.Filter, "/CCITTFaxDecode");
+            var parameters = new PdfDictionary();
+            if (image.K != 0)
+                parameters.Elements.SetInteger("/K", image.K);
+            if (image.EncodedByteAlign)
+                parameters.Elements.SetBoolean("/EncodedByteAlign", true);
+            // The number of rows is known, so the data need not end with an end-of-block pattern.
+            parameters.Elements.SetBoolean("/EndOfBlock", false);
+            parameters.Elements.SetInteger("/Columns", image.PixelWidth);
+            parameters.Elements.SetInteger("/Rows", image.PixelHeight);
+            Elements[PdfStream.Keys.DecodeParms] = parameters;
+            Elements.SetInteger(Keys.Width, image.PixelWidth);
+            Elements.SetInteger(Keys.Height, image.PixelHeight);
+            Elements.SetInteger(Keys.BitsPerComponent, 1);
+            Elements.SetName(Keys.ColorSpace, "/DeviceGray");
+            if (image.Inverted)
+            {
+                var decode = new PdfArray(Document);
+                decode.Elements.Add(new PdfInteger(1));
+                decode.Elements.Add(new PdfInteger(0));
+                Elements[Keys.Decode] = decode;
+            }
+        }
+
         void CreateIndexedMemoryBitmap(int bits)
         {
             var ii = (ImportedRasterImage)ImportedImage!;
@@ -764,8 +586,7 @@ namespace PdfSharp.Pdf.Advanced
             Elements[Keys.Width] = new PdfInteger(ii.PixelWidth);
             Elements[Keys.Height] = new PdfInteger(ii.PixelHeight);
             Elements[Keys.BitsPerComponent] = new PdfInteger(8);
-            // Anything needed for CMYK? Do we have sample images?
-            Elements[Keys.ColorSpace] = new PdfName(components == 1 ? "/DeviceGray" : "/DeviceRGB");
+            Elements[Keys.ColorSpace] = new PdfName(components switch { 1 => "/DeviceGray", 4 => "/DeviceCMYK", _ => "/DeviceRGB" });
 
             if (_image is { Interpolate: true })
             {
@@ -780,7 +601,6 @@ namespace PdfSharp.Pdf.Advanced
                 }
             }
         }
-#endif
 
         static int ReadWord(byte[] ab, int offset)
         {
@@ -820,29 +640,14 @@ namespace PdfSharp.Pdf.Advanced
             //#endif
             int pdfVersion = Owner.Version;
             var memory = new MemoryStream();
-#if GDI
-            _image!._gdiImage.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
-#endif
-#if WPF
-            BmpBitmapEncoder encoder = new BmpBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(_image!._wpfImage));
-            encoder.Save(memory);
-#endif
 
             int streamLength = (int)memory.Length;
             Debug.Assert(streamLength > 0, "Bitmap image encoding failed.");
             if (streamLength > 0)
             {
-#if !WUI
                 // Available with wrt, but not with wrt81.
                 // Note that imageBits.Length can be larger than streamLength. Do not use these extra bytes.
                 byte[] imageBits = memory.GetBuffer();
-#else
-                byte[] imageBits = new byte[streamLength];
-                memory.Seek(0, SeekOrigin.Begin);
-                memory.Read(imageBits, 0, streamLength);
-                memory.Dispose();
-#endif
 
                 int height = _image!.PixelHeight;
                 int width = _image!.PixelWidth;
@@ -945,17 +750,6 @@ namespace PdfSharp.Pdf.Advanced
             bool segmentedColorMask = false;
 
             MemoryStream memory = new MemoryStream();
-#if GDI
-            _image!._gdiImage.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
-#endif
-#if WPF
-            BmpBitmapEncoder encoder = new BmpBitmapEncoder();
-            //if (!_image._path.StartsWith("*", StringComparison.Ordinal))
-            //    encoder.Frames.Add(BitmapFrame.Create(new Uri(_image._path), BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad));
-            //else
-            encoder.Frames.Add(BitmapFrame.Create(_image!._wpfImage));
-            encoder.Save(memory);
-#endif
             int streamLength = (int)memory.Length;
             Debug.Assert(streamLength > 0, "Bitmap image encoding failed.");
             if (streamLength > 0)
@@ -966,11 +760,7 @@ namespace PdfSharp.Pdf.Advanced
                 byte[] imageBits = new byte[streamLength];
                 memory.Seek(0, SeekOrigin.Begin);
                 _ = memory.Read(imageBits, 0, streamLength);
-#if !WUI
                 memory.Close();
-#else
-                memory.Dispose();
-#endif
 
                 // We use TryImportImageBmp here to avoid redundant code.
 

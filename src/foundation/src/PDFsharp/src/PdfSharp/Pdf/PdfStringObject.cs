@@ -60,12 +60,6 @@ namespace PdfSharp.Pdf
             _flags = flags;
         }
 
-#if PRESERVE_PARSED_VALUES_
-        /// <summary>
-        /// Gets or sets the string that was read from the lexer.
-        /// </summary>
-        internal string? ParsedValue { get; set; }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PdfStringObject"/> class

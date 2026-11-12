@@ -76,11 +76,6 @@ namespace PdfSharp.Tests.Pdf.ObjectModel
 
             PDFsharp stores floating point values as Double, but writes them to PDF formatted as Single.
             */
-#if true_
-            var s0 = PdfReal.ToPdfLiteral(Math.PI, 0, false);
-            var s8 = PdfReal.ToPdfLiteral(Math.PI, 8, false);
-            var s12 = PdfReal.ToPdfLiteral(Math.PI, 34, false);
-#endif
 
             //long longMax = Int64.MaxValue;
             //long longSingleMax = (unchecked((long)Single.MaxValue));

@@ -59,7 +59,6 @@ namespace PdfSharp.Pdf.Filters
         {
             using var msInput = new MemoryStream(data);
             using var msOutput = new MemoryStream();
-#if true
             // CMF (Compression Method Flags) must be deflated.
             byte byte1 = (byte)msInput.ReadByte();
             if ((byte1 & 0xF) != 0x8)
@@ -70,20 +69,6 @@ namespace PdfSharp.Pdf.Filters
             byte byte2 = (byte)msInput.ReadByte();
             if ((byte2 & 0x20) != 0)
                 PdfSharpLogHost.Logger.LogWarning("Cannot decode stream. DeflateStream does not support Adler32.");
-#else
-            // ReSharper disable once RedundantAssignment
-            var header = new byte[]
-            {
-                (byte)msInput.ReadByte(), // CMF (Compression Method and flags)
-                (byte)msInput.ReadByte()  // Flags
-            };
-
-            if ((header[0] & 0xF) != 0x8)
-                PdfSharpLogHost.Logger.LogWarning("Can’t decode stream: Wrong header: Compression method must be deflate.");
-
-            if ((header[1] & 0x20) != 0)
-                PdfSharpLogHost.Logger.LogWarning("Can’t decode stream: Wrong header: DeflateStream does not support Adler32.");
-#endif
 
             using var zip = new DeflateStream(msInput, CompressionMode.Decompress, true);
             CopyWithLimit(zip, msOutput, parms?.MaxDecodedLength ?? Filtering.MaxDecodedLength);

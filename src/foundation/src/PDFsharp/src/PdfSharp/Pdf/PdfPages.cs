@@ -336,9 +336,6 @@ namespace PdfSharp.Pdf
                                             break;
 
                                         default:
-#if DEBUG_
-                                            Debug-Break.Break(true);
-#endif
                                             break;
 
                                     }
@@ -353,21 +350,12 @@ namespace PdfSharp.Pdf
                     // At least one link annotation found?
                     if (annotations.Count > 0)
                     {
-#if DEBUG_
-                        // BUG_OLD!!! HACK_OLD to make it work: Fails if there already are annotations. // ReviewSTLA.
-                        var annots2 = page.Elements.GetArray(PdfPage.Keys.Annots);
-                        if (annots2 is null)
-                        {
-                            page.Elements.Add(PdfPage.Keys.Annots, annotations);
-                        }
-#else
                         var annots2 = page.Elements.GetArray(PdfPage.Keys.Annots);
                         if (annots2 is not null)
                             _ = typeof(int);  // Temporary line for breakpoints.
 
                         //Owner._irefTable.Add(annotations);
                         page.Elements.Add(PdfPage.Keys.Annots, annotations);
-#endif
                     }
                 }
             }

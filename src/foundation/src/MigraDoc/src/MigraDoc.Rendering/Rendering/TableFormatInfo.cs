@@ -3,9 +3,7 @@
 
 using MigraDoc.DocumentObjectModel.Tables;
 using MigraDoc.DocumentObjectModel.Visitors;
-#if !PSXGRA
 using PdfSharp.Drawing;
-#endif
 
 namespace MigraDoc.Rendering
 {

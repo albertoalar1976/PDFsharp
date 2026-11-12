@@ -23,9 +23,7 @@ namespace MigraDoc.Tests
         public TextTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()
@@ -62,11 +60,6 @@ namespace MigraDoc.Tests
             // … and start a viewer.
             PdfFileUtility.ShowDocumentIfDebugging(filename);
 
-#if DEBUG___
-            MigraDoc.DocumentObjectModel.IO.DdlWriter dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_2.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
         }
 
         /// <summary>

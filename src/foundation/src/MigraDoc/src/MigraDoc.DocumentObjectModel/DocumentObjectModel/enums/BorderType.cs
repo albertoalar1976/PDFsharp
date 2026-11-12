@@ -29,18 +29,6 @@ namespace MigraDoc.DocumentObjectModel
         Right,
 
         /// <summary>
-        /// Horizontal border (currently not used).
-        /// </summary>
-        [Obsolete("Not used in MigraDoc 1.2")]
-        Horizontal,  // Not used in MigraDoc 1.2.
-
-        /// <summary>
-        /// Vertical border (currently not used).
-        /// </summary>
-        [Obsolete("Not used in MigraDoc 1.2")]
-        Vertical,    // Not used in MigraDoc 1.2.
-
-        /// <summary>
         /// Diagonal-down border.
         /// </summary>
         DiagonalDown,

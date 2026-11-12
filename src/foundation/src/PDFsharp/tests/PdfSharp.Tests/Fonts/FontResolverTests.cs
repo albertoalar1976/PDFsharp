@@ -6,9 +6,7 @@ using PdfSharp.Diagnostics;
 using PdfSharp.Drawing;
 using PdfSharp.Fonts;
 using PdfSharp.Snippets.Font;
-#if CORE
 using PdfSharp.Quality;
-#endif
 using Xunit;
 using FontHelper = PdfSharp.Fonts.Internal.FontHelper;
 
@@ -56,7 +54,6 @@ namespace PdfSharp.Tests.Fonts
 
             // No CFR.
             XFilesShouldFail();
-#if CORE
             // We set the UnitTestFontResolver to get support for some fonts.
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
 
@@ -107,71 +104,31 @@ namespace PdfSharp.Tests.Fonts
             winDingsB.GlyphTypeface.StyleSimulations.Should().Be(XStyleSimulations.BoldSimulation);
             winDingsI.GlyphTypeface.StyleSimulations.Should().Be(XStyleSimulations.ItalicSimulation);
             winDingsBI.GlyphTypeface.StyleSimulations.Should().Be(XStyleSimulations.BoldItalicSimulation);
-#endif
-#if GDI
-            // Resolved by GDI.
-            SegoeUIShouldSucceed();
-
-            var arial = new XFont(ArialName, 10, XFontStyleEx.Regular);
-            var times = new XFont(TimesName, 10, XFontStyleEx.Regular);
-            var courier = new XFont(CourierName, 10, XFontStyleEx.Regular);
-            var verdana = new XFont(VerdanaName, 10, XFontStyleEx.Regular);
-            var lucida = new XFont(LucidaName, 10, XFontStyleEx.Italic);
-            var symbol = new XFont(SymbolName, 10, XFontStyleEx.Regular);
-            var winDings = new XFont(WingdingsName, 10, XFontStyleEx.Regular);
-#endif
-#if WPF
-            // Resolved by GDI.
-            SegoeUIShouldSucceed();
-
-            var arial = new XFont(ArialName, 10, XFontStyleEx.Regular);
-            var times = new XFont(TimesName, 10, XFontStyleEx.Regular);
-            var courier = new XFont(CourierName, 10, XFontStyleEx.Regular);
-            var verdana = new XFont(VerdanaName, 10, XFontStyleEx.Regular);
-            var lucida = new XFont(LucidaName, 10, XFontStyleEx.Regular);
-            var symbol = new XFont(SymbolName, 10, XFontStyleEx.Regular);
-            var winDings = new XFont(WingdingsName, 10, XFontStyleEx.Regular);
-#endif
             var arialCount = FontHelper.CountGlyphs(arial);
             var timesCount = FontHelper.CountGlyphs(times);
             var courierCount = FontHelper.CountGlyphs(courier);
             var verdanaCount = FontHelper.CountGlyphs(verdana);
-#if !CORE
-            var lucidaCount = FontHelper.CountGlyphs(lucida);
-            var symbolCount = FontHelper.CountGlyphs(symbol);
-#endif
 
             arialCount.Should().BeGreaterThan(3300);
             timesCount.Should().BeGreaterThan(3300);
             courierCount.Should().BeGreaterThan(3100);
             verdanaCount.Should().BeGreaterThan(800);
-#if !CORE
-            lucidaCount.Should().BeGreaterThan(600);
-            symbolCount.Should().BeGreaterThan(180);
-#endif
         }
 
         [Fact]
         public void No_FontResolver_set_and_multiple_creations()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             // We set the UnitTestFontResolver to get support for some fonts.
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
 
             // No FFR.
             DummyShouldFail();
 
             // No CFR.
             XFilesShouldFail();
-#if CORE
             // Not in UTFR.
             SegoeUIShouldFail();
-#else
-            // Resolved by PDF for GDI and WPF.
-            SegoeUIShouldSucceed();
-#endif
             var arial0 = new XFont(ArialName, 10, XFontStyleEx.Regular);
             var arial = new XFont(ArialName, 10, XFontStyleEx.Regular);
             var times0 = new XFont(TimesName, 10, XFontStyleEx.Regular);
@@ -204,10 +161,8 @@ namespace PdfSharp.Tests.Fonts
         public void No_FontResolver_set_and_multiple_creations2()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             // We set the UnitTestFontResolver to get support for some fonts.
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
 
             var arial0 = new XFont(ArialName, 10, XFontStyleEx.Regular);
             var arial1 = new XFont(ArialName, 10, XFontStyleEx.Italic);
@@ -274,10 +229,8 @@ namespace PdfSharp.Tests.Fonts
         public void Test_FailsafeFontResolver_as_fallback_font_resolver()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             // We set the UnitTestFontResolver to get support for some fonts.
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
 
             GlobalFontSettings.FallbackFontResolver = new FailsafeFontResolver();
 
@@ -286,31 +239,14 @@ namespace PdfSharp.Tests.Fonts
 
             // Resolved in FFR.
             XFilesShouldBeReplacedBy("Segoe WP");
-#if CORE
             // Resolved in FFR.
             SegoeUIShouldBeReplacedBy("Segoe WP");
-#else
-            // Resolved by PFF for GDI and WPF.
-            SegoeUIShouldSucceed();
-#endif
             // Platform font resolver creates Arial.
             var arial = new XFont(ArialName, 10, XFontStyleEx.Regular);
             arial.GlyphTypeface.FontName.Should().Be("Arial");
-#if CORE
             // Fallback font resolver creates Segoe WP.
             var dummy = new XFont("Dummy", 10, XFontStyleEx.Regular);
             dummy.GlyphTypeface.FamilyName.Should().Be("Segoe WP");
-#endif
-#if GDI
-            // Fallback font resolver creates Segoe WP.
-            var dummy = new XFont("Dummy", 10, XFontStyleEx.Regular);
-            dummy.GlyphTypeface.FontName.Should().Be("Segoe WP");
-#endif
-#if WPF
-            // Fallback font resolver creates Segoe WP.
-            var dummy = new XFont("Dummy", 10, XFontStyleEx.Regular);
-            dummy.GlyphTypeface.FamilyName.Should().Be("Segoe WP");
-#endif
         }
 
         [Fact]
@@ -375,10 +311,8 @@ namespace PdfSharp.Tests.Fonts
         public void TestXFilesFontResolver2_used_as_main_font_resolver()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             // We set the UnitTestFontResolver to get support for some fonts.
             GlobalFontSettings.FallbackFontResolver = new UnitTestFontResolver();
-#endif
 
             GlobalFontSettings.FontResolver = new TestXFilesFontResolver2();
 
@@ -388,13 +322,8 @@ namespace PdfSharp.Tests.Fonts
             // Resolved in CFR.
             XFilesShouldSucceed();
 
-#if CORE
             // PFR called from CFR but cannot resolve.
             SegoeUIShouldFail();
-#else
-            // PFR called from CFR and resolved by GDI / WPF PFR.
-            SegoeUIShouldSucceed();
-#endif
             // Arial fails not because custom font resolver calls
             // platform font resolver.
             var arial = new XFont(ArialName, 10, XFontStyleEx.Regular);
@@ -404,26 +333,9 @@ namespace PdfSharp.Tests.Fonts
             var xfiles = new XFont(XFilesName, 10, XFontStyleEx.Regular);
             xfiles.GlyphTypeface.FontName.Should().Be("X-Files");
 
-#if CORE
             // Dummy fails because it cannot be resolved.
             Func<XFont> createDummy = () => new XFont("Dummy", 10, XFontStyleEx.Regular);
             createDummy.Should().Throw<InvalidOperationException>();
-#endif
-#if GDI
-            // Dummy resolved by platform font resolver and creates Microsoft Sans Serif.
-            //var dummy = new XFont("Dummy", 10, XFontStyleEx.Regular);
-            //dummy.GlyphTypeface.FontFamily.Should().Be("Microsoft Sans Serif");
-            Func<XFont> createDummy = () => new XFont("Dummy", 10, XFontStyleEx.Regular);
-            createDummy.Should().Throw<InvalidOperationException>();
-#endif
-#if WPF
-            //// Dummy resolved by platform font resolver and creates Microsoft Sans Serif.
-            //var dummy = new XFont("Dummy", 10, XFontStyleEx.Regular);
-            //dummy.GlyphTypeface.FontFamily.Should().Be("Microsoft Sans Serif");
-            // Dummy fails because it cannot be resolved.
-            Func<XFont> createDummy = () => new XFont("Dummy", 10, XFontStyleEx.Regular);
-            createDummy.Should().Throw<InvalidOperationException>();
-#endif
         }
 
         [Fact]
@@ -438,20 +350,9 @@ namespace PdfSharp.Tests.Fonts
 
             // Resolved in CFR.
             XFilesShouldSucceed();
-#if CORE
             // PFR called CFT but cannot resolve Segoe UI so it is resolved by FFR.
             SegoeUIShouldBeReplacedBy("Segoe WP");
-#else
-            // PFR called and resolved by GDI / WPF PFR.
-            SegoeUIShouldSucceed();
-#endif
 
-#if !CORE
-            // Arial fails not because custom font resolver calls
-            // platform font resolver.
-            var arial = new XFont(ArialName, 10, XFontStyleEx.Regular);
-            arial.GlyphTypeface.FontName.Should().Be("Arial");
-#endif
 
             // X-Files resolved by font resolver.
             var xfiles = new XFont(XFilesName, 10, XFontStyleEx.Regular);
@@ -459,17 +360,7 @@ namespace PdfSharp.Tests.Fonts
 
             // Dummy resolved by fallback font resolver and creates Segoe WP.
             var dummy = new XFont("Dummy", 10, XFontStyleEx.Regular);
-#if CORE
             dummy.GlyphTypeface.FamilyName.Should().Be("Segoe WP");
-#endif
-#if GDI
-            // PDFsharp ignores the fact that GDI resolve every unknown font with 'Microsoft Sans Serif'.
-            //dummy.GlyphTypeface.FontFamily.Should().Be("Microsoft Sans Serif");
-            dummy.GlyphTypeface.FamilyName.Should().Be("Segoe WP");
-#endif
-#if WPF
-            dummy.GlyphTypeface.FamilyName.Should().Be("Segoe WP");
-#endif
         }
 
         [Fact]

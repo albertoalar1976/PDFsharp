@@ -16,10 +16,6 @@ namespace PdfSharp.Pdf.Annotations
     {
         // Reference 2.0: 12.5.6.12  Rubber stamp annotations / Page 494
 
-        [Obsolete("PDFsharp 6.4: Use a constructor with a PDF document parameter.")]
-        public PdfStampAnnotation()
-            => throw new NotImplementedException("PDFsharp 6.4: Use a constructor with a PDF document parameter.");
-
         /// <summary>
         /// Initializes a new instance of the <see cref="PdfStampAnnotation"/> class.
         /// </summary>
@@ -118,10 +114,4 @@ namespace PdfSharp.Pdf.Annotations
         internal override DictionaryMeta Meta => Keys.Meta;
     }
 
-    /// <summary>
-    /// Use PdfStampAnnotation.
-    /// </summary>
-    [Obsolete("Use PdfStampAnnotation.")]
-    public class PdfRubberStampAnnotation
-    { }
 }

@@ -8,9 +8,7 @@ using PdfSharp.Fonts;
 using PdfSharp.Quality;
 using PdfSharp.TestHelper;
 using Xunit;
-#if CORE
 using PdfSharp.Snippets.Font;
-#endif
 
 namespace MigraDoc.Tests
 {
@@ -20,9 +18,7 @@ namespace MigraDoc.Tests
         public MultipleFooters()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

@@ -24,13 +24,7 @@ namespace GdiGrammarByExample
         }
 
         [SkippableFact]
-#if CORE
         public void DDL_Grammar_By_Example_Section_PageLayout()
-#elif GDI
-        public void GDI_DDL_Grammar_By_Example_Section_PageLayout()
-#elif WPF
-        public void WPF_DDL_Grammar_By_Example_Section_PageLayout()
-#endif
         {
             Skip.If(SkippableTests.SkipSlowTests());
             RunTest();

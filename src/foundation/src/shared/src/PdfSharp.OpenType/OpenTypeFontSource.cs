@@ -60,24 +60,6 @@ namespace PdfSharp.Internal.OpenType
             return null;
         }
 
-#if not_used  // DELETE
-        static OpenTypeFontSource GetOrCreateFromBytes(string typefaceKey, byte[] fontBytes)
-        {
-            ulong checksumKey = ChecksumHelper.CalcChecksum(fontBytes);
-            if (OpenTypeFontFactory.TryGetFontSourceByKey(checksumKey, out var fontSource))
-            {
-                // The font source already exists, but is not yet cached under the specified typeface key.
-                OpenTypeFontFactory.CacheExistingFontSourceWithNewTypefaceKey(typefaceKey, fontSource);
-            }
-            else
-            {
-                // No font source exists. Create new one and cache it.
-                fontSource = new(fontBytes, checksumKey);
-                OpenTypeFontFactory.CacheNewFontSource(typefaceKey, fontSource);
-            }
-            return fontSource;
-        }
-#endif
 
         /// <summary>
         /// Creates a font source from a byte array.

@@ -319,21 +319,10 @@ namespace MigraDoc.Rendering
             {
                 string base64 = uri.Substring("base64:".Length);
                 byte[] bytes = Convert.FromBase64String(base64);
-#if WPF || GDI
-                // WPF stores a reference to the stream internally. We must not destroy the stream here, otherwise rendering the PDF will fail.
-                // Same for GDI.
-                // We have to rely on the garbage collector to properly dispose the MemoryStream.
-                {
-                    Stream stream = new MemoryStream(bytes, 0, bytes.Length, false, true);
-                    XImage image = XImage.FromStream(stream);
-                    return image;
-                }
-#else
                 //using Stream stream = new MemoryStream(bytes);
                 using Stream stream = new MemoryStream(bytes, 0, bytes.Length, true, true);
                 XImage image = XImage.FromStream(stream);
                 return image;
-#endif
             }
             return XImage.FromFile(uri);
         }

@@ -69,7 +69,6 @@ namespace PdfSharp.Pdf
         /// </summary>
         internal void GetInheritableValues(ref InheritedValues inheritedValues)
         {
-#if true  // @@@
             //var res = Elements.GetDictionary(InheritablePageKeys.Resources);
             //if (res != null)
             //    inheritedValues.Resources = res;
@@ -85,33 +84,6 @@ namespace PdfSharp.Pdf
 
             //inheritedValues.CropBox = Elements.GetValue<PdfRectangle>(InheritablePageKeys.CropBox);
             //inheritedValues.Rotate = Elements.GetValue<PdfInteger>(InheritablePageKeys.Rotate);
-#else
-            // Old code from PdfPage - DELETE
-            var item = page.Elements[InheritablePageKeys.Resources];
-            if (item != null)
-            {
-                if (item is PdfReference reference)
-                    values.Resources = (PdfDictionary)(reference.Value);
-                else
-                    values.Resources = (PdfDictionary)item;
-            }
-
-            item = page.Elements.GetValue(InheritablePageKeys.MediaBox);
-            if (item != null)
-                values.MediaBox = new PdfRectangle(item);
-
-            item = page.Elements.GetValue(InheritablePageKeys.CropBox);
-            if (item != null)
-                values.CropBox = new PdfRectangle(item);
-
-            item = page.Elements.GetValue(InheritablePageKeys.Rotate);
-            if (item != null)
-            {
-                //if (item is PdfReference)
-                //    item = ((PdfReference)item).Value;
-                values.Rotate = (PdfInteger)item;
-            }
-#endif
         }
 
         /// <summary>

@@ -302,10 +302,6 @@ namespace PdfSharp.Internal.OpenType
             // ReSharper restore InconsistentNaming
             try
             {
-#if DEBUG_
-                if (Name == "Cambria")
-                    _ = typeof(int);
-#endif
                 // Check if data is a TrueType collection font.
                 uint startTag = ReadULong();
                 if (startTag == TTCF)
@@ -522,10 +518,6 @@ namespace PdfSharp.Internal.OpenType
             for (int idx = 0; idx < tableCount; idx++)
             {
                 var entry = TableDictionary[tags[idx]];
-#if DEBUG_
-                if (entry.Tag is "glyf" or "loca")
-                    _ = typeof(int);
-#endif
                 entry.FontTable.PrepareForCompilation();
                 entry.Offset = tablePosition;
                 writer.Position = tablePosition;

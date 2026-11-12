@@ -170,13 +170,6 @@ namespace MigraDoc.DocumentObjectModel
         }
 
         /// <summary>
-        /// This is now the same as PageWidth.
-        /// </summary>
-        [Obsolete("EffectivePageWidth used to return the actual width of the page, while PageWidth returned the width of the non-rotated page format." +
-                  "As of now, PageWidth is already the effective page width.")]
-        public Unit EffectivePageWidth => PageWidth;
-
-        /// <summary>
         /// Gets or sets the starting number for the first section page.
         /// </summary>
         public int StartingNumber
@@ -216,13 +209,6 @@ namespace MigraDoc.DocumentObjectModel
             Values.PageFormat = null;
             Values.Orientation = null;
         }
-
-        /// <summary>
-        /// This is now the same as PageHeight.
-        /// </summary>
-        [Obsolete("EffectivePageHeight used to return the actual height of the page, while PageHeight returned the height of the non-rotated page format." +
-                  "As of now, PageHeight is already the effective page height.")]
-        public Unit EffectivePageHeight => PageHeight;
 
         /// <summary>
         /// Gets or sets the top margin of the pages in the section.
@@ -409,7 +395,6 @@ namespace MigraDoc.DocumentObjectModel
             {
                 if (_defaultPageSetup == null)
                 {
-#if true
                     // This is the default metric PageSetup. If we ever create a different one
                     // for non-metric countries we have to write this information into MDDDL.
                     // Currently, we only use this default values.
@@ -431,48 +416,6 @@ namespace MigraDoc.DocumentObjectModel
                         MirrorMargins = false,
                         HorizontalPageBreak = false
                     };
-#else // KEEP for reference if we create a non-metric setup and fix the MDDDL issue.
-                    // Check if the current country/region uses the metric system of measurement
-                    // and then use page format A4 anyway.
-                    var culture = CultureInfo.CurrentCulture;
-                    if (culture.IsNeutralCulture)
-                        culture = CultureInfo.InvariantCulture;
-
-                    var regionInfo = culture.Name.Length > 0 ? new RegionInfo(culture.Name) : null;
-                    var isMetric = regionInfo?.IsMetric ?? true;
-
-                Metric:
-                    if (isMetric)
-                    {
-                        // This is the default metric PageSetup. If we ever create a different one
-                        // for non-metric countries we have to write this information into MDDDL.
-                        _defaultPageSetup = new()
-                        {
-                            PageFormat = PageFormat.A4,
-                            SectionStart = BreakType.BreakNextPage,
-                            Orientation = Orientation.Portrait,
-                            PageWidth = "21cm",
-                            PageHeight = "29.7cm",
-                            TopMargin = "2.5cm",
-                            BottomMargin = "2cm",
-                            LeftMargin = "2.5cm",
-                            RightMargin = "2.5cm",
-                            HeaderDistance = "1.25cm",
-                            FooterDistance = "1.25cm",
-                            OddAndEvenPagesHeaderFooter = false,
-                            DifferentFirstPageHeaderFooter = false,
-                            MirrorMargins = false,
-                            HorizontalPageBreak = false
-                        };
-                    }
-                    else
-                    {
-                        // TODO_OLD: Maybe useful in the future, but MDDDL now depends on the settings when it was created.
-                        // Just go to metric case.
-                        isMetric = true;
-                        goto Metric;
-                    }
-#endif
                     _defaultPageSetup.Freeze();
                 }
                 return _defaultPageSetup;

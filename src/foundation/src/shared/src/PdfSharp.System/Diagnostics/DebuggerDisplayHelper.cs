@@ -3,7 +3,6 @@
 
 using System.Globalization;
 
-#if DEBUG || true  // I don’t compile this effin’ crap into a Release build.
 
 namespace PdfSharp.Diagnostics
 {
@@ -55,4 +54,3 @@ namespace PdfSharp.Diagnostics
         public static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
     }
 }
-#endif

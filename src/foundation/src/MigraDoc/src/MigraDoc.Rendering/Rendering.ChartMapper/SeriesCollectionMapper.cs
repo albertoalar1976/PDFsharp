@@ -42,25 +42,17 @@ namespace MigraDoc.Rendering.ChartMapper
                     series.MarkerBackgroundColor = XColor.Empty;
                 else
                 {
-#if noCMYK
-                    series.MarkerBackgroundColor = XColor.FromArgb(domSeries.MarkerBackgroundColor.Argb);
-#else
                     Debug.Assert(domSeries.Document != null, "domSeries.Document != null");
                     series.MarkerBackgroundColor =
                       ColorHelper.ToXColor(domSeries.MarkerBackgroundColor, domSeries.Document.UseCmykColor);
-#endif
                 }
                 if (domSeries.MarkerForegroundColor.IsEmpty)
                     series.MarkerForegroundColor = XColor.Empty;
                 else
                 {
-#if noCMYK
-                    series.MarkerForegroundColor = XColor.FromArgb(domSeries.MarkerForegroundColor.Argb);
-#else
                     Debug.Assert(domSeries.Document != null, "domSeries.Document != null");
                     series.MarkerForegroundColor =
                       ColorHelper.ToXColor(domSeries.MarkerForegroundColor, domSeries.Document.UseCmykColor);
-#endif
                 }
                 series.MarkerSize = domSeries.MarkerSize.ToXUnit();
                 if (domSeries.Values.MarkerStyle is not null)

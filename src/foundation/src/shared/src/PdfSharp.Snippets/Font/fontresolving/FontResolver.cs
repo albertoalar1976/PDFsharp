@@ -41,9 +41,6 @@ namespace PdfSharp.Snippets.Font
 
             // Create a font.
             const double fontSize = 16;
-#if false
-            XFont times = new XFont("Times New Roman", fontSize, XFontStyleEx.Regular, pdfOptions);
-#endif
             //var wpLightFont = new XFont("Segoe WP Light", fontSize, XFontStyleEx.Regular, pdfOptions);
             var wpLightFont = new XFont("Times New Roman", fontSize, XFontStyleEx.Regular, pdfOptions);
             var wpSemilightFont = new XFont("Segoe WP Semilight", fontSize, XFontStyleEx.Regular, pdfOptions);

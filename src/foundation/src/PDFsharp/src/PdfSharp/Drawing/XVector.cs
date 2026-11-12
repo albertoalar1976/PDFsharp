@@ -3,12 +3,6 @@
 
 using System.Runtime.InteropServices;
 using PdfSharp.Internal;
-#if GDI
-using System.Drawing;
-#endif
-#if WPF
-using System.Windows.Media;
-#endif
 
 namespace PdfSharp.Drawing
 {

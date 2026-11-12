@@ -9,8 +9,6 @@ using MigraDoc.DocumentObjectModel.Fields;
 using MigraDoc.DocumentObjectModel.Shapes;
 using MigraDoc.Rendering;
 using Xunit;
-#if CORE
-#endif
 using FluentAssertions;
 using PdfSharp.Fonts;
 
@@ -22,9 +20,7 @@ namespace MigraDoc.DocumentObjectModel.Tests
         public ParagraphTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()

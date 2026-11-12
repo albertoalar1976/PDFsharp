@@ -16,19 +16,6 @@ namespace PdfSharp.Quality.Ghostscript
         // Add support for Linux when needed.
         // Add more options when needed.
 
-#if false
-        // Sample code:
-
-            var pdf = @"D:\PDFsharp\Specs\ISO_32000-2_2020(en).pdf";
-            var png = @"D:\page34.png";
-            var png2 = @"D:\page%d.png";
-            var png3 = @"D:\page%04d.png";
-
-            var pdfConvert = new PdfToPngConverter(pdf, 150, true);
-            pdfConvert.ConvertPages(png, 33);
-            pdfConvert.ConvertPages(png2, 34, 3);
-            pdfConvert.ConvertPages(png3, 37, 3);
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PdfToPngConverter"/> class.
@@ -138,18 +125,10 @@ namespace PdfSharp.Quality.Ghostscript
 
         private static string FindTool(bool throwOnError = true)
         {
-#if true
             var toolFolder = IOUtility.GetAssetsPath("tools/pdf-to-png");
             if (toolFolder == null)
                 throw new InvalidOperationException("Copy tools to asset folder \"tools/pdf-to-png\". See README.md for further information.");
             var toolExe = toolFolder + "/gswin64c.exe"; // Linux: different application name.
-#else
-            var toolFolder = AssetsHelper.GetAssetsFolder();
-            if (toolFolder == null)
-                throw new InvalidOperationException("Copy tools to asset folder.");
-            toolFolder = Path.Combine(toolFolder, "tools\\pdf-to-png");
-            var toolExe = toolFolder + "\\gswin64c.exe"; // Linux: different application name.
-#endif
             if (!File.Exists(toolExe))
             {
                 if (throwOnError)

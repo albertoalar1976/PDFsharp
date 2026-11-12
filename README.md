@@ -1,47 +1,87 @@
-﻿[![Maintained by PDFsharp Team](https://img.shields.io/badge/Maintained%20by-PDFsharp%20Team-blue?style=flat)](https://www.pdfsharp.com) 
-[![Commercial Support Available](https://img.shields.io/badge/Commercial%20Support-Available-blue?style=flat)](https://www.pdfsharp.com/Offers)
+﻿# PDFsharp & MigraDoc 7 – MIT fork
 
-> This project is actively maintained by the PDFsharp Team.  
-> Professional assistance for production is available upon request.
+> **This is an independent fork under the MIT license.**  
+> It is based on the last version of PDFsharp & MigraDoc that was published under the MIT license:
+> **7.0.0 Preview 1** (upstream commit `8d818d5`, 2026-05-05).
+> Later upstream versions are licensed under the AGPL and are **not** part of this fork.  
+> This fork is not affiliated with or endorsed by empira Software GmbH.  
+> **Never merge or "Sync fork" with the upstream repository**: that would bring AGPL-licensed code into this fork.
 
-# PDFsharp & MigraDoc 7
+### Platforms and target framework
 
-Version **7.0.0 Preview 2**  
-Published **2026-10-13**
+There is **one code base for Windows, Linux, and macOS**. All projects target **.NET 10** (`net10.0`) only.
 
-This is a preview version of the **PDFsharp** project, the main project of PDFsharp & MigraDoc 7.
+* The same build and the same NuGet packages (`PDFsharp` and `PDFsharp-MigraDoc`) run on all three operating systems.
+* The former Windows-only GDI and WPF builds (System.Drawing and WPF rendering, desktop preview controls, and printing) are not part of this fork.
+* .NET Framework, .NET Standard, and .NET 8/9 are not supported.
 
-### Target framework
+### License
 
-This fork targets **.NET 10** only.
+Published Open Source under the MIT license, see [LICENSE](LICENSE).
+The copyright notices of the original authors must be kept:
 
-* The Core build (`net10.0`, NuGet packages `PDFsharp` and `PDFsharp-MigraDoc`) runs on **Windows, Linux, and macOS**.
-* The GDI and WPF builds (`net10.0-windows`) are for Windows desktop applications.
-* .NET Framework, .NET Standard, and .NET 8/9 (end of support on 2026-11-10) are no longer supported.
-
-PDFsharp: Copyright (c) 2005-2026 empira Software GmbH, Troisdorf (Cologne Area), Germany
+PDFsharp: Copyright (c) 2005-2026 empira Software GmbH, Troisdorf (Cologne Area), Germany  
 MigraDoc: Copyright (c) 2001-2026 empira Software GmbH, Troisdorf (Cologne Area), Germany
-Published Open Source under [AGPL and Commercial License](https://docs.pdfsharp.net/LICENSE.html)
 
-For more information see [docs.pdfsharp.net](https://docs.pdfsharp.net/)
+### Fonts on Windows, Linux, and macOS
+
+`SystemFontResolver` uses the fonts installed on the computer, the same way on all three operating systems.
+It finds TrueType fonts (.ttf) and TrueType collections (.ttc) in the standard font folders,
+simulates bold and italic if a family has no such face,
+and uses a metric-compatible family if a family is not installed, e.g. Liberation Sans for Arial on Linux.
+
+```cs
+// Once at application startup.
+GlobalFontSettings.FontResolver = new SystemFontResolver();
+
+// Or: your own fonts first, the installed fonts for everything else.
+GlobalFontSettings.FontResolver = new MyFontResolver();
+GlobalFontSettings.FallbackFontResolver = new SystemFontResolver();
+```
+
+In containers, install the fonts you need, e.g. `apt-get install fonts-liberation`,
+or pass your own font folders: `new SystemFontResolver(["/app/fonts"])`.
+`GetFamilyNames()` lists the families found.
+
+### Images
+
+`XImage.FromFile` and `XImage.FromStream` read JPEG, PNG, BMP, GIF, and TIFF on all platforms.
+GIF: the first frame, with transparency and interlacing.
+TIFF: the first page; bilevel, gray, palette, RGB, RGBA, and CMYK images with 1 to 16 bits per sample,
+uncompressed or compressed with PackBits, LZW, or Deflate. CMYK stays CMYK in the PDF file.
+Scanned bilevel TIFF images compressed with CCITT Group 4, Group 3 (1D), or modified Huffman
+are written to the PDF file without decoding them, because PDF supports these compressions.
+Not supported: JPEG compressed TIFF, YCbCr and Lab TIFF, Group 3 2D, and Group 4 with more than one strip.
+
+### Removed obsolete API
+
+This fork removed the API that the upstream project had marked as obsolete.
+See [MIGRATION.md](MIGRATION.md) for the replacements.
 
 ## Read this FIRST
 
-Project documentation can be found on our DOCS site: <https://docs.pdfsharp.net>.
+The documentation of the original project can be found at <https://docs.pdfsharp.net>.
+Note that it describes the upstream versions, which may differ from this fork.
 
 Note that PowerShell 7 is required to execute the PowerShell scripts that come with PDFsharp.
 
 ### Download assets first
 
-Assets like bitmaps, fonts, or PDF files are not part of the repository anymore.
-You must download them before compiling the solution for the first time.
-Use `download-assets.ps1` in the `dev` folder to create `assets` folder required for some unit tests and needed by some projects.
-
-Execute
+Assets like bitmaps, fonts, or PDF files are not part of the repository.
+Download them once before you build the solution for the first time: some projects embed fonts from the assets
+(PdfSharp.WPFonts and PdfSharp.Snippets, which are part of the NuGet packages), and the tests use them.
+The build itself never downloads anything; if the assets are missing, it stops with an error that says so.
+Run `download-assets.ps1` in the `dev` folder to create the `assets` folder:
 
 ```ps
-.\dev\download-assets.ps1
+./dev/download-assets.ps1
 ```
+
+The script downloads the assets from the server of the upstream project and checks the SHA-256 hash of every file.
+If a file on the server has changed, the script stops. To use your own copy of the files,
+set the environment variable `PDFSHARP_ASSETS_URL` or use the parameter `-Source`.
+
+`./dev/run-tests.ps1` downloads the assets if necessary, builds the solution, and runs all tests.
 
 ### Build the solution
 
@@ -85,5 +125,5 @@ Andreas Seifert
 
 ## Libraries used by PDFsharp
 
-The Core build of PDFsharp uses BigGustave to read PNG images. BigGustave was released into the public domain and does not restrict the AGPL or Commercial License used by PDFsharp.  
+The Core build of PDFsharp uses BigGustave to read PNG images. BigGustave was released into the public domain and does not restrict the MIT license used by PDFsharp.  
 Link to project repository: https://github.com/EliotJones/BigGustave

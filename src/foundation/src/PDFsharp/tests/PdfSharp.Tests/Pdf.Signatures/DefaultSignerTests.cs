@@ -2,9 +2,6 @@
 // See the LICENSE file in the solution root for more information.
 
 using System.Globalization;
-#if WPF
-using System.IO;
-#endif
 using System.Security.Cryptography.X509Certificates;
 using PdfSharp.Diagnostics;
 using PdfSharp.Drawing;
@@ -26,9 +23,7 @@ namespace PdfSharp.Tests.Pdf.Signatures
         public DefaultSignerTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()
@@ -186,13 +181,6 @@ namespace PdfSharp.Tests.Pdf.Signatures
             Skip.If(SkippableTests.SkipSlowTests());
 
             int loops = 2;
-#if DEBUG_
-            var version = PdfSharp.Internal.BuildInformation.BuildVersionNumber;
-            loops = 100;
-            // Reduce loops for slow timestamp servers.
-            if (timestampURL.Contains("sect"))
-                loops = 5;
-#endif
             IOUtility.EnsureAssetsVersion(RequiredAssets);
 
             for (int loop = 1; loop <= loops; loop++)
@@ -268,17 +256,11 @@ namespace PdfSharp.Tests.Pdf.Signatures
         [SkippableFact]
         public void Sign_with_Certificate_from_Store()
         {
-            // Get empira Software GmbH certificates.
             const string certName = "empira Software GmbH";
             X509Certificate2 certificate = null!;
             var store = new X509Store(StoreLocation.CurrentUser);
             store.Open(OpenFlags.ReadOnly);
             X509Certificate2Collection cers = store.Certificates.Find(X509FindType.FindBySubjectName, certName, false);
-
-            // This test works only with the old local certificates.
-            cers = cers.Find(X509FindType.FindByTimeExpired, new DateTime(2026, 10, 6), false);
-
-            // Only continue test, if matching certificates were found.
             Skip.If(cers.Count == 0);
 
             if (cers.Count > 0)

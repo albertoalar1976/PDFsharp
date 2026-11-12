@@ -157,15 +157,4 @@ namespace PdfSharp.Logging
         //public static partial void WarningMessage(this ILogger logger, string someText);
     }
 
-#if true_
-    class LogTestCode
-    {
-        void FooBar()
-        {
-            //var ss = PSEventId.Test1;
-            //PdfSharpLogHost.Logger.LogError(ss, "message");
-            LoggerMessage.Define<char>(LogLevel.Critical, )
-        }
-    }
-#endif
 }

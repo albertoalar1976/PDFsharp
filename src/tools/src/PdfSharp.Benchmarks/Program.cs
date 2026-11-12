@@ -15,7 +15,6 @@ using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 using PdfSharp.Quality;
 
-PdfSharpLicense.SetAgplLicense();
 GlobalFontSettings.FontResolver = new UnitTestFontResolver();
 
 byte[] created = [];

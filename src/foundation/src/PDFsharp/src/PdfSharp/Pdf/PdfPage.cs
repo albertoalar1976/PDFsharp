@@ -3,9 +3,7 @@
 
 using Microsoft.Extensions.Logging;
 using PdfSharp.Drawing;
-#if CORE
 using PdfSharp.Internal.Imaging;
-#endif
 using PdfSharp.Logging;
 using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf.Annotations;
@@ -238,12 +236,6 @@ namespace PdfSharp.Pdf
         public bool HasMediaBox => Elements.HasValue(InheritablePageKeys.MediaBox);
 
         /// <summary>
-        /// Gets a copy of the media box if it exists, or an empty PdfRectangle if no media box is set.
-        /// </summary>
-        [Obsolete("Use properties HasMediaBox and MediaBox.")]
-        public PdfRectangle MediaBoxReadOnly => Elements.GetRequiredRectangle(InheritablePageKeys.MediaBox, false, new());
-
-        /// <summary>
         /// Gets or sets the crop box.
         /// </summary>
         public PdfRectangle CropBox
@@ -256,12 +248,6 @@ namespace PdfSharp.Pdf
         /// Gets a value indicating whether a crop box is set.
         /// </summary>
         public bool HasCropBox => Elements.HasValue(InheritablePageKeys.CropBox);
-
-        /// <summary>
-        /// Gets a copy of the crop box if it exists, or an empty PdfRectangle if no crop box is set.
-        /// </summary>
-        [Obsolete("Use properties HasCropBox and CropBox.")]
-        public PdfRectangle CropBoxReadOnly => Elements.GetRequiredRectangle(InheritablePageKeys.CropBox, false, new());
 
         /// <summary>
         /// Gets a copy of the effective crop box if it exists, or an empty PdfRectangle if neither crop box nor media box are set.
@@ -284,13 +270,6 @@ namespace PdfSharp.Pdf
         /// Gets a value indicating whether a bleed box is set.
         /// </summary>
         public bool HasBleedBox => Elements.HasValue(Keys.BleedBox);
-
-        /// <summary>
-        /// Gets a copy of the bleed box if it exists, or an empty PdfRectangle if no bleed box is set.
-        /// </summary>
-        [Obsolete("Use properties HasBleedBox and BleedBox.")]
-
-        public PdfRectangle BleedBoxReadOnly => Elements.GetRequiredRectangle(Keys.BleedBox, false, new());
 
         /// <summary>
         /// Gets a copy of the effective bleed box if it exists, or an empty PdfRectangle if neither bleed box nor crop box nor media box are set.
@@ -320,12 +299,6 @@ namespace PdfSharp.Pdf
         public bool HasArtBox => Elements.HasValue(Keys.ArtBox);
 
         /// <summary>
-        /// Gets a copy of the art box if it exists, or an empty PdfRectangle if no art box is set.
-        /// </summary>
-        [Obsolete("Use properties HasArtBox and ArtBox.")]
-        public PdfRectangle ArtBoxReadOnly => Elements.GetRequiredRectangle(Keys.ArtBox, false, new());
-
-        /// <summary>
         /// Gets a copy of the effective art box if it exists, or an empty PdfRectangle if neither art box nor crop box nor media box are set.
         /// </summary>
         public PdfRectangle EffectiveArtBoxReadOnly
@@ -351,13 +324,6 @@ namespace PdfSharp.Pdf
         /// Gets a value indicating whether a trim box is set.
         /// </summary>
         public bool HasTrimBox => Elements.HasValue(Keys.TrimBox);
-
-        /// <summary>
-        /// Gets a copy of the trim box if it exists, or an empty PdfRectangle if no trim box is set.
-        /// </summary>
-        [Obsolete("Use properties HasTrimBox and TrimBox.")]
-
-        public PdfRectangle TrimBoxReadOnly => Elements.GetRequiredRectangle(Keys.TrimBox, false, new());
 
         /// <summary>
         /// Gets a copy of the effective trim box if it exists, or an empty PdfRectangle if neither trim box nor crop box nor media box are set.
@@ -734,12 +700,7 @@ namespace PdfSharp.Pdf
         {
             get
             {
-#if true
                 return field ??= Elements.GetRequiredDictionary<PdfResources>(InheritablePageKeys.Resources, VCF.Create);
-#else
-                return _resources ??= (PdfResources?)Elements.GetValue(InheritablePageKeys.Resources, VCF.Create)
-                                      ?? NRT.ThrowOnNull<PdfResources>();
-#endif
             }
         }
 
@@ -802,7 +763,6 @@ namespace PdfSharp.Pdf
             return name;
         }
 
-#if CORE
         internal string GetImageName(PdfSharp.Internal.Imaging.ImportedImage importedImage)
         {
             var pdfImage = Document.ImageTable.GetImage(importedImage);
@@ -810,7 +770,6 @@ namespace PdfSharp.Pdf
             string name = Resources.AddImage(pdfImage);
             return name;
         }
-#endif
 
         /// <summary>
         /// Implements the interface because the primary function is internal.
@@ -876,7 +835,6 @@ namespace PdfSharp.Pdf
         /// </summary>
         internal void ApplyInheritedValues(ref readonly PdfPageTreeNode.InheritedValues inheritedValues)  // TODO review
         {
-#if true
             if (inheritedValues.Resources != null)
             {
                 var resources = Elements.GetDictionary(InheritablePageKeys.Resources);
@@ -922,51 +880,6 @@ namespace PdfSharp.Pdf
 
             if (inheritedValues.Rotate != null && Elements.GetValue(InheritablePageKeys.Rotate) == null)
                 Elements[InheritablePageKeys.Rotate] = inheritedValues.Rotate;
-#else
-            // Old code - DELETE
-            if (values.Resources != null!)
-            {
-                PdfDictionary? resources;
-                var res = page.Elements[InheritablePageKeys.Resources];
-                if (res is PdfReference pdfReference)
-                {
-                    resources = (PdfDictionary)pdfReference.Value.Clone();
-                    resources.Document = page.Owner;
-                }
-                else
-                    resources = (PdfDictionary?)res;
-
-                if (resources == null)
-                {
-                    resources = values.Resources.Clone();
-                    resources.Document = page.Owner;
-                    page.Elements.Add(InheritablePageKeys.Resources, resources);
-                }
-                else
-                {
-                    foreach (var name in values.Resources.Elements.KeyNames)
-                    {
-                        if (!resources.Elements.ContainsKey(name.Value))
-                        {
-                            var item = values.Resources.Elements[name];
-                            Debug.Assert(item != null);
-                            if (item is PdfObject)
-                                item = item.Clone();
-                            resources.Elements.Add(name.ToString(), item);
-                        }
-                    }
-                }
-            }
-
-            if (values.MediaBox != null! && page.Elements[InheritablePageKeys.MediaBox] == null)
-                page.Elements[InheritablePageKeys.MediaBox] = values.MediaBox;
-
-            if (values.CropBox != null! && page.Elements[InheritablePageKeys.CropBox] == null)
-                page.Elements[InheritablePageKeys.CropBox] = values.CropBox;
-
-            if (values.Rotate != null! && page.Elements[InheritablePageKeys.Rotate] == null)
-                page.Elements[InheritablePageKeys.Rotate] = values.Rotate;
-#endif
         }
 
         internal override void PrepareForSave()

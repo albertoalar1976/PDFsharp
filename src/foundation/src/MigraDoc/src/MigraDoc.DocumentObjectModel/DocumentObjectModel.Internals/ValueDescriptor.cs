@@ -69,24 +69,6 @@ namespace MigraDoc.DocumentObjectModel.Internals
             var valueName = propertyInfo.Name;
             var valueType = propertyInfo.PropertyType;
 
-#if true_  // This is now checked in unit tests and must not be rechecked on every startup.
-            if (valueType.IsValueType)
-            {
-                var underlyingValueType = Nullable.GetUnderlyingType(valueType);
-                if (underlyingValueType is null)
-                {
-                    // Case: The type of the property is non-nullable.
-                    throw new InvalidOperationException(
-                        $"The type '{valueType.Name}' of property '{valueName}' of document object type '{propertyInfo.DeclaringType!.Name}' must be nullable.");
-                }
-                else
-                {
-                    // Case: The type of the property is nullable.
-                    //ValueStyleInternal |= ValueStyleInternal.Nullable;
-                    //_ = typeof(int);
-                }
-            }
-#endif
             // All nullable value types like Int32, Color, or Unit and all enums.
             if (valueType.IsValueType)
                 return new ValueTypeDescriptor(valueName, Nullable.GetUnderlyingType(valueType)!, propertyInfo, flags);

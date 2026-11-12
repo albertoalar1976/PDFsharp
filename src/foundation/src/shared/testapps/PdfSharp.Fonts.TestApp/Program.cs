@@ -3,7 +3,6 @@
 
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.Logging;
-using PdfSharp;
 using PdfSharp.Logging;
 
 namespace PDFsharp.Fonts.TestApp
@@ -12,8 +11,7 @@ namespace PDFsharp.Fonts.TestApp
     {
         static void Main(/*string[] args*/)
         {
-            // Set AGPL license.
-            PdfSharpLicense.SetAgplLicense();
+     
         }
     }
 }

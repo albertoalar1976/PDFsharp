@@ -19,31 +19,18 @@ namespace MigraDoc.Rendering.ChartMapper
                 lineFormat.Color = XColor.Empty;
             else
             {
-#if noCMYK
-                lineFormat.Color = XColor.FromArgb(domLineFormat.Color.Argb);
-#else
                 Debug.Assert(domLineFormat.Document != null, "domLineFormat.Document != null");
                 lineFormat.Color = ColorHelper.ToXColor(domLineFormat.Color, domLineFormat.Document.UseCmykColor);
-#endif
             }
 
             lineFormat.DashStyle = domLineFormat.DashStyle switch
             {
-#if PSGFX
-                DocumentObjectModel.Shapes.DashStyle.Dash => XDashStyles.Dash,
-                DocumentObjectModel.Shapes.DashStyle.DashDot => XDashStyles.DashDot,
-                DocumentObjectModel.Shapes.DashStyle.DashDotDot => XDashStyles.DashDotDot,
-                DocumentObjectModel.Shapes.DashStyle.Solid => XDashStyles.Solid,
-                DocumentObjectModel.Shapes.DashStyle.SquareDot => XDashStyles.Dot,
-                _ => XDashStyles.Solid
-#else
                 DocumentObjectModel.Shapes.DashStyle.Dash => XDashStyle.Dash,
                 DocumentObjectModel.Shapes.DashStyle.DashDot => XDashStyle.DashDot,
                 DocumentObjectModel.Shapes.DashStyle.DashDotDot => XDashStyle.DashDotDot,
                 DocumentObjectModel.Shapes.DashStyle.Solid => XDashStyle.Solid,
                 DocumentObjectModel.Shapes.DashStyle.SquareDot => XDashStyle.Dot,
                 _ => XDashStyle.Solid
-#endif
             };
             lineFormat.Style = domLineFormat.Style switch
             {

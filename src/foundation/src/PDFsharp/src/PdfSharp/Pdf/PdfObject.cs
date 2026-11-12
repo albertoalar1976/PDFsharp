@@ -95,36 +95,6 @@ namespace PdfSharp.Pdf
             return obj;
         }
 
-#if true_  // Works, but may lead to other problems that I cannot assess
-        /// <summary>
-        /// Determines whether the specified object is equal to the current PdfObject.
-        /// </summary>
-        public override bool Equals(object? obj)
-        {
-            if (obj is PdfObject)
-            {
-                PdfObject other = (PdfObject)obj;
-                // Take object type transformation into account
-                if (_iref != null && other._iref != null)
-                {
-                    Debug.Assert(_iref.Value != null, "iref without value.");
-                    Debug.Assert(other.iref.Value != null, "iref without value.");
-                    return Object.ReferenceEquals(_iref.Value, other.iref.Value);
-                }
-            }
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            if (_iref != null)
-            {
-                Debug.Assert(_iref.Value != null, "iref without value.");
-                return _iref.GetHashCode();
-            }
-            return base.GetHashCode();
-        }
-#endif
 
         /// <summary>
         /// Sets the object and generation number.
@@ -410,10 +380,6 @@ namespace PdfSharp.Pdf
 
                 if (importedObjectTable.Contains(obj.ObjectID))
                 {
-#if DEBUG_
-                    if (obj.ObjectID.ObjectNumber == 5894)
-                        _ = typeof(int);
-#endif
                     // Case: External object was already imported.
 
                     PdfReference reference = importedObjectTable[obj.ObjectID];
@@ -427,10 +393,6 @@ namespace PdfSharp.Pdf
                 {
                     // Case: External object was not yet imported earlier and must be cloned.
 
-#if DEBUG_
-                    if (idx == 6)
-                        _ = typeof(int);
-#endif
                     var clone = obj.Clone();
                     Debug.Assert(clone.Reference == null);
                     clone.Document = owner;
@@ -678,14 +640,6 @@ namespace PdfSharp.Pdf
         /// <exception cref="System.InvalidOperationException">The indirect reference must be not null here.</exception>
         public PdfReference RequiredReference
             => _iref ?? throw new InvalidOperationException("The indirect reference must be not null here.");
-
-        /// <summary>
-        /// Gets the indirect reference of this object. Throws if it is null.
-        /// </summary>
-        /// <exception cref="System.InvalidOperationException">The indirect reference must be not null here.</exception>
-        [Obsolete("Use RequiredReference.")]
-        public PdfReference ReferenceNotNull
-            => RequiredReference;
 
         /// <summary>
         /// Gets the actual reference.

@@ -24,17 +24,6 @@ using System;
 using System.Diagnostics;
 using System.Reflection;
 //#if CORE || GDI
-#if GDI
-using System.Drawing;
-using GdiFont = System.Drawing.Font;
-#endif
-#if WPF
-using System.Windows;
-using System.Windows.Media;
-#endif
-#if WUI
-using Windows.UI.Xaml.Media;
-#endif
 using PdfSharp.Drawing;
 using PdfSharp.Internal;
 using PdfSharp.Pdf;
@@ -47,11 +36,7 @@ namespace PdfSharp.Snippets.Font
         const string Text = "Sphinx";
         const string Text2 = "Sphinx abc test";
         const double EmSize = 24;
-#if true
         readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.WinAnsi);
-#else
-        readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.Unicode);
-#endif
 
 #if TIMES_NEW_ROMAN
         const string FamilyName = "Times New Roman";
@@ -70,7 +55,6 @@ namespace PdfSharp.Snippets.Font
         {
             XPoint pos;
 
-#if true || CORE || GDI || WPF || WUI
             var fntRegular = new XFont(FamilyName, EmSize, XFontStyleEx.Regular, _fontOptions);
             var fntBold = new XFont(FamilyName, EmSize, XFontStyleEx.Bold, _fontOptions);
             var fntItalic = new XFont(FamilyName, EmSize, XFontStyleEx.Italic, _fontOptions);
@@ -88,30 +72,10 @@ namespace PdfSharp.Snippets.Font
                 _fontOptions, XStyleSimulations.ItalicSimulation);
             var fntBoldItalicSimulated = FontsDevHelper.CreateSpecialFont(FamilyName, EmSize, XFontStyleEx.Regular,
                 _fontOptions, XStyleSimulations.BoldItalicSimulation);
-#endif
-#if CORE || GDI
             //var segoeRegular2 = new XFont(new Font("Segoe UI", 32, FontStyle.Regular, GraphicsUnit.World));
             //var segoeBold2 = new XFont(new Font("Segoe UI", 32, FontStyle.Bold, GraphicsUnit.World));
             //var segoeItalic2 = new XFont(new Font("Segoe UI", 32, FontStyle.Italic, GraphicsUnit.World));
             //var segoeBoldItalic2 = new XFont(new Font("Segoe UI", 32, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.World));
-#endif
-#if WPF
-            //GlyphTypeface glyphTypeface = null;
-            //var times = new XFont(glyphTypeface, new Font("Times New Roman", 10), null);
-            var times = new XFont("Times New Roman", 10);
-            var times2 = new XFont("Times New Roman", 10);
-            var segoeFamily = new FontFamily("Segoe UI");
-            var segoeRegular2 =
-                new XFont(new Typeface(segoeFamily, FontStyles.Normal, FontWeights.Regular, FontStretches.Normal), 32);
-            var segoeBold2 =
-                new XFont(new Typeface(segoeFamily, FontStyles.Normal, FontWeights.Bold, FontStretches.Normal), 32);
-            var segoeItalic2 =
-                new XFont(new Typeface(segoeFamily, FontStyles.Italic, FontWeights.Regular, FontStretches.Normal), 32);
-            var segoeOblique2 =
-                new XFont(new Typeface(segoeFamily, FontStyles.Oblique, FontWeights.Regular, FontStretches.Normal), 32);
-            var segoeBoldItalic2 =
-                new XFont(new Typeface(segoeFamily, FontStyles.Italic, FontWeights.Bold, FontStretches.Normal), 32);
-#endif
 
 #if BOX1
             BeginBox(gfx, 1, BoxOptions.Tile, "Native typefaces of " + FamilyName);
@@ -272,13 +236,8 @@ namespace PdfSharp.Snippets.Font
 
         public override void RenderSnippet(XGraphics gfx)
         {
-#if CORE || GDI || WUI
 #if TIMES_NEW_ROMAN
-#if !WUI
             var times = new FontFamily("Times New Roman");
-#else
-            var times = "Times New Roman";
-#endif
             var timesRegular = new XFont(times, 32, XFontStyleEx.Bold);
             var timesBold = new XFont(times, 32, XFontStyleEx.Bold);
             var timesItalic = new XFont(times, 32, XFontStyleEx.Italic);
@@ -290,11 +249,7 @@ namespace PdfSharp.Snippets.Font
             var timesBoldItalic2 = new XFont(times, 42, XFontStyleEx.BoldItalic);
 #endif
 #if SEGOE_UI
-#if !WUI && false
-            var segoe = new FontFamily("Segoe UI");
-#else
             var segoe = "Segoe UI";
-#endif
             var segoeRegular = new XFont(segoe, 32, XFontStyleEx.Regular);
             var segoeBold = new XFont(segoe, 32, XFontStyleEx.Bold);
             var segoeItalic = new XFont(segoe, 32, XFontStyleEx.Italic);
@@ -306,62 +261,6 @@ namespace PdfSharp.Snippets.Font
             var segoeBoldLight = new XFont(segoeLight, 32, XFontStyleEx.Bold);
             var segoeItalicLight = new XFont(segoeLight, 32, XFontStyleEx.Italic);
             var segoeBoldItalicLight = new XFont(segoeLight, 32, XFontStyleEx.BoldItalic);
-#endif
-#endif
-#if (CORE || GDI) && false
-            var segoeRegular2 = new XFont(new GdiFont("Segoe UI", 32, FontStyle.Regular, GraphicsUnit.World));
-            var segoeBold2 = new XFont(new GdiFont("Segoe UI", 32, FontStyle.Bold, GraphicsUnit.World));
-            var segoeItalic2 = new XFont(new GdiFont("Segoe UI", 32, FontStyle.Italic, GraphicsUnit.World));
-            var segoeBoldItalic2 = new XFont(new GdiFont("Segoe UI", 32, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.World));
-#endif
-#if WPF_
-            GlyphTypeface glyphTypeface = null;
-            //var times = new XFont(glyphTypeface, new Font("Times New Roman", 10), null);
-            var times = new XFont("Times New Roman", 10);
-            var times2 = new XFont("Times New Roman", 10);
-            var segoeFamily=new FontFamily("Segoe UI");
-            var segoeRegular2 = new XFont(new Typeface(segoeFamily,FontStyles.Normal, FontWeights.Regular,FontStretches.Normal), 32);
-            var segoeBold2 = new XFont(new Typeface(segoeFamily, FontStyles.Normal, FontWeights.Bold, FontStretches.Normal), 32);
-            var segoeItalic2 = new XFont(new Typeface(segoeFamily, FontStyles.Italic, FontWeights.Regular, FontStretches.Normal), 32);
-            var segoeOblique2 = new XFont(new Typeface(segoeFamily, FontStyles.Oblique, FontWeights.Regular, FontStretches.Normal), 32);
-            var segoeBoldItalic2 = new XFont(new Typeface(segoeFamily, FontStyles.Italic, FontWeights.Bold, FontStretches.Normal), 32);
-#endif
-#if WPF
-#if TIMES_NEW_ROMAN
-            FontFamily times = new FontFamily("Times New Roman");
-            Typeface timesFace = new Typeface(times, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
-            var timesRegular = new XFont(timesFace, 32);
-            var timesBold = new XFont(times, 32, XFontStyleEx.Bold);
-            var timesItalic = new XFont(times, 32, XFontStyleEx.Italic);
-            var timesBoldItalic = new XFont(times, 32, XFontStyleEx.BoldItalic);
-
-            var timesRegularUnderline = new XFont(times, 32, XFontStyleEx.Underline);
-            var timesBoldStrikeout = new XFont(times, 32, XFontStyleEx.Bold | XFontStyleEx.Strikeout);
-            var timesItalicStrikeoutUnderline = new XFont(times, 32,
-                XFontStyleEx.Italic | XFontStyleEx.Strikeout | XFontStyleEx.Underline);
-            var timesBoldItalic2 = new XFont(times, 42, XFontStyleEx.BoldItalic);
-
-            //Typeface typeface = new Typeface("Segoe UI", FontStyles.);
-            //var times = new XFont(typeface, 40);
-            //var segoe = new XFontFamily("Segoe ui Semibold");
-            //var sg =new XFont(segoe, 14, XFontStyleEx.Regular);
-            //var times = new XFont("Times New Roman", 10);
-            //  var times2 = new XFont("Times New Roman", 18);
-#endif
-#if SEGOE_UI_2
-            var segoe = new FontFamily("Segoe UI");
-            var segoeRegular = new XFont(segoe, 32, XFontStyleEx.Regular);
-            //var segoeBold = new XFont(segoe, 32, XFontStyleEx.Bold);
-            //var segoeItalic = new XFont(segoe, 32, XFontStyleEx.Italic);
-            //var segoeBoldItalic = new XFont(segoe, 32, XFontStyleEx.BoldItalic);
-
-            var segoeLight = new FontFamily("Segoe UI Light");
-            var segoeRegularLight = new XFont(segoeLight, 32, XFontStyleEx.Regular);
-            var segoeBoldLight = new XFont(segoeLight, 32, XFontStyleEx.Bold);
-            //var segoeItalicLight = new XFont(segoeLight, 32, XFontStyleEx.Italic);
-            //var segoeBoldItalicLight = new XFont(segoeLight, 32, XFontStyleEx.BoldItalic);
-#endif
-
 #endif
 
             BeginBox(gfx, 1, BoxOptions.Tile);
@@ -435,11 +334,7 @@ namespace PdfSharp.Snippets.Font
         const string Text = "Sphinx";
         const string Text2 = "Sphinx abc test";
         const float EmSize = 24;
-#if true
         readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.WinAnsi);
-#else
-        readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.Unicode);
-#endif
 
 #if TIMES_NEW_ROMAN
         const string FamilyName = "Times New Roman";
@@ -459,7 +354,6 @@ namespace PdfSharp.Snippets.Font
             var brush = new XSolidBrush(XColor.FromArgb(0xA0, 0x00, 0x00, 0x80));
             XPoint pos;
 
-#if CORE
             //var segoeUI = new FontFamily("Segoe UI");
             //var segoeUILight = new FontFamily("Segoe UI Light");
             //var segoeUISemilight = new FontFamily("Segoe UI Semilight");
@@ -488,87 +382,6 @@ namespace PdfSharp.Snippets.Font
             var fntCondenstBold = new XFont("Segoe Condensed", EmSize, XFontStyleEx.Bold);
             var fntCondenstItalic = new XFont("Segoe Condensed", EmSize, XFontStyleEx.Italic);
             var fntCondenstBoldItalic = new XFont("Segoe Condensed", EmSize, XFontStyleEx.BoldItalic);
-#else
-#if CORE || GDI
-            var segoeUI = new FontFamily("Segoe UI");
-            var segoeUILight = new FontFamily("Segoe UI Light");
-            var segoeUISemilight = new FontFamily("Segoe UI Semilight");
-            var segoeUISemibold = new FontFamily("Segoe UI Semibold");
-            var segoeUIBlack = new FontFamily("Segoe UI Black");
-            var segoeCondensed = new FontFamily("Segoe Condensed");
-
-            var fntRegular = new XFont(new GdiFont(segoeUI, EmSize, FontStyle.Regular, GraphicsUnit.World));
-            var fntBold = new XFont(new GdiFont(segoeUI, EmSize, FontStyle.Bold, GraphicsUnit.World));
-            var fntItalic = new XFont(new GdiFont(segoeUI, EmSize, FontStyle.Italic, GraphicsUnit.World));
-            var fntBoldItalic = new XFont(new GdiFont(segoeUI, EmSize, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.World));
-
-            var fntLight = new XFont(new GdiFont(segoeUILight, EmSize, FontStyle.Regular, GraphicsUnit.World));
-            var fntLightItalic = new XFont(new GdiFont(segoeUILight, EmSize, FontStyle.Italic, GraphicsUnit.World));
-
-            var fntSemiLight = new XFont(new GdiFont(segoeUISemilight, EmSize, FontStyle.Regular, GraphicsUnit.World));
-            var fntSemiLightItalic = new XFont(new GdiFont(segoeUISemilight, EmSize, FontStyle.Italic, GraphicsUnit.World));
-
-            var fntSemiBold = new XFont(new GdiFont(segoeUISemibold, EmSize, FontStyle.Regular, GraphicsUnit.World));
-            var fntSemiBoldItalic = new XFont(new GdiFont(segoeUISemibold, EmSize, FontStyle.Italic, GraphicsUnit.World));
-
-            var fntBlack = new XFont(new GdiFont(segoeUIBlack, EmSize, FontStyle.Regular, GraphicsUnit.World));
-            var fntBlackItalic = new XFont(new GdiFont(segoeUIBlack, EmSize, FontStyle.Italic, GraphicsUnit.World));
-
-            var fntCondenst = new XFont(new GdiFont(segoeCondensed, EmSize, FontStyle.Regular, GraphicsUnit.World));
-            var fntCondenstBold = new XFont(new GdiFont(segoeCondensed, EmSize, FontStyle.Bold, GraphicsUnit.World));
-            var fntCondenstItalic = new XFont(new GdiFont(segoeCondensed, EmSize, FontStyle.Italic, GraphicsUnit.World));
-            var fntCondenstBoldItalic = new XFont(new GdiFont(segoeCondensed, EmSize, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.World));
-#endif
-#if WPF
-#if true
-            var families = System.Windows.Media.Fonts.SystemFontFamilies;
-            var typefaces = System.Windows.Media.Fonts.SystemTypefaces;
-            //FontFamily; Typeface
-            //_ = typeof(int);
-            //#else
-            var segoeUI = new FontFamily("Segoe UI");
-            //var segoeUISemilight = new FontFamily("Segoe UI Semilight");
-            var segoeCondensed = new FontFamily("Segoe");
-
-            var segoeUISemilightFamilyTypefaces = segoeUI.FamilyTypefaces[16];
-
-            var fntLight = new XFont(new Typeface(segoeUI, FontStyles.Normal, FontWeights.Light, FontStretches.Normal), EmSize);
-            Debug.WriteLine(FontsDevHelper.GetFontCachesState());
-            var fntLightItalic = new XFont(new Typeface(segoeUI, FontStyles.Italic, FontWeights.Light, FontStretches.Normal), EmSize);
-
-            // What a bummer: The weight of SemiLight is 350, which is between Light (300) and Regular (400). And because there is 
-            // no 'FontWeights.SemiLight' and no 'new FontWeight(350)' constructor, we must use the value directly from the FamilyTypeface object.
-            var fntSemiLight = new XFont(new Typeface(segoeUI, FontStyles.Normal, segoeUI.FamilyTypefaces[16].Weight, FontStretches.Normal), EmSize);
-            var fntSemiLightItalic = new XFont(new Typeface(segoeUI, FontStyles.Italic, segoeUI.FamilyTypefaces[16].Weight, segoeUISemilightFamilyTypefaces.Stretch), EmSize);
-
-            var fntRegular = new XFont(new Typeface(segoeUI, FontStyles.Normal, FontWeights.Regular, FontStretches.Normal), EmSize);
-            Debug.WriteLine(FontsDevHelper.GetFontCachesState());
-            var fntItalic = new XFont(new Typeface(segoeUI, FontStyles.Italic, FontWeights.Regular, FontStretches.Normal), EmSize);
-
-            var fntSemiBold = new XFont(new Typeface(segoeUI, FontStyles.Normal, FontWeights.SemiBold, FontStretches.Normal), EmSize);
-            var fntSemiBoldItalic = new XFont(new Typeface(segoeUI, FontStyles.Italic, FontWeights.SemiBold, FontStretches.Normal), EmSize);
-
-            var fntBold = new XFont(new Typeface(segoeUI, FontStyles.Normal, FontWeights.Bold, FontStretches.Normal), EmSize);
-            var fntBoldItalic = new XFont(new Typeface(segoeUI, FontStyles.Italic, FontWeights.Bold, FontStretches.Normal), EmSize);
-
-            var fntBlack = new XFont(new Typeface(segoeUI, FontStyles.Normal, FontWeights.Black, FontStretches.Normal), EmSize);
-            var fntBlackItalic = new XFont(new Typeface(segoeUI, FontStyles.Italic, FontWeights.Black, FontStretches.Normal), EmSize);
-
-            var fntCondenst = new XFont(new Typeface(segoeCondensed, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal), EmSize);
-            var fntCondenstItalic = new XFont(new Typeface(segoeCondensed, FontStyles.Oblique, FontWeights.Normal, FontStretches.Condensed), EmSize);
-
-            var fntCondenstBold = new XFont(new Typeface(segoeCondensed, FontStyles.Normal, FontWeights.Bold, FontStretches.Normal), EmSize);
-            var fntCondenstBoldItalic = new XFont(new Typeface(segoeCondensed, FontStyles.Oblique, FontWeights.Bold, FontStretches.Condensed), EmSize);
-
-            var fntOblique = new XFont(new Typeface(segoeUI, FontStyles.Oblique, FontWeights.Regular, FontStretches.Normal), EmSize);
-            var fntBoldOblique = new XFont(new Typeface(segoeUI, FontStyles.Oblique, FontWeights.Bold, FontStretches.Condensed), EmSize);
-
-            var fntThin = new XFont(new Typeface(segoeUI, FontStyles.Normal, FontWeights.Thin, FontStretches.Normal), EmSize);
-            var fntExtraLight = new XFont(new Typeface(segoeUI, FontStyles.Normal, FontWeights.ExtraLight, FontStretches.Normal), EmSize);
-            var fntUltraLight = new XFont(new Typeface(segoeUI, FontStyles.Normal, FontWeights.Light, FontStretches.Normal), EmSize);
-#endif
-#endif
-#endif
 
 #if BOX1
             BeginBox(gfx, 1, BoxOptions.Tile, "light - semilight - regular");
@@ -712,11 +525,7 @@ namespace PdfSharp.Snippets.Font
         const string Text = "Sphinx";
         const double EmSize = 24;
 
-#if true
         readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.WinAnsi);
-#else
-        readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.Unicode);
-#endif
         public PrivateFontCollectionSnippet()
         {
             //NoText = true;
@@ -726,21 +535,9 @@ namespace PdfSharp.Snippets.Font
 
         static PrivateFontCollectionSnippet()
         {
-#if CORE
             // No PrivateFontCollection - use font resolver.
-#endif
 
-#if GDI_
-            var assembly = Assembly.GetExecutingAssembly();
-            XPrivateFontCollection.Add(assembly.GetManifestResourceStream("PdfSharp.Features.Fonts.xfiles.ttf")!);
-            XPrivateFontCollection.Add(assembly.GetManifestResourceStream("PdfSharp.Features.Fonts.oblivious.ttf")!);
-#endif
 
-#if WPF_
-            var uri = new Uri("pack://application:,,,/");
-            XPrivateFontCollection.Add(uri, "./Fonts/#X-Files");
-            XPrivateFontCollection.Add(uri, "./Fonts/#Oblivious font");
-#endif
         }
 
         public override void RenderSnippet(XGraphics gfx)
@@ -833,20 +630,7 @@ namespace PdfSharp.Snippets.Font
 
         static FrutigerFontsSnippet()
         {
-#if GDI_
-            XPrivateFontCollection.Add(Assembly.GetExecutingAssembly().GetManifestResourceStream("PdfSharp.Features.Fonts.walrod.ttf")!);
-            XPrivateFontCollection.Add(Assembly.GetExecutingAssembly().GetManifestResourceStream("PdfSharp.Features.Fonts.battlest.ttf")!);
-            XPrivateFontCollection.Add(Assembly.GetExecutingAssembly().GetManifestResourceStream("PdfSharp.Features.Fonts.xfiles.ttf")!);
-#endif
 
-#if WPF
-            Uri uriPackApplication = new Uri("pack://application:,,,/");
-#if FRUTIGER_VIA_WPF_FONTFAMILY_
-            // We have 'Frutiger' and 'Frutiger,bold'.
-            XPrivateFontCollection.Add(uriPackApplication, "./Fonts/Frutiger/#Frutiger");
-            XPrivateFontCollection.Add(uriPackApplication, "./Fonts/Frutiger/#FrutigerLight");
-#endif
-#endif
         }
 
 #if VARIANT2___
@@ -1000,11 +784,7 @@ namespace PdfSharp.Snippets.Font
         //const string FamilyNameLight = "Helvetica Neue|light";
         const string FamilyNameLight = "Helvetica Neue Light";
 
-#if true
         readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.WinAnsi);
-#else
-        readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.Unicode);
-#endif
 
         public HelveticaNeueFontsSnippet()
         {
@@ -1015,21 +795,7 @@ namespace PdfSharp.Snippets.Font
 
         static HelveticaNeueFontsSnippet()
         {
-#if GDI_
-            XPrivateFontCollection.Add(Assembly.GetExecutingAssembly().GetManifestResourceStream("PdfSharp.Features.Fonts.walrod.ttf")!);
-            XPrivateFontCollection.Add(Assembly.GetExecutingAssembly().GetManifestResourceStream("PdfSharp.Features.Fonts.battlest.ttf")!);
-            XPrivateFontCollection.Add(Assembly.GetExecutingAssembly().GetManifestResourceStream("PdfSharp.Features.Fonts.xfiles.ttf")!);
-#endif
 
-#if WPF_
-            Uri uriPackApplication = new Uri("pack://application:,,,/");
-#if true_ //FRUTIGER_VIA_WPF_FONTFAMILY
-            // We have 'Helvetica Neue', 'Helvetica Neue Light', and 'Helvetica Neue,bold'.
-            XPrivateFontCollection.Add(uriPackApplication, "./Fonts/HelveticaNeue/#Helvetica Neue");
-            XPrivateFontCollection.Add(uriPackApplication, "./Fonts/HelveticaNeue/#Helvetica Neue Bold");
-            XPrivateFontCollection.Add(uriPackApplication, "./Fonts/HelveticaNeue/#Helvetica Neue Light");
-#endif
-#endif
         }
 
 #if VARIANT2___

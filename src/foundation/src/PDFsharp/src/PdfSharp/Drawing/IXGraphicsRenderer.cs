@@ -1,13 +1,6 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
-#if GDI
-using System.Drawing;
-using System.Drawing.Drawing2D;
-#endif
-#if WPF
-using System.Windows.Media;
-#endif
 
 namespace PdfSharp.Drawing
 {
@@ -100,12 +93,6 @@ namespace PdfSharp.Drawing
         /// Draws a series of glyphs identified by the specified text and font.
         /// </summary>
         void DrawString(string s, XFont font, XBrush brush, XRect layoutRectangle, XStringFormat format);
-
-        /// <summary>
-        /// Draws a series of glyphs identified by the specified text and font.
-        /// </summary>
-        [Obsolete("Not yet implemented.")]
-        void DrawString(string s, XGlyphTypeface typeface, XBrush brush, XRect layoutRectangle, XStringFormat format);
 
         /// <summary>
         /// Draws an image.

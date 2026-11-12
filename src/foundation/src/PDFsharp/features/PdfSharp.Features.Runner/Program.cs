@@ -17,12 +17,7 @@ namespace PdfSharp.Features
     {
         static void Main(string[] args)
         {
-            // Set AGPL license.
-            PdfSharpLicense.SetAgplLicense();
-
-#if CORE
             GlobalFontSettings.UseWindowsFontsUnderWindows = true;
-#endif
             Memory<byte> m = null;
             ReadOnlyMemory<byte> rom = null;
             Span<byte> s = null;
@@ -42,7 +37,6 @@ namespace PdfSharp.Features
             //features[PdfSharpFeatures.Names.Drawing_paths_Paths__PathWpf].Run();
 
             // Drawing/graphics
-            //features[PdfSharpFeatures.Names.Drawing_graphics_GraphicsUnit__Upwards].Run();
 
             //features[PdfSharpFeatures.Names.Drawing_graphics_GraphicsUnit__Downwards].Run();
 

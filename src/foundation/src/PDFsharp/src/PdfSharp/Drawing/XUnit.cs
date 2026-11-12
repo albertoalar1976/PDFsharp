@@ -47,12 +47,7 @@ namespace PdfSharp.Drawing
         /// </summary>
         public XUnit(double value, XGraphicsUnit type)
         {
-#if true
             if ((int)type is < (int)XGraphicsUnit.Point or > (int)XGraphicsUnit.Presentation)
-#else
-            // According to the profiler this code makes PDFsharp remarkably slow.
-            if (!Enum.IsDefined(typeof(XGraphicsUnit), type))
-#endif
                 throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(XGraphicsUnit));
 
             Value = value;
@@ -327,26 +322,6 @@ namespace PdfSharp.Drawing
             };
             return unit;
         }
-
-        /// <summary>
-        /// Converts an int to an XUnit object with type set to point.
-        /// </summary>
-        [Obsolete("In PDFsharp 6.1 implicit conversion from int is marked obsolete, because it led to misunderstandings and unexpected behavior. " +
-                  "Provide the unit by XUnit.FromPoint() or use the new class XUnitPt instead.")]
-        public static implicit operator XUnit(int value) => new(value/*, XGraphicsUnit.Point*/);
-
-        /// <summary>
-        /// Converts a double to an XUnit object with type set to point.
-        /// </summary>
-        [Obsolete("In PDFsharp 6.1 implicit conversion from double is marked obsolete, because it led to misunderstandings and unexpected behavior. " +
-                  "Provide the unit by XUnit.FromPoint() or use the new class XUnitPt instead.")]
-        public static implicit operator XUnit(double value) => new(value/*, XGraphicsUnit.Point*/);
-
-        /// <summary>
-        /// Converts an XUnit object to a double value as point.
-        /// </summary>
-        [Obsolete("In PDFsharp 6.1 implicit conversion to double is marked obsolete, because it led to misunderstandings and unexpected behavior. Use the XUnit.Point property instead.")]
-        public static implicit operator double(XUnit value) => value.PointValue;
 
         /// <summary>
         /// Memberwise comparison checking the exact value and unit.

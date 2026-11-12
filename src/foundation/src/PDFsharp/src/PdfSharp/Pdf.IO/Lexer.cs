@@ -396,28 +396,14 @@ namespace PdfSharp.Pdf.IO
                 ch = ScanNextChar(true);
             }
 
-#if true_  // KEEP Maybe we warn in the future about leading zeros outside xref.
-            // xref has lots of leading zeros.
-            // Maybe we add a parameter 'warnAboutLeadingZeros', but not yet.
-            if (leadingZeros > 1)
-#pragma warning disable CA2254 // This is a rare case outside xref. Therefor we use string interpolation.
-                PdfSharpLogHost.PdfReadingLogger.LogWarning($"Token '{_token}' has more than one leading zero.");
-#pragma warning restore CA2254
-#endif
             // Can the scanned number be the first part of an object reference?
             if (testForObjectReference && period is false
                 && totalDigits <= maxDigitsForObjectNumber  // Values in range [8_388_609..9_999_999] are checked in PdfObjectID.
                 && IsWhiteSpace(_currChar))
             {
-#if DEBUG_
-                LexerHelper.TryCheckReferenceCount++;
-#endif
                 int gen = TryReadReference();
                 if (gen >= 0)
                 {
-#if DEBUG_
-                    LexerHelper.TryCheckReferenceSuccessCount++;
-#endif
                     _tokenAsObjectID = ((int)value, gen);
                     return Symbol = Symbol.ObjRef;
                 }
@@ -1468,14 +1454,4 @@ namespace PdfSharp.Pdf.IO
         readonly ILogger _logger;
     }
 
-#if DEBUG_
-    public class LexerHelper
-    {
-        // Give me an idea of the try/success ratio.
-        // To be DELETED
-
-        public static int TryCheckReferenceCount;
-        public static int TryCheckReferenceSuccessCount;
-    }
-#endif
 }

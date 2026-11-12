@@ -4,9 +4,6 @@
 using System.Diagnostics;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Tables;
-#if WPF
-using TabAlignment = MigraDoc.DocumentObjectModel.TabAlignment;
-#endif
 
 namespace MigraDoc.RtfRendering
 {

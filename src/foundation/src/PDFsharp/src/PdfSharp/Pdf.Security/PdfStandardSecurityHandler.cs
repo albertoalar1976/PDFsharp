@@ -49,13 +49,6 @@ namespace PdfSharp.Pdf.Security
         }
 
         /// <summary>
-        /// Set the encryption according to the given DefaultEncryption.
-        /// Allows setting the encryption automized using one single parameter.
-        /// </summary>
-        [Obsolete("Use SetEncryption(PdfDefaultEncryption encryption) instead.")]
-        public void SetEncryption(DefaultEncryption encryption) => SetEncryption((PdfDefaultEncryption)encryption);
-
-        /// <summary>
         /// Set the encryption according to the given PdfDefaultEncryption.
         /// Allows setting the encryption automized using one single parameter.
         /// </summary>
@@ -238,14 +231,9 @@ namespace PdfSharp.Pdf.Security
 
             // Correct permission bits.
             permissionsValue &= 0xfffffffc; // 1... 1111 1111 1100 - Bit 1 & 2 must be 0.
-#if true  // TODO clean up
             //permissionsValue |= 0x000002c0; // 0... 0010 1100 0000 - Bit 7 & 8 must be 1. Also, Bit 10 is no longer used and shall be always set to 1.
             // Top-most bit not correct, but can also be read with PDFsharp up to 6.1.0.
             permissionsValue |= 0x7ffff2c0; // 01.. 1110 1100 0000 - Bit 7 & 8 & 13 through 32 must be 1. Also, Bit 10 is no longer used and shall be always set to 1.
-#else
-            // Include this later as files can not be read with PDFsharp up to 6.1.0.
-            permissionsValue |= 0xfffff2c0; // 1... 1110 1100 0000 - Bit 7 & 8 & 13 through 32 must be 1. Also, Bit 10 is no longer used and shall be always set to 1.
-#endif
             return permissionsValue;
         }
 
@@ -720,26 +708,7 @@ namespace PdfSharp.Pdf.Security
         /// </summary>
         public void EncryptEmbeddedFileStreamsOnly()
         {
-#if true
             throw TH.NotImplementedException_EncryptEmbeddedFileStreamsOnlyCurrentlyShutOff();
-#else
-            // TODO_OLD: Find and fix error in order to produce files readable by common PDF readers. When done enable SecurityTests.Test_OnlyEmbeddedFileStreamEncrypted().
-
-            if (!VersionSupportsCryptFilter())
-                throw TH.InvalidOperationException_InvalidVersionForEncryptEmbeddedFilesOnly();
-
-            var pdfCryptFilters = (PdfCryptFilters?)Elements.GetValue(PdfSecurityHandler.Keys.CF);
-            var defaultCryptFilter = pdfCryptFilters?.GetCryptFilter(CryptFilterConstants.StandardFilterName);
-
-            if (defaultCryptFilter is null)
-                throw TH.InvalidOperationException_MissingDefaultCryptFilter(CryptFilterConstants.StandardFilterName);
-
-            defaultCryptFilter.SetAuthEventForEmbeddedFiles();
-
-            SetCryptFilterAsDefaultForStreams(null);
-            SetCryptFilterAsDefaultForStrings(null);
-            SetCryptFilterAsDefaultForEmbeddedFileStreams(CryptFilterConstants.StandardFilterName);
-#endif
         }
 
         /// <summary>
@@ -970,56 +939,6 @@ namespace PdfSharp.Pdf.Security
         CryptFilterBase? _defaultCryptFilterStreams;
         CryptFilterBase? _defaultCryptFilterStrings;
         CryptFilterBase? _defaultCryptFilterEmbeddedFileStreams;
-
-        /// <summary>
-        /// Typical settings to initialize encryption with.
-        /// With DefaultEncryption, the encryption can be set automized using PdfStandardSecurityHandler.SetPermission() with one single parameter.
-        /// </summary>
-        [Obsolete("Use PdfDefaultEncryption instead.")]
-        public enum DefaultEncryption
-        {
-            /// <summary>
-            /// Do not encrypt the PDF file.
-            /// </summary>
-            None = PdfDefaultEncryption.None,
-
-            /// <summary>
-            /// Use V4UsingAES, the most recent encryption method not requiring PDF 2.0.
-            /// </summary>
-            Default = PdfDefaultEncryption.Default,
-
-            /// <summary>
-            /// Encrypt with Version 1 (RC4 and a file encryption key length of 40 bits).
-            /// </summary>
-            V1 = PdfDefaultEncryption.V1,
-
-            /// <summary>
-            /// Encrypt with Version 2 (RC4 and a file encryption key length of more than 40 bits, PDF 1.4) with a file encryption key length of 40 bits.
-            /// </summary>
-            V2With40Bits = PdfDefaultEncryption.V2With40Bits,
-
-            /// <summary>
-            /// Encrypt with Version 2 (RC4 and a file encryption key length of more than 40 bits, PDF 1.4) with a file encryption key length of 128 bits.
-            /// This was the default encryption in PDFsharp 1.5.
-            /// </summary>
-            V2With128Bits = PdfDefaultEncryption.V2With128Bits,
-
-            /// <summary>
-            /// Encrypt with Version 4 (RC4 or AES and a file encryption key length of 128 bits using a crypt filter, PDF 1.5) using RC4.
-            /// </summary>
-            // ReSharper disable once InconsistentNaming
-            V4UsingRC4 = PdfDefaultEncryption.V4UsingRC4,
-
-            /// <summary>
-            /// Encrypt with Version 4 (RC4 or AES and a file encryption key length of 128 bits using a crypt filter, PDF 1.5) using AES (PDF 1.6).
-            /// </summary>
-            V4UsingAES = PdfDefaultEncryption.V4UsingAES,
-
-            /// <summary>
-            /// Encrypt with Version 5 (AES and a file encryption key length of 256 bits using a crypt filter, PDF 2.0).
-            /// </summary>
-            V5 = PdfDefaultEncryption.V5
-        }
 
         static class CryptFilterConstants
         {

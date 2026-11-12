@@ -21,9 +21,7 @@ namespace PdfSharp.Tests.Basics
         public SmokeTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()
@@ -148,13 +146,6 @@ namespace PdfSharp.Tests.Basics
                     document.Save(stream);
                     results[run] = (int)stream.Length;
                 }
-#if false
-                // Save the document…
-                string filename = PdfFileUtility.GetTempPdfFullFileName("unittests/pdfsharp/PDF/creation/HelloWorld");
-                document.Save(filename);
-                // … and start a viewer.
-                PdfFileUtility.ShowDocumentIfDebugging(filename);
-#endif
             }
 
             results[0].Should().BeGreaterThan(results[1], "File with compressed content streams must be smaller.");

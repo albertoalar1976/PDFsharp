@@ -2,10 +2,6 @@
 // See the LICENSE file in the solution root for more information.
 
 using System.Runtime.InteropServices;
-#if GDI
-#endif
-#if WPF
-#endif
 using PdfSharp.Internal;
 
 // ReSharper disable RedundantNameQualifier
@@ -121,24 +117,6 @@ namespace PdfSharp.Drawing
         }
 
         /// <summary>
-        /// Appends the specified matrix to this matrix. 
-        /// </summary>
-        [Obsolete("Use Append.")]
-        public void Multiply(XMatrix matrix)
-        {
-            Append(matrix);
-        }
-
-        /// <summary>
-        /// Prepends the specified matrix to this matrix. 
-        /// </summary>
-        [Obsolete("Use Prepend.")]
-        public void MultiplyPrepend(XMatrix matrix)
-        {
-            Prepend(matrix);
-        }
-
-        /// <summary>
         /// Multiplies this matrix with the specified matrix.
         /// </summary>
         public void Multiply(XMatrix matrix, XMatrixOrder order)
@@ -174,30 +152,6 @@ namespace PdfSharp.Drawing
             }
 
             DeriveMatrixType();
-        }
-
-        /// <summary>
-        /// Appends a translation of the specified offsets to this matrix.
-        /// </summary>
-        [Obsolete("Use TranslateAppend or TranslatePrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        public void Translate(double offsetX, double offsetY)
-        {
-            throw new InvalidOperationException("Temporarily out of order.");
-            //if (_type == XMatrixTypes.Identity)
-            //{
-            //  SetMatrix(1.0, 0, 0, 1.0, offsetX, offsetY, XMatrixTypes.Translation);
-            //}
-            //else if (_type == XMatrixTypes.Unknown)
-            //{
-            //  _offsetX += offsetX;
-            //  _offsetY += offsetY;
-            //}
-            //else
-            //{
-            //  _offsetX += offsetX;
-            //  _offsetY += offsetY;
-            //  _type |= XMatrixTypes.Translation;
-            //}
         }
 
         /// <summary>
@@ -257,15 +211,6 @@ namespace PdfSharp.Drawing
         /// <summary>
         /// Appends the specified scale vector to this matrix.
         /// </summary>
-        [Obsolete("Use ScaleAppend or ScalePrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        public void Scale(double scaleX, double scaleY)
-        {
-            this = CreateScaling(scaleX, scaleY) * this;
-        }
-
-        /// <summary>
-        /// Appends the specified scale vector to this matrix.
-        /// </summary>
         public void ScaleAppend(double scaleX, double scaleY) // TODO_OLD: will become default
         {
             this *= CreateScaling(scaleX, scaleY);
@@ -308,18 +253,6 @@ namespace PdfSharp.Drawing
         }
 
         /// <summary>
-        /// Scales the matrix with the specified scalar.
-        /// </summary>
-        [Obsolete("Use ScaleAppend or ScalePrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        // ReSharper disable InconsistentNaming
-        public void Scale(double scaleXY)
-        // ReSharper restore InconsistentNaming
-        {
-            throw new InvalidOperationException("Temporarily out of order.");
-            //Scale(scaleXY, scaleXY, XMatrixOrder.Prepend);
-        }
-
-        /// <summary>
         /// Appends the specified scale vector to this matrix.
         /// </summary>
         // ReSharper disable InconsistentNaming
@@ -350,16 +283,6 @@ namespace PdfSharp.Drawing
         }
 
         /// <summary>
-        /// Function is obsolete.
-        /// </summary>
-        [Obsolete("Use ScaleAtAppend or ScaleAtPrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        public void ScaleAt(double scaleX, double scaleY, double centerX, double centerY)
-        {
-            throw new InvalidOperationException("Temporarily out of order.");
-            //this *= CreateScaling(scaleX, scaleY, centerX, centerY);
-        }
-
-        /// <summary>
         /// Appends the specified scale about the specified point of this matrix.
         /// </summary>
         public void ScaleAtAppend(double scaleX, double scaleY, double centerX,
@@ -374,17 +297,6 @@ namespace PdfSharp.Drawing
         public void ScaleAtPrepend(double scaleX, double scaleY, double centerX, double centerY)
         {
             this = CreateScaling(scaleX, scaleY, centerX, centerY) * this;
-        }
-
-        /// <summary>
-        /// Function is obsolete.
-        /// </summary>
-        [Obsolete("Use RotateAppend or RotatePrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        public void Rotate(double angle)
-        {
-            throw new InvalidOperationException("Temporarily out of order.");
-            //angle %= 360.0;
-            //this *= CreateRotationRadians(angle * Const.Deg2Rad);
         }
 
         /// <summary>
@@ -447,17 +359,6 @@ namespace PdfSharp.Drawing
         }
 
         /// <summary>
-        /// Function is obsolete.
-        /// </summary>
-        [Obsolete("Use RotateAtAppend or RotateAtPrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        public void RotateAt(double angle, double centerX, double centerY)
-        {
-            throw new InvalidOperationException("Temporarily out of order.");
-            //angle %= 360.0;
-            //this *= CreateRotationRadians(angle * Const.Deg2Rad, centerX, centerY);
-        }
-
-        /// <summary>
         /// Appends a rotation of the specified angle at the specified point to this matrix.
         /// </summary>
         public void RotateAtAppend(double angle, double centerX, double centerY) // TODO_OLD: will become default
@@ -473,16 +374,6 @@ namespace PdfSharp.Drawing
         {
             angle %= 360.0;
             this = CreateRotationRadians(angle * Const.Deg2Rad, centerX, centerY) * this;
-        }
-
-        /// <summary>
-        /// Rotates the matrix with the specified angle at the specified point.
-        /// </summary>
-        [Obsolete("Use RotateAtAppend or RotateAtPrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        public void RotateAt(double angle, XPoint point)
-        {
-            throw new InvalidOperationException("Temporarily out of order.");
-            //RotateAt(angle, point, XMatrixOrder.Prepend);
         }
 
         /// <summary>
@@ -521,16 +412,6 @@ namespace PdfSharp.Drawing
             }
 
             DeriveMatrixType();
-        }
-
-        /// <summary>
-        /// Function is obsolete.
-        /// </summary>
-        [Obsolete("Use ShearAppend or ShearPrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        public void Shear(double shearX, double shearY)
-        {
-            throw new InvalidOperationException("Temporarily out of order.");
-            //Shear(shearX, shearY, XMatrixOrder.Prepend);
         }
 
         /// <summary>
@@ -581,18 +462,6 @@ namespace PdfSharp.Drawing
             }
 
             DeriveMatrixType();
-        }
-
-        /// <summary>
-        /// Function is obsolete.
-        /// </summary>
-        [Obsolete("Use SkewAppend or SkewPrepend explicitly, because in GDI+ and WPF the defaults are contrary.", true)]
-        public void Skew(double skewX, double skewY)
-        {
-            throw new InvalidOperationException("Temporarily out of order.");
-            //skewX %= 360.0;
-            //skewY %= 360.0;
-            //this *= CreateSkewRadians(skewX * Const.Deg2Rad, skewY * Const.Deg2Rad);
         }
 
         /// <summary>
@@ -666,51 +535,7 @@ namespace PdfSharp.Drawing
             }
         }
 
-#if GDI
-        /// <summary>
-        /// Multiplies all points of the specified array with this matrix.
-        /// </summary>
-        public void TransformPoints(System.Drawing.Point[] points)
-        {
-            if (points == null)
-                throw new ArgumentNullException(nameof(points));
 
-            if (IsIdentity)
-                return;
-
-            int count = points.Length;
-            for (int idx = 0; idx < count; idx++)
-            {
-                double x = points[idx].X;
-                double y = points[idx].Y;
-                points[idx].X = (int)(x * _m11 + y * _m21 + _offsetX);
-                points[idx].Y = (int)(x * _m12 + y * _m22 + _offsetY);
-            }
-        }
-#endif
-
-#if WPF
-        /// <summary>
-        /// Transforms an array of points.
-        /// </summary>
-        public void TransformPoints(System.Windows.Point[] points)
-        {
-            if (points == null)
-                throw new ArgumentNullException(nameof(points));
-
-            if (IsIdentity)
-                return;
-
-            int count = points.Length;
-            for (int idx = 0; idx < count; idx++)
-            {
-                double x = points[idx].X;
-                double y = points[idx].Y;
-                points[idx].X = (int)(x * _m11 + y * _m21 + _offsetX);
-                points[idx].Y = (int)(x * _m12 + y * _m22 + _offsetY);
-            }
-        }
-#endif
 
         /// <summary>
         /// Transforms the specified vector by this Matrix and returns the result.
@@ -742,29 +567,6 @@ namespace PdfSharp.Drawing
             }
         }
 
-#if GDI
-        /// <summary>
-        /// Multiplies all vectors of the specified array with this matrix. The translation elements 
-        /// of this matrix (third row) are ignored.
-        /// </summary>
-        public void TransformVectors(PointF[] points)
-        {
-            if (points == null)
-                throw new ArgumentNullException(nameof(points));
-
-            if (IsIdentity)
-                return;
-
-            int count = points.Length;
-            for (int idx = 0; idx < count; idx++)
-            {
-                double x = points[idx].X;
-                double y = points[idx].Y;
-                points[idx].X = (float)(x * _m11 + y * _m21 + _offsetX);
-                points[idx].Y = (float)(x * _m12 + y * _m22 + _offsetY);
-            }
-        }
-#endif
 
         /// <summary>
         /// Gets the determinant of this matrix.
@@ -980,83 +782,11 @@ namespace PdfSharp.Drawing
             }
         }
 
-#if GDI
-        /// <summary>
-        /// Converts this matrix to a System.Drawing.Drawing2D.Matrix object.
-        /// </summary>
-        public System.Drawing.Drawing2D.Matrix ToGdiMatrix()
-        {
-            if (IsIdentity)
-                return new System.Drawing.Drawing2D.Matrix();
 
-            return new System.Drawing.Drawing2D.Matrix((float)_m11, (float)_m12, (float)_m21, (float)_m22,
-                (float)_offsetX, (float)_offsetY);
-        }
-#endif
 
-#if WPF
-        /// Converts this matrix to a System.Windows.Media.Matrix object.
-        /// <summary>
-        /// </summary>
-        public System.Windows.Media.Matrix ToWpfMatrix()
-        {
-            return (System.Windows.Media.Matrix)this;
-            //return new System.Windows.Media.Matrix(_m11, _m12, _m21, _m22, _offsetX, _offsetY);
-        }
-#endif
 
-#if GDI
-        /// <summary>
-        /// Explicitly converts a XMatrix to a Matrix.
-        /// </summary>
-        public static explicit operator System.Drawing.Drawing2D.Matrix(XMatrix matrix)
-        {
-            if (matrix.IsIdentity)
-                return new System.Drawing.Drawing2D.Matrix();
 
-            return new System.Drawing.Drawing2D.Matrix(
-                (float)matrix._m11, (float)matrix._m12,
-                (float)matrix._m21, (float)matrix._m22,
-                (float)matrix._offsetX, (float)matrix._offsetY);
-        }
-#endif
 
-#if WPF
-        /// <summary>
-        /// Explicitly converts an XMatrix to a Matrix.
-        /// </summary>
-        public static explicit operator System.Windows.Media.Matrix(XMatrix matrix)
-        {
-            if (matrix.IsIdentity)
-                return new System.Windows.Media.Matrix();
-
-            return new System.Windows.Media.Matrix(
-              matrix._m11, matrix._m12,
-              matrix._m21, matrix._m22,
-              matrix._offsetX, matrix._offsetY);
-        }
-#endif
-
-#if GDI
-        /// <summary>
-        /// Implicitly converts a Matrix to an XMatrix.
-        /// </summary>
-        public static implicit operator XMatrix(System.Drawing.Drawing2D.Matrix matrix)
-        {
-            float[] elements = matrix.Elements;
-            return new XMatrix(elements[0], elements[1], elements[2], elements[3], elements[4], elements[5]);
-        }
-#endif
-
-#if WPF
-        /// <summary>
-        /// Implicitly converts a Matrix to an XMatrix.
-        /// </summary>
-        public static implicit operator XMatrix(System.Windows.Media.Matrix matrix)
-        {
-            return new XMatrix(matrix.M11, matrix.M12, matrix.M21, matrix.M22, matrix.OffsetX, matrix.OffsetY);
-        }
-#endif
 
         /// <summary>
         /// Determines whether the two matrices are equal.

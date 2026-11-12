@@ -115,7 +115,6 @@ namespace PdfSharp.Pdf
                     case KeyType.FileSpecification:
                         type = typeof(PdfFileSpecification);
                         break;
-#if true
                     case KeyType.NameOrArray:
                     case KeyType.NameOrDictionary: // #US373
                     case KeyType.ArrayOrDictionary:
@@ -126,22 +125,6 @@ namespace PdfSharp.Pdf
                     case KeyType.TextStringOrStream:
                     case KeyType.TextStringOrTextStream:
                         return null!;
-#else
-                    // The following types are not yet used.
-
-                    case KeyType.NameOrArray:
-                        throw new NotImplementedException("KeyType.NameOrArray");
-
-                    case KeyType.ArrayOrDictionary:
-                        throw new NotImplementedException("KeyType.ArrayOrDictionary");
-
-                    case KeyType.StreamOrArray:
-                        throw new NotImplementedException("KeyType.StreamOrArray");
-
-                    case KeyType.ArrayOrNameOrString:
-                        return null!; // HACK_OLD: Make PdfOutline work
-                                      //throw new NotImplementedException("KeyType.ArrayOrNameOrString");
-#endif
                     default:
                         Debug.Assert(false, "Invalid KeyType: " + KeyType);
                         break;

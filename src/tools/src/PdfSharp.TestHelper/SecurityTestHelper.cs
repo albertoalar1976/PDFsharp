@@ -5,9 +5,6 @@ using System.Collections;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.Security;
 using PdfSharp.Quality;
-#if WPF
-using System.IO;
-#endif
 
 namespace PdfSharp.TestHelper
 {
@@ -328,15 +325,8 @@ namespace PdfSharp.TestHelper
 
         public static Stream CreateTempStream(string nameTag)
         {
-#if true
             // Create MemoryStream.
             return new MemoryStream();
-#else
-            // Create FileStream for debugging.
-            string filename = PdfFileUtility.GetTempPdfFullFileName(nameTag);
-            var stream = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
-            return stream;
-#endif
         }
 
     }

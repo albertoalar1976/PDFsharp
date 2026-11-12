@@ -7,8 +7,6 @@ using PdfSharp.Quality;
 using PdfSharp.TestHelper;
 using MigraDoc.DocumentObjectModel.Fields;
 using MigraDoc.Rendering;
-#if CORE
-#endif
 using Xunit;
 
 namespace MigraDoc.DocumentObjectModel.Tests
@@ -19,9 +17,7 @@ namespace MigraDoc.DocumentObjectModel.Tests
         public TextFrames()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()
@@ -42,9 +38,6 @@ namespace MigraDoc.DocumentObjectModel.Tests
             //// This setting has no effect on the RTF renderer.
             //const bool unicode = false;
 
-#if DEBUG_
-            var ddl = MigraDoc.DocumentObjectModel.IO.DdlWriter.WriteToString(document);
-#endif
 
             // Create a renderer for the MigraDoc document.
             var pdfRenderer = new PdfDocumentRenderer()

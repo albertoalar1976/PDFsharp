@@ -18,7 +18,6 @@ namespace MigraDoc.DocumentObjectModel.Visitors
 
         internal override void VisitDocumentElements(DocumentElements elements)
         {
-#if true
             // New version without sorted list.
             int count = elements.Count;
             for (int idx = 0; idx < count; idx++)
@@ -38,34 +37,6 @@ namespace MigraDoc.DocumentObjectModel.Visitors
                     }
                 }
             }
-#else
-            SortedList splitParaList = new SortedList();
-
-            for (int idx = 0; idx < elements.Count; idx++)
-            {
-                Paragraph paragraph = elements[idx] as Paragraph;
-                if (paragraph != null)
-                {
-                    Paragraph[] paragraphs = paragraph.SplitOnParaBreak();
-                    if (paragraphs != null)
-                        splitParaList.Add(idx, paragraphs);
-                }
-            }
-
-            int insertedObjects = 0;
-            for (int idx = 0; idx < splitParaList.Count; idx++)
-            {
-                int insertPosition = (int)splitParaList.GetKey(idx);
-                Paragraph[] paragraphs = (Paragraph[])splitParaList.GetByIndex(idx);
-                foreach (Paragraph paragraph in paragraphs)
-                {
-                    elements.InsertObject(insertPosition + insertedObjects, paragraph);
-                    ++insertedObjects;
-                }
-                elements.RemoveObjectAt(insertPosition + insertedObjects);
-                --insertedObjects;
-            }
-#endif
         }
 
         internal override void VisitDocumentObjectCollection(DocumentObjectCollection elements)

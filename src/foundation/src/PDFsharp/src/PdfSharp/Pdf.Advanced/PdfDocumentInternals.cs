@@ -155,12 +155,6 @@ namespace PdfSharp.Pdf.Advanced
         }
 
         /// <summary>
-        /// Gets all indirect objects ordered by their object identifier.
-        /// </summary>
-        [Obsolete("Use GetAllObjects.")]  // Because a properties should not return an array.
-        public PdfObject[] AllObjects => GetAllObjects();
-
-        /// <summary>
         /// Creates the indirect object of the specified type, adds it to the document,
         /// and returns the object.
         /// </summary>
@@ -256,13 +250,4 @@ namespace PdfSharp.Pdf.Advanced
         public readonly string CustomValueKey = "/PdfSharp.CustomValue";
     }
 
-    /// <summary>
-    /// The class PdfInternals was renamed to PdfDocumentInternals.
-    /// Just rename it.
-    /// </summary>
-    [Obsolete("PDFsharp 6.4: PdfInternals was renamed to PdfDocumentInternals.")]
-    public class PdfInternals
-    {
-        // Just a stub for a better compiler message.
-    }
 }

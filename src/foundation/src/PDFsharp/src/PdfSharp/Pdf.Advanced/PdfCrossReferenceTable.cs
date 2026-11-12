@@ -2,7 +2,7 @@
 // See the LICENSE file in the solution root for more information.
 
 // Turn on all test code at one place and ensure, that it does not come accidentally to the release build.
-#if true && TEST_CODE
+#if TEST_CODE
 #define TEST_CODE  // The #define is redundant, but clarifies what it means.
 #else
 #undef TEST_CODE
@@ -50,15 +50,6 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         public void Add(PdfReference iref)
         {
-#if DEBUG_
-            //if (this is PdfObject { ObjectNumber: 96049 })
-            //    _ = typeof(int);
-            if (iref.ObjectID.ObjectNumber == 96049)
-            {
-                _ = typeof(int);
-                var number = iref.ObjectNumber;
-            }
-#endif
             if (iref.ObjectID.IsEmpty)
             {
                 // When happens this?
@@ -126,10 +117,6 @@ namespace PdfSharp.Pdf.Advanced
                 // TODO: Check when this happens.
                 // Create new object number and create reference.
                 obj.SetObjectID(GetNewObjectNumber(), 0);
-#if DEBUG_
-                if (obj.ObjectNumber == 5)
-                    _ = typeof(int);
-#endif
             }
 
             if (_objectTable.ContainsKey(obj.ObjectID))
@@ -275,53 +262,6 @@ namespace PdfSharp.Pdf.Advanced
             int removed = _objectTable.Count;
             PdfReference[] irefs = TransitiveClosure(document.Trailer);
 
-#if DEBUG_ // Turn on again
-            // Have any two objects the same ID?
-            Dictionary<int, int> ids = [];
-            foreach (PdfObjectID objID in _objectTable.Keys)
-            {
-                ids.Add(objID.ObjectNumber, 0);
-            }
-
-            // Have any two irefs the same value?
-            //Dictionary<int, int> ids = new Dictionary<int, int>();
-            ids.Clear();
-            foreach (PdfReference iref in _objectTable.Values)
-            {
-                ids.Add(iref.ObjectNumber, 0);
-            }
-
-            // Are all references different?
-            Dictionary<PdfReference, int> refs = new Dictionary<PdfReference, int>();
-            foreach (PdfReference iref in irefs)
-            {
-                refs.Add(iref, 0);
-            }
-
-            foreach (PdfReference value in _objectTable.Values)
-            {
-                if (!refs.ContainsKey(value))
-                    _ = typeof(int);
-            }
-
-            foreach (PdfReference iref in _objectTable.Values)
-            {
-                if (iref.Value == null!)
-                    _ = typeof(int);
-                Debug.Assert(iref.Value != null);
-            }
-
-            foreach (PdfReference iref in irefs)
-            {
-                if (!_objectTable.ContainsKey(iref.ObjectID))
-                    _ = typeof(int);
-                Debug.Assert(_objectTable.ContainsKey(iref.ObjectID));
-
-                if (iref.Value == null!)
-                    _ = typeof(int);
-                Debug.Assert(iref.Value != null);
-            }
-#endif
 
             MaxObjectNumber = 0;
             _objectTable.Clear();
@@ -376,10 +316,6 @@ namespace PdfSharp.Pdf.Advanced
         /// </summary>
         internal SizeType GetPositionOfObjectBehind(PdfObject obj, SizeType position)
         {
-#if DEBUG_
-            if (obj.Reference == null)
-                _ = typeof(int);
-#endif
             var closestPosition = SizeType.MaxValue;
             PdfReference? closest = null;
             foreach (var iref in _objectTable.Values)
@@ -735,13 +671,6 @@ namespace PdfSharp.Pdf.Advanced
                             Debug.Assert(ReferenceEquals(iref.Document, document));
                             if (newObject.ObjectID.ObjectNumber != 0)
                                 references.Add(iref, null);
-#if TEST_CODE_
-                            // ReSharper disable once CanSimplifyDictionaryLookupWithTryAdd because of .NET Framework / Standard
-                            if (!doubleCheckReferences.ContainsKey(value))
-                                doubleCheckReferences.Add(value, null);
-                            else
-                                _ = typeof(int);
-#endif
 
                             if (newObject is PdfDictionary or PdfArray) // TODO PdfContainer
                             {
@@ -768,11 +697,6 @@ namespace PdfSharp.Pdf.Advanced
 #endif
                         if (item is PdfObject pdfDictionaryOrArray and (PdfDictionary or PdfArray))
                         {
-#if TEST_CODE_
-                            // Not useful, is too slow.
-                            if (stack.Contains(pdfDictionaryOrArray))
-                                _ = typeof(int);
-#endif
                             stack.Push(pdfDictionaryOrArray);
 #if TEST_CODE
                             elementsAdded++;
@@ -783,25 +707,6 @@ namespace PdfSharp.Pdf.Advanced
             }
         }
 
-#if true_  // Not used.
-        /// <summary>
-        /// Gets the cross-reference to an object used for undefined indirect references.
-        /// </summary>
-        public PdfReference DeadObject
-        {
-            get
-            {
-                if (_deadObject == null)
-                {
-                    _deadObject = new PdfDictionary(document);
-                    Add(_deadObject);
-                    _deadObject.Elements.Add("/DeadObjectCount", new PdfInteger());
-                }
-                return _deadObject.RequiredReference;
-            }
-        }
-        PdfDictionary? _deadObject;
-#endif
         /// <summary>
         /// Represents the relation between PdfObjectID and PdfReference for a PdfDocument.
         /// </summary>

@@ -6,14 +6,10 @@ using System.Diagnostics;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using MigraDoc.DocumentObjectModel;
 using MigraDoc.GrammarByExample;
-#if CORE
 using PdfSharp.Diagnostics;
-#endif
 using PdfSharp.Fonts;
 using PdfSharp.Quality;
-#if CORE
 using PdfSharp.Snippets.Font;
-#endif
 using Xunit;
 
 namespace GdiGrammarByExample
@@ -41,9 +37,7 @@ namespace GdiGrammarByExample
 
         public virtual void CleanupTest()
         {
-#if CORE
             GlobalFontSettings.ResetFontManagement();
-#endif
         }
 
         /// <summary>
@@ -96,20 +90,11 @@ namespace GdiGrammarByExample
 
         void CompatibilityPatchCallback(Document document)
         {
-#if GDI || WPF
-            var style = document.Styles[Style.DefaultParagraphName];
-            // Verdana was the default style until about 2012 or so.
-            // Since all reference documents created with PDFsharp 1.40 or earlier use Verdana, we change the default to Verdana here for all DLL snippets.
-            Debug.Assert(style != null, nameof(style) + " != null");
-            style!.Font.Name = "Verdana";
-#endif
-#if CORE
             // Core uses SnippetsFontResolver and all required fonts should be available.
             var style = document.Styles[Style.DefaultParagraphName];
             Debug.Assert(style != null, nameof(style) + " != null");
             // Since all reference documents created with PDFsharp 1.40 or earlier use Verdana, we change the default to Verdana here for all DLL snippets.
             style!.Font.Name = "Verdana";
-#endif
         }
 
         internal static string WslPathHack(string path)

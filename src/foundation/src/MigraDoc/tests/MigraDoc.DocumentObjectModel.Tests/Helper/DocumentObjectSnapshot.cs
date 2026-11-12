@@ -35,11 +35,7 @@ namespace MigraDoc.DocumentObjectModel.Tests.Helper
         /// This way the elements objects are called directly on the DocumentObject (and not via the Values object) and are therefore created while taking the snapshot.
         /// DefaultObjectsForAutoCreation contains the objects used for auto creation, if objectsForAutoCreation is not set explicit for the snapshot.
         /// </summary>
-#if true
         public static readonly Dictionary<Type, List<String>>? DefaultObjectsForAutoCreation = new (UsualObjectsForAutoCreation);
-#else
-        public static readonly Dictionary<Type, List<String>>? DefaultObjectsForAutoCreation = null;
-#endif
 
         // These properties are used for test debugging and have public getters to allow reading in further tests.
         // ReSharper disable MemberCanBePrivate.Local

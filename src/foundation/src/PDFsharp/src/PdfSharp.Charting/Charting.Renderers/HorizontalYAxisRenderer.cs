@@ -3,9 +3,6 @@
 
 using System.Globalization;
 using PdfSharp.Drawing;
-#if PSGFX
-using PdfSharp.Graphics.Media.MatrixExtensions;
-#endif
 
 namespace PdfSharp.Charting.Renderers
 {

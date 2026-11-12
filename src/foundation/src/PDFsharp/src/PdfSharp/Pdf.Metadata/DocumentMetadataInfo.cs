@@ -24,15 +24,6 @@ namespace PdfSharp.Pdf.Metadata
             Creator = info.Creator;
             Producer = info.Producer;
 
-#if DEBUG && true_
-            // Check from where Acrobat takes the text.
-            Title = "(xmp) " + info.Title;
-            Author = "(xmp) " + info.Author;
-            Subject = "(xmp) " + info.Subject;
-            Keywords = "(xmp) " + info.Keywords;
-            Creator = "(xmp) " + info.Creator;
-            Producer = "(xmp) " + info.Producer;
-#endif
             CreationDate = MetadataManager.ToXmpDateString(info.CreationDate);
             ModificationDate = MetadataManager.ToXmpDateString(info.ModificationDate);
             DocumentID = document.Internals.FirstDocumentID;

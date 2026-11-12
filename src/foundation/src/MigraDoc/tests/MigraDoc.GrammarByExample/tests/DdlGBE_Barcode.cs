@@ -24,13 +24,7 @@ namespace GdiGrammarByExample
         }
 
         [SkippableFact]
-#if CORE
         public void DDL_Grammar_By_Example_Barcode()
-#elif GDI
-        public void GDI_DDL_Grammar_By_Example_Barcode()
-#elif WPF
-        public void WPF_DDL_Grammar_By_Example_Barcode()
-#endif
         {
             Skip.If(SkippableTests.SkipSlowTests());
             RunTest();

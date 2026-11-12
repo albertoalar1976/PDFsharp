@@ -81,86 +81,6 @@ namespace PdfSharp.Pdf.Internal
         //  return RawString(bytes, 0, bytes.Length);
         //}
 
-#if true_
-        public static string EncodeAsLiteral(string text, bool unicode)
-        {
-            if (text == null || text == "")
-                return "<>";
-
-            StringBuilder pdf = new StringBuilder("");
-            if (!unicode)
-            {
-                byte[] bytes = WinAnsiEncoding.GetBytes(text);
-                int count = bytes.Length;
-                pdf.Append("(");
-                for (int idx = 0; idx < count; idx++)
-                {
-                    char ch = (char)bytes[idx];
-                    if (ch < 32)
-                    {
-                        switch (ch)
-                        {
-                            case '\n':
-                                pdf.Append("\\n");
-                                break;
-
-                            case '\r':
-                                pdf.Append("\\r");
-                                break;
-
-                            case '\t':
-                                pdf.Append("\\t");
-                                break;
-
-                            case '\f':
-                                pdf.Append("\\f");
-                                break;
-
-                            default:
-                                pdf.Append(InvalidChar); // TO/DO
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        switch (ch)
-                        {
-                            case '(':
-                                pdf.Append("\\(");
-                                break;
-
-                            case ')':
-                                pdf.Append("\\)");
-                                break;
-
-                            case '\\':
-                                pdf.Append("\\\\");
-                                break;
-
-                            default:
-                                pdf.Append(ch);
-                                break;
-                        }
-                    }
-                }
-                pdf.Append(')');
-            }
-            else
-            {
-                pdf.Append("<");
-                byte[] bytes = UnicodeEncoding.GetBytes(text);
-                int count = bytes.Length;
-                for (int idx = 0; idx < count; idx += 2)
-                {
-                    pdf.AppendFormat("{0:X2}{1:X2}", bytes[idx + 1], bytes[idx]);
-                    if (idx != 0 && (idx % 48) == 0)
-                        pdf.Append("\n");
-                }
-                pdf.Append(">");
-            }
-            return pdf.ToString();
-        }
-#endif
 
         //public static string EncodeAsLiteral(string text)
         //{
@@ -600,16 +520,5 @@ namespace PdfSharp.Pdf.Internal
         static string? s_formatCMYK;
         // ReSharper restore InconsistentNaming
 
-        /// <summary>
-        /// Converts an XMatrix into a string with up to 4 decimal digits and a decimal point.
-        /// </summary>
-        [Obsolete]
-        public static string ToString(XMatrix matrix)
-        {
-            const string format = Config.SignificantDecimalPlaces4;
-            return String.Format(CultureInfo.InvariantCulture,
-                "{0:" + format + "} {1:" + format + "} {2:" + format + "} {3:" + format + "} {4:" + format + "} {5:" + format + "}",
-                matrix.M11, matrix.M12, matrix.M21, matrix.M22, matrix.OffsetX, matrix.OffsetY);
-        }
     }
 }

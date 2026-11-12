@@ -5,12 +5,6 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
-#if GDI
-using System.Drawing;
-using System.Drawing.Drawing2D;
-#endif
-#if WPF
-#endif
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf.Internal;
@@ -443,15 +437,9 @@ namespace PdfSharp.Drawing.Pdf
             {
                 // Take chirality into account and
                 // invert the direction of rotation.
-#if true
                 // Prevent getting negative zeros in cm operator.
                 transform.M12 = value.M12 == 0.0 ? 0 : -value.M12;
                 transform.M21 = value.M21 == 0.0 ? 0 : -value.M21;
-#else
-                // Can result in e.g. "1 -0 -0 1 200 150 cm".
-                transform.M12 = -value.M12;
-                transform.M21 = -value.M21;
-#endif
             }
             UnrealizedCtm.Prepend(transform);
 
@@ -507,36 +495,9 @@ namespace PdfSharp.Drawing.Pdf
 
         void RealizeClipPath(XGraphicsPath clipPath)
         {
-#if CORE_  // It should work in Core build.
-            DiagnosticsHelper.HandleNotImplemented("RealizeClipPath");
-#endif
-#if GDI
-            // Do not render an empty path.
-            if (clipPath.GdipPath.PointCount < 0)
-                return;
-#endif
-#if WPF
-            // Do not render an empty path.
-            if (clipPath.PathGeometry.Bounds.IsEmpty)
-                return;
-#endif
             renderer.BeginGraphicMode();
             RealizeCtm();
-#if CORE
             renderer.AppendPath(clipPath.CorePath);
-#endif
-#if GDI && !WPF
-            renderer.AppendPath(clipPath.GdipPath);
-#endif
-#if WPF && !GDI
-            renderer.AppendPath(clipPath.PathGeometry);
-#endif
-#if WPF && GDI
-            if (renderer.Gfx.TargetContext == XGraphicTargetContext.GDI)
-                renderer.AppendPath(clipPath._gdipPath);
-            else
-                renderer.AppendPath(clipPath._pathGeometry);
-#endif
             renderer.Append(clipPath.FillMode == XFillMode.Winding ? "W n\n" : "W* n\n");
         }
 

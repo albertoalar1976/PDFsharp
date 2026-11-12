@@ -13,13 +13,8 @@ using MigraDoc.Tests.Helper;
 using Xunit;
 using FluentAssertions;
 using PdfSharp.Diagnostics;
-#if CORE
 using PdfSharp.Fonts;
 using PdfSharp.Snippets.Font;
-#endif
-#if WPF
-using System.IO;
-#endif
 
 namespace MigraDoc.Tests
 {
@@ -29,9 +24,7 @@ namespace MigraDoc.Tests
         public RtfRendererTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()
@@ -68,20 +61,10 @@ namespace MigraDoc.Tests
             // Save the document…
             var filename = IOUtility.GetTempFullFileName("HelloWorld", null);
 
-#if DEBUG___
-            MigraDoc.DocumentObjectModel.IO.DdlWriter dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_0.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
 
             // Layout and render document to RTF.
             rtfRenderer.Render(document, filename + ".rtf", Environment.CurrentDirectory);
 
-#if DEBUG___
-            dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_1.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
             //// … and start a viewer.
             //PdfFileUtility.ShowDocumentIfDebugging(filename);
         }
@@ -550,20 +533,10 @@ namespace MigraDoc.Tests
             // Save the document…
             var filename = IOUtility.GetTempFullFileName("HelloWorld", null);
 
-#if DEBUG___
-            MigraDoc.DocumentObjectModel.IO.DdlWriter dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_0.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
 
             // Layout and render document to PDF.
             rtfRenderer.Render(document, filename + ".rtf", Environment.CurrentDirectory);
 
-#if DEBUG___
-            dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_1.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
 
             //// … and start a viewer.
             //PdfFileUtility.ShowDocumentIfDebugging(filename);
@@ -586,20 +559,10 @@ namespace MigraDoc.Tests
             // Save the document…
             var filename = IOUtility.GetTempFullFileName("HelloWorldEmbeddedBase64", null);
 
-#if DEBUG___
-            MigraDoc.DocumentObjectModel.IO.DdlWriter dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_0.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
 
             // Layout and render document to PDF.
             rtfRenderer.Render(document, filename + ".rtf", Environment.CurrentDirectory);
 
-#if DEBUG___
-            dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_1.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
 
             //// … and start a viewer.
             //PdfFileUtility.ShowDocumentIfDebugging(filename);
@@ -652,14 +615,7 @@ VeP/8gP+s//MzMQAAAAASUVORK5CYII=
             var logo = document.LastSection.AddImage(base64);
         }
 
-#if !CORE
-        // Not supported by Core build.
         [Theory]
-        [InlineData(@"bmp\Test_OS2.bmp")]
-        [InlineData(@"png\color4A.png")]
-#else
-        [Theory]
-#endif
         [InlineData(@"jpeg\windows7problem.jpg")]
         [InlineData(@"jpeg\PowerBooks_CMYK.jpg")]
         [InlineData(@"jpeg\grayscaleA.jpg")]
@@ -711,20 +667,10 @@ VeP/8gP+s//MzMQAAAAASUVORK5CYII=
             // Save the document…
             var filename = IOUtility.GetTempFullFileName("HelloWorldBase64", null);
 
-#if DEBUG___
-            MigraDoc.DocumentObjectModel.IO.DdlWriter dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_0.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
 
             // Layout and render document to PDF.
             rtfRenderer.Render(document, filename + ".rtf", Environment.CurrentDirectory);
 
-#if DEBUG___
-            dw = new MigraDoc.DocumentObjectModel.IO.DdlWriter(filename + "_1.mdddl");
-            dw.WriteDocument(document);
-            dw.Close();
-#endif
 
             //// … and start a viewer.
             //PdfFileUtility.ShowDocumentIfDebugging(filename);

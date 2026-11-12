@@ -49,9 +49,6 @@ namespace PdfSharp.Charting
         /// Gets or sets the dash style of the line.
         /// </summary>
         public XDashStyle DashStyle { get; set; }
-#if PSGFX
-            = XDashStyles.Solid;
-#endif
 
         /// <summary>
         /// Gets or sets the style of the line.

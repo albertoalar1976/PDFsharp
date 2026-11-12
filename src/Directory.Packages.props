@@ -8,37 +8,18 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- Logging packages used by all PDFsharp projects -->
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.Extensions.Logging" Version="$(Logging_PackageVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="$(Logging_Abstractions_PackageVersion)" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Configuration" Version="$(Logging_PackageVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="$(Logging_PackageVersion)" />
-    <!-- Used empira internal only -->
-    <PackageVersion Include="System.Numerics.Vectors" Version="4.6.1" />
-    <PackageVersion Include="Microsoft.Graphics.Win2D" Version="1.3.2" />
-    <PackageVersion Include="Microsoft.TestPlatform.TestHost" Version="18.0.1" />
-    <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7705" />
-    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.8.260209005" />
-    <!--GhostScript - used for quality assurance only-->
-    <PackageVersion Include="Ghostscript.NET" Version="1.3.2" />
     <!-- Digital signature packages used by PdfSharp.Cryptography and for testing -->
-    <PackageVersion Include="MSTest.TestAdapter" Version="4.0.2" />
-    <PackageVersion Include="MSTest.TestFramework" Version="4.0.2" />
     <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="$(Cryptography_PackageVersion)" />
     <PackageVersion Include="BouncyCastle.Cryptography" Version="2.6.2" />
     <!-- Unit test packages used for testing only -->
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
-    <PackageVersion Include="MSTest" Version="4.0.1" />
-    <PackageVersion Include="System.Text.Json" Version="$(Json_PackageVersion)" /> <!-- Cleanup forms separation: Define version directly again. -->
     <PackageVersion Include="xunit.core" Version="2.9.3" />
-    <PackageVersion Include="xunit.assert" Version="2.4.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
     <PackageVersion Include="Xunit.Priority" Version="1.1.6" />
     <PackageVersion Include="Xunit.SkippableFact" Version="1.5.61" />
     <PackageVersion Include="XunitXml.TestLogger" Version="8.0.0" />
     <PackageVersion Include="FluentAssertions" Version="7.2.1" /> <!-- Latest 7.x version under Apache license. -->
-    <!-- Other packages -->
-    <PackageVersion Include="System.Resources.Extensions" Version="10.0.14" />
-    <!-- Needed for PDFsharp-GDI. -->
   </ItemGroup>
 </Project>

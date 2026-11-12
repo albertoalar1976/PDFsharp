@@ -32,10 +32,6 @@ namespace PdfSharp.Pdf.Annotations
     {
         // Reference 2.0: 12.5.6.5  Link annotations / Page 482
 
-        [Obsolete("PDFsharp 6.4: Use a constructor with a PDF document parameter.")]
-        public PdfLinkAnnotation()
-            => throw new NotImplementedException("PDFsharp 6.4: Use a constructor with a PDF document parameter.");
-
         /// <summary>
         /// Initializes a new instance of the <see cref="PdfLinkAnnotation"/> class.
         /// </summary>
@@ -62,10 +58,6 @@ namespace PdfSharp.Pdf.Annotations
         }
 
         const string ObsoleteMessage = "PDFsharp 6.4: Parameter requires a PDF page as first parameter.";
-
-        [Obsolete(ObsoleteMessage)]
-        public static PdfLinkAnnotation CreateDocumentLink(PdfRectangle rect, int destinationPage, XPoint? point = null)
-            => throw new NotImplementedException(ObsoleteMessage);
 
         /// <summary>
         /// Creates a link within the current document.
@@ -97,10 +89,6 @@ namespace PdfSharp.Pdf.Annotations
         string _url = "";
         XPoint? _point = null;
 
-        [Obsolete(ObsoleteMessage)]
-        public static PdfLinkAnnotation CreateDocumentLink(PdfRectangle rect, string destinationName)
-            => throw new NotImplementedException(ObsoleteMessage);
-
         /// <summary>
         /// Creates a link within the current document using a named destination.
         /// </summary>
@@ -122,10 +110,6 @@ namespace PdfSharp.Pdf.Annotations
         }
 
         PdfAction _action = null!;
-
-        [Obsolete(ObsoleteMessage)]
-        public static PdfLinkAnnotation CreateDocumentLink(PdfRectangle rect, string documentPath, string destinationName, bool? newWindow = null)
-            => throw new NotImplementedException(ObsoleteMessage);
 
         /// <summary>
         /// Creates a link to an external PDF document using a named destination.
@@ -149,10 +133,6 @@ namespace PdfSharp.Pdf.Annotations
             page.Annotations.Add(link);
             return link;
         }
-
-        [Obsolete(ObsoleteMessage)]
-        public static PdfLinkAnnotation CreateEmbeddedDocumentLink(PdfRectangle rect, string destinationPath, bool? newWindow = null)
-            => throw new NotImplementedException(ObsoleteMessage);
 
         /// <summary>
         /// Creates a link to an embedded document.
@@ -178,10 +158,6 @@ namespace PdfSharp.Pdf.Annotations
             return link;
         }
 
-        [Obsolete(ObsoleteMessage)]
-        public static PdfLinkAnnotation CreateEmbeddedDocumentLink(PdfRectangle rect, string documentPath, string destinationPath, bool? newWindow = null)
-            => throw new NotImplementedException(ObsoleteMessage);
-
         /// <summary>
         /// Creates a link to an embedded document in another document.
         /// </summary>
@@ -206,10 +182,6 @@ namespace PdfSharp.Pdf.Annotations
             return link;
         }
 
-        [Obsolete(ObsoleteMessage)]
-        public static PdfLinkAnnotation CreateWebLink(PdfRectangle rect, string url)
-            => throw new NotImplementedException(ObsoleteMessage);
-
         /// <summary>
         /// Creates a link to the web.
         /// </summary>
@@ -229,10 +201,6 @@ namespace PdfSharp.Pdf.Annotations
             page.Annotations.Add(link);
             return link;
         }
-
-        [Obsolete("PDFsharp 6.4: Requires a PDF page as first parameter.")]
-        public static PdfLinkAnnotation CreateFileLink(PdfRectangle rect, string fileName)
-            => throw new NotImplementedException("");
 
         /// <summary>
         /// Creates a link to a file.

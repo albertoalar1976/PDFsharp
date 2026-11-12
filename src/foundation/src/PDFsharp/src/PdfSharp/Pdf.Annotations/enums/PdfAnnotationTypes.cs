@@ -95,13 +95,6 @@ namespace PdfSharp.Pdf.Annotations
         /// (PDF 1.3) Rubber stamp annotation.
         /// Markup: Yes
         /// </summary>
-        [Obsolete("Use Stamp instead.")]
-        RubberStamp,
-
-        /// <summary>
-        /// (PDF 1.3) Rubber stamp annotation.
-        /// Markup: Yes
-        /// </summary>
         Stamp,
 
         /// <summary>

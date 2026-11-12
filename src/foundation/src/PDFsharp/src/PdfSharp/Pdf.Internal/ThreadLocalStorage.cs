@@ -3,7 +3,6 @@
 
 using PdfSharp.Pdf.IO;
 
-#if true
 namespace PdfSharp.Pdf.Internal
 {
     /// <summary>
@@ -91,4 +90,3 @@ namespace PdfSharp.Pdf.Internal
         readonly Dictionary<string, PdfDocument.DocumentHandle> _importedDocuments = [];
     }
 }
-#endif

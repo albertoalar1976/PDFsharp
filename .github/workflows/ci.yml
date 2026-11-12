@@ -37,21 +37,22 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      # PdfSharp.BuildConfig downloads the assets (fonts, images, PDF files, license assembly)
-      # and generates the version information. It needs PowerShell, which all runners provide.
-      - name: Download assets and create build configuration
+      # The tests need fonts, images, and PDF files. The script checks the SHA-256 hash of every file.
+      - name: Download test assets
+        shell: pwsh
+        run: ./dev/download-assets.ps1
+
+      # PdfSharp.BuildConfig generates the version information from the git history.
+      # It needs PowerShell, which all runners provide. It does not download anything.
+      - name: Create build configuration
         run: dotnet build src/foundation/src/shared/src/PdfSharp.BuildConfig/PdfSharp.BuildConfig.csproj -c Release
 
-      - name: Build cross-platform projects
-        if: runner.os != 'Windows'
-        run: dotnet build PdfSharp-Core.slnf -c Release -warnaserror
-
-      - name: Build all projects, including GDI and WPF
-        if: runner.os == 'Windows'
+      # One code base and one solution: the same steps run on Linux, macOS, and Windows.
+      - name: Build
         run: dotnet build PdfSharp.sln -c Release -warnaserror
 
-      - name: Test cross-platform projects
-        run: dotnet test PdfSharp-Core.slnf -c Release --no-build --logger trx --results-directory TestResults
+      - name: Test
+        run: dotnet test PdfSharp.sln -c Release --no-build --logger trx --results-directory TestResults
 
       - name: Summarize failed tests
         if: always()

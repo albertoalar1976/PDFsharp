@@ -1,13 +1,6 @@
 // PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
-#if GDI
-using System.Drawing;
-using System.Drawing.Drawing2D;
-#endif
-#if WPF
-using System.Windows.Media;
-#endif
 
 namespace PdfSharp.Drawing
 {
@@ -74,9 +67,6 @@ namespace PdfSharp.Drawing
         /// </summary>
         public void Pushed()
         {
-#if GDI
-            // Nothing to do.
-#endif
         }
 
         /// <summary>
@@ -85,47 +75,11 @@ namespace PdfSharp.Drawing
         public void Popped()
         {
             Invalid = true;
-#if GDI
-            // Nothing to do.
-#endif
-#if WPF
-            // Pop all objects pushed in this state.
-            if (_gfx.TargetContext == XGraphicTargetContext.WPF)
-            {
-                for (int idx = 0; idx < _transformPushLevel; idx++)
-                    _gfx._dc.Pop();
-                _transformPushLevel = 0;
-                for (int idx = 0; idx < _geometryPushLevel; idx++)
-                    _gfx._dc.Pop();
-                _geometryPushLevel = 0;
-            }
-#endif
         }
 
         public bool Invalid;
 
-#if GDI_
-        /// <summary>
-        /// The GDI+ GraphicsState if constructed from XGraphicsState.
-        /// </summary>
-        public GraphicsState GdiGraphicsState;
-#endif
 
-#if WPF
-        public void PushTransform(MatrixTransform transform)
-        {
-            _gfx._dc.PushTransform(transform);
-            _transformPushLevel++;
-        }
-        int _transformPushLevel;
-
-        public void PushClip(Geometry geometry)
-        {
-            _gfx._dc.PushClip(geometry);
-            _geometryPushLevel++;
-        }
-        int _geometryPushLevel;
-#endif
 
         readonly XGraphics _gfx;
 

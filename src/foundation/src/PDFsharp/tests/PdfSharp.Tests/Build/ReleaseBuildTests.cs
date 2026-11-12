@@ -1,9 +1,6 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
-#if WPF
-using System.IO;
-#endif
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
@@ -253,13 +250,9 @@ namespace PdfSharp.Tests.Build
         public static void Ensure_DEBUG_stuff_is_excluded()
         {
             const string aaa = "PdfSharp.Diagnostics.DebugBreakHelper";
-#if DEBUG_
-            true.Should().BeTrue();
-#else
             var assembly = Assembly.GetAssembly(typeof(PdfDocument)) ?? throw new SystemException("What?");
             var type = assembly.GetType(aaa);
             type.Should().BeNull($"{aaa} must not be part of a release build.");
-#endif
         }
 
         [Fact]
@@ -269,13 +262,9 @@ namespace PdfSharp.Tests.Build
             string[] dirsToExclude = ["bin", "obj", "publish"];  // TODO: TestResults etc.
 
             var root = Directory.GetCurrentDirectory();
-#if DEBUG_
-            true.Should().BeTrue();
-#else
             //var assembly = Assembly.GetAssembly(typeof(PdfDocument)) ?? throw new SystemException("What?");
             //var type = assembly.GetType(aaa);
             //type.Should().BeNull($"{aaa} should not be part of a release build.");
-#endif
         }
     }
 }

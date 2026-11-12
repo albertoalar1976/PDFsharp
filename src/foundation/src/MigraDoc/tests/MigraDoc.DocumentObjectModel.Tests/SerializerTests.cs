@@ -8,8 +8,6 @@ using Xunit;
 using FluentAssertions;
 using PdfSharp.Fonts;
 using PdfSharp.Quality;
-#if CORE
-#endif
 using PdfSharp.Snippets.Font;
 
 namespace MigraDoc.DocumentObjectModel.Tests
@@ -20,9 +18,7 @@ namespace MigraDoc.DocumentObjectModel.Tests
         public SerializerTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()
@@ -265,9 +261,7 @@ namespace MigraDoc.DocumentObjectModel.Tests
             {
                 // Restore the state set by the c’tor.
                 PdfSharpCore.ResetAll();
-#if CORE
                 GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
             }
         }
 
@@ -340,9 +334,7 @@ namespace MigraDoc.DocumentObjectModel.Tests
             {
                 // Restore the state set by the c’tor.
                 PdfSharpCore.ResetAll();
-#if CORE
                 GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
             }
         }
 
@@ -418,9 +410,7 @@ namespace MigraDoc.DocumentObjectModel.Tests
             {
                 // Restore the state set by the c’tor.
                 PdfSharpCore.ResetAll();
-#if CORE
                 GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
             }
         }
 
@@ -1159,9 +1149,7 @@ namespace MigraDoc.DocumentObjectModel.Tests
             {
                 // Restore the state set by the c’tor.
                 PdfSharpCore.ResetAll();
-#if CORE
                 GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
             }
         }
 

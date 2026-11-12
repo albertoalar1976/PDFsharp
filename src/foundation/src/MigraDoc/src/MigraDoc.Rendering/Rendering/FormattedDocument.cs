@@ -498,7 +498,6 @@ namespace MigraDoc.Rendering
             switch (align)
             {
                 case ElementAlignment.Near:
-#if true
                     // Attempt to make it compatible with MigraDoc CPP.
                     // Ignore layoutInfo.Left if absolute position is specified in layoutInfo.MarginLeft.
                     // Use layoutInfo.Left if layoutInfo.MarginLeft is 0.
@@ -507,13 +506,6 @@ namespace MigraDoc.Rendering
                         xPos = layoutInfo.MarginLeft != 0 ? layoutInfo.MarginLeft : layoutInfo.Left;
                     else
                         xPos = Math.Max(layoutInfo.MarginLeft, layoutInfo.Left);
-#else
-                    if (layoutInfo.HorizontalReference == HorizontalReference.Page ||
-                      layoutInfo.HorizontalReference == HorizontalReference.PageMargin)
-                        xPos = layoutInfo.MarginLeft; // ignore layoutInfo.Left if absolute position is specified
-                    else
-                        xPos = Math.Max(layoutInfo.MarginLeft, layoutInfo.Left);
-#endif
                     layoutInfo.ContentArea.X = xPos;
                     break;
 

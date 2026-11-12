@@ -40,7 +40,6 @@ namespace PdfSharp.Pdf.IO
     {
         PdfReader(ILogger? logger, PdfReaderOptions? options)
         {
-            PdfSharpLicense.CheckLicense();
             _logger = logger ?? PdfSharpLogHost.PdfReadingLogger;
             _options = options ?? new();
         }
@@ -405,13 +404,6 @@ namespace PdfSharp.Pdf.IO
                 // #US373: Should we expect references here?
                 if (_document.Trailer!.Elements[PdfTrailer.Keys.Encrypt] is PdfReference xrefEncrypt) // #US373 Expect a reference here.
                 {
-#if DEBUG_
-                    if (xrefEncrypt.ObjectNumber == 96049)
-                    {
-                        bool contains = _document.IrefTable.Contains(xrefEncrypt.ObjectID);
-                        var xrefExisting = _document.IrefTable[xrefEncrypt.ObjectID];
-                    }
-#endif
                     var encrypt = parser.ReadIndirectObject(xrefEncrypt, null, true);
                     encrypt.Reference = xrefEncrypt;
                     xrefEncrypt.Value = encrypt;
@@ -506,13 +498,6 @@ namespace PdfSharp.Pdf.IO
 
                 RereadUnicodeStrings();
 
-#if DEBUG_ // TODO_OLD: Delete or rewrite.
-                // Some tests...
-                PdfReference[] reachables = document.xrefTable.TransitiveClosure(document.trailer);
-                _ = typeof(int);
-                reachables = document.xrefTable.AllXRefs;
-                document.xrefTable.CheckConsistence();
-#endif
                 if (openMode == PdfDocumentOpenMode.Modify)
                 {
                     // Create new or change existing document IDs.

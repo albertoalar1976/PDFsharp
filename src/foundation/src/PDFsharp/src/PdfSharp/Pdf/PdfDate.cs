@@ -43,16 +43,6 @@ namespace PdfSharp.Pdf
         /// <summary>
         /// Initializes a new instance of the <see cref="PdfDate"/> class.
         /// </summary>
-        [Obsolete("Use a DateTimeOffset for creating a PdfDate.")]
-        public PdfDate(DateTime value)
-        {
-            // Let .NET do the conversion. We do not try to ‘optimize’ it.
-            Value = value;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PdfDate"/> class.
-        /// </summary>
         public PdfDate(DateTimeOffset value)
         {
             Value = value;

@@ -96,15 +96,10 @@ namespace PdfSharp.Pdf.Signatures
             sb.Clear();
             sb.Append('<');
             sb.Append(FormatHex(signature));
-#if true
             // Filler bytes must be part of the hex string. Trailing blanks are invalid PDF.
             //sb.Append(new String('0', 2 * (expectedLength - signature.Length)));
             sb.Append(new String('0', _contentsPlaceholder.Length - sb.Length - 1));
             sb.Append('>');
-#else
-            sb.Append('>');
-            sb.Append(new String(' ', 2 * (expectedLength - signature.Length)));
-#endif
             _contentsPlaceholder.SetValue(sb.ToString());
             _contentsPlaceholder.WriteEffectiveValue(writer);
         }

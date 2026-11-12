@@ -3,17 +3,12 @@
 
 using System.Diagnostics;
 using System.Globalization;
-#if WPF
-using System.IO;
-#endif
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf.IO;
 using PdfSharp.Quality;
-#if CORE
 using PdfSharp.Fonts;
-#endif
 using Xunit;
 using FluentAssertions;
 using PdfSharp.Diagnostics;
@@ -30,9 +25,7 @@ namespace PdfSharp.Tests.IO
         public ReaderTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()
@@ -129,13 +122,8 @@ namespace PdfSharp.Tests.IO
 
             page.Resources.Elements["/NumberTest"] = array;
 
-#if true_
-            // Create a file for debugging.
-            using var stream = new FileStream("$temp$$$.pdf", FileMode.Create);
-#else
             // Use a memory stream for speed.
             using var stream = new MemoryStream();
-#endif
             doc.Save(stream, false);
             stream.Position = 0;
             stream.Length.Should().BeGreaterThan(0);
@@ -193,7 +181,6 @@ namespace PdfSharp.Tests.IO
             var page = doc.AddPage();
             doc.Info.Author = "empira";
             doc.Info.Title = "Test";
-#if true
             var properties = doc.Info.Elements;
             properties.SetString("/Test", "Test");
             properties.SetString("/UmlautTestÄÖÜäöüß", "UmlautTestÄÖÜäöüß");
@@ -208,7 +195,6 @@ namespace PdfSharp.Tests.IO
             properties.SetString("/AÀÁÂÃÄÅÆÇÈÉÊËB", "AÀÁÂÃÄÅÆÇÈÉÊËB");
             properties.SetString("/🖕 🦄 🦂 🍇 🍆 ☕ 🚂 🛸 ☁ ☢ ♌ ♏ ✅ ☑ ✔ ™ 🆒", "🖕 🦄 🦂 🍇 🍆 ☕ 🚂 🛸 ☁ ☢ ♌ ♏ ✅ ☑ ✔ ™ 🆒");
             properties.SetString("/✓✔✅🐛👌🆗", "✓✔✅🐛👌🆗");
-#endif
             using var stream = new MemoryStream();
             doc.Save(stream, false);
             stream.Position = 0;
@@ -273,10 +259,6 @@ namespace PdfSharp.Tests.IO
             for (int i = 0; i < 8; ++i)
             {
                 var page = document.Pages[i];
-#if true_  // can be deleted now
-                // Modifying the PDF works with this hack.
-                page.Orientation = PageOrientation.Portrait; // Always set "Portrait" for imported pages.
-#endif
                 DrawPageFrame(page, XColors.Yellow, 10);
             }
 

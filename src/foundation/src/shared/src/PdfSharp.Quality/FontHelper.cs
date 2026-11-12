@@ -5,10 +5,6 @@ using System.Reflection;
 //#if NET/FX_CORE
 //using System.Threading.Tasks;
 //#endif
-#if WPF
-using System.Windows;
-using System.Windows.Resources;
-#endif
 using PdfSharp;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
@@ -45,27 +41,5 @@ namespace PdfSharp.Quality
             return data;
         }
 
-#if WPF
-        /// <summary>
-        /// Returns the specified font from a WPF Pack URI resource.
-        /// </summary>
-        public static byte[] LoadFontDataPack(Uri uri)
-        {
-            var streamInfo = System.Windows.Application.GetResourceStream(uri);
-            if (streamInfo == null)
-                throw new ArgumentException("No resource with name " + uri);
-
-            // We own the stream, so we have to close it.
-            using (var stream = streamInfo.Stream)
-            {
-                int count = (int)stream.Length;
-                byte[] data = new byte[count];
-                var read = stream.Read(data, 0, count);
-                if (read != count)
-                    throw new InvalidOperationException($"Reading the font failed. Stream has {count} bytes, but only {read} bytes were returned.");
-                return data;
-            }
-        }
-#endif
     }
 }

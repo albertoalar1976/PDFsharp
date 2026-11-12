@@ -42,7 +42,6 @@ namespace PdfSharp.Pdf
         /// </summary>
         public PdfDocument()
         {
-            PdfSharpLicense.CheckLicense();
             PdfSharpLogHost.Logger.PdfDocumentCreated(Name);
             CreationDate = DateTimeOffset.Now;
             State = DocumentState.Created;
@@ -70,7 +69,6 @@ namespace PdfSharp.Pdf
         /// </summary>
         public PdfDocument(Stream outputStream)
         {
-            PdfSharpLicense.CheckLicense();
             CreationDate = DateTimeOffset.Now;
             State = DocumentState.Created;
             _version = 14;
@@ -82,7 +80,6 @@ namespace PdfSharp.Pdf
 
         internal PdfDocument(Lexer lexer)
         {
-            PdfSharpLicense.CheckLicense();
             CreationDate = DateTimeOffset.Now;
             State = DocumentState.Imported;
 
@@ -176,10 +173,6 @@ namespace PdfSharp.Pdf
         /// </summary>
         static string NewName()
         {
-#if DEBUG_
-            if (PdfDocument._nameCount == 57)
-                _ = typeof(int);
-#endif
             return "Document #" + ++_nameCount;
         }
 
@@ -411,10 +404,6 @@ namespace PdfSharp.Pdf
                         cancellationToken.ThrowIfCancellationRequested();
 
                     PdfReference iref = irefs[idx];
-#if DEBUG_
-                    if (iref.ObjectNumber == 18)
-                        _ = typeof(int);
-#endif
                     iref.Position = writer.Position;
 
                     var obj = iref.Value;
@@ -514,7 +503,7 @@ namespace PdfSharp.Pdf
         void PrepareForSave()
         {
             // The Creator is called “Application” in Acrobat.
-            // The Producer is called “Created by” in Acrobat.
+            // The Producer is call “Created by” in Acrobat.
 
             // Set Creator if value is undefined. This is the 'application' in Adobe Reader.
             //if (Info.Elements[PdfDocumentInformation.Keys.Creator] is null) // TODO #US373 Just a null check.
@@ -522,74 +511,21 @@ namespace PdfSharp.Pdf
                 Info.Creator = PdfSharpProductVersionInformation.Producer;
 
             // We set Producer if it is not yet set.
-#if true // TODO clean up
-            var pdfProducer = DefaultProducer.Trim();
-#else
-            var pdfProducer = PdfSharpProductVersionInformation.Creator;
-#if DEBUG
-            // Add OS suffix only in DEBUG build.
-            pdfProducer += $" under {RuntimeInformation.OSDescription}";
-#endif
-#endif
+            var pdfProducer = DefaultProducer;
             // Keep original producer if file was imported. This is “PDF created by” in Adobe Reader.
-            var producer = RemoveLicenseInfoAndTrim(Info.Producer);
-            
-#if true
-            // If the document has no producer, simply set it.
-            if (producer.Length == 0)
-                producer = pdfProducer;
-            // If the document’s producer is already the one, we want to set, leave it.
-            // Otherwise, append the original producer to the new one.
-            else if (producer != pdfProducer)
-            {
-                // Prevent endless concatenation if file is edited with PDFsharp more than once.
-                // If already present, the part in "(Original ...)" shall remain.
-                const string originalProducerBegin = " (Original: ";
-                var originalProducerBeginPos = producer.LastIndexOf(originalProducerBegin, StringComparison.InvariantCulture);
-                if (originalProducerBeginPos > 0)
-                {
-                    originalProducerBeginPos += originalProducerBegin.Length;
-
-                    // OriginalProducerEndPos shall be the position of the closing brace belonging to "(Original", or producer.Length if it is missing.
-                    var originalProducerEndPos = producer.Length;
-                    var bracesLevel = 1;
-                    for (var i = originalProducerBeginPos; i < producer.Length; i++)
-                    {
-                        var c = producer[i];
-                        if (c == '(')
-                            bracesLevel++;
-                        else if (c == ')' && --bracesLevel == 0)
-                        {
-                            originalProducerEndPos = i;
-                            break;
-                        }
-                    }
-
-                    // Temporarily update producer to the original producer only.
-                    producer = producer[originalProducerBeginPos..originalProducerEndPos];
-                }
-                // With no "(Original ...)" found, producer contains still the original value read.
-
-                // Set the current producer and append the original producer value.
-                producer = $"{pdfProducer}{originalProducerBegin}{producer})";
-            }
-#else
+            string producer = Info.Producer;
             if (producer.Length == 0)
             {
                 producer = pdfProducer;
             }
             else
             {
-
                 // Prevent endless concatenation if file is edited with PDFsharp more than once.
                 if (!producer.StartsWith(PdfSharpProductVersionInformation.Title, StringComparison.Ordinal))
                     producer = $"{pdfProducer} (Original: {producer})";
             }
-#endif
 
             Info.Elements.SetString(PdfDocumentInformation.Keys.Producer, producer);
-
-            PrepareForSaveCallback?.Invoke(this);
 
             // Prepare used fonts.
             _fontTable?.PrepareForSave();
@@ -600,7 +536,6 @@ namespace PdfSharp.Pdf
             // #PDF-UA  // TODO rewrite
             // Create PdfMetadata now to include the final document information in XMP generation.
             //Catalog.Elements.SetReference(PdfCatalog.Keys.Metadata, new PdfMetadata(this));
-#if true
             // Remove all unreachable objects (e.g. from deleted pages).
             int removed = IrefTable.Compact();
             if (removed != 0 && PdfSharpLogHost.Logger.IsEnabled(LogLevel.Information))
@@ -610,52 +545,7 @@ namespace PdfSharp.Pdf
             }
 
             IrefTable.Renumber();
-#endif
-
-            string RemoveLicenseInfoAndTrim(string prod)
-            {
-                var licenseInfoStart = prod.IndexOf("(AGPL license", StringComparison.InvariantCulture);
-                if (licenseInfoStart == -1)
-                    licenseInfoStart = prod.IndexOf("(Commercial license", StringComparison.InvariantCulture);
-                if (licenseInfoStart == -1)
-                    return prod.Trim();
-
-                // Look for the appropriate bracket to close license info.
-                var length = prod.Length;
-                var licenseInfoEnd = licenseInfoStart + 1;
-                var bracketsLevel = 1;
-                for (; licenseInfoEnd < length; licenseInfoEnd++)
-                {
-                    var c = prod[licenseInfoEnd];
-                    if (c == '(')
-                        bracketsLevel++;
-                    else if (c == ')')
-                        bracketsLevel--;
-
-                    if (bracketsLevel == 0)
-                        break;
-                }
-
-                // Retain text after license info.
-                var producerPart2Start = licenseInfoEnd + 1;
-                if (producerPart2Start > length)
-                    producerPart2Start = length;
-
-                var producerPart1 = prod[..licenseInfoStart].Trim();
-                var producerPart2 = prod[producerPart2Start..length].Trim();
-
-                prod = producerPart1;
-                if (!String.IsNullOrEmpty(producerPart2))
-                    prod += $" {producerPart2}";
-
-                return prod;
-            }
         }
-
-        /// <summary>
-        /// Allows running external code on PrepareForSave.
-        /// </summary>
-        internal static Action<object>? PrepareForSaveCallback { private get; set; }
 
         /// <summary>
         /// Determines whether the document can be saved.
@@ -750,15 +640,7 @@ namespace PdfSharp.Pdf
             {
                 EnsureNotYetSaved();
 
-#if true
                 return Pages.Count;
-#else
-                if (CanModify)
-                    return Pages.Count;
-                // PdfOpenMode is InformationOnly.
-                var pageTreeRoot = (PdfDictionary?)Catalog.Elements.GetObject(PdfCatalog.Keys.Pages);
-                return pageTreeRoot?.Elements.GetInteger(PdfPages.Keys.Count) ?? 0;
-#endif
             }
         }
 
@@ -864,12 +746,6 @@ namespace PdfSharp.Pdf
         /// Gets the root of the outline (or bookmark) tree.
         /// </summary>
         public PdfOutlineCollection Outlines => Catalog.Outlines;
-
-        /// <summary>
-        /// Get the AcroForm (interactive form) dictionary.
-        /// </summary>
-        [Obsolete("Use Catalog.GetAcroForm or Catalog.GetOrCreateAcroForm.")]
-        public PdfForm AcroForm => Catalog.AcroForm;
 
         /// <summary>
         /// Gets or sets the default language of the document.
@@ -1083,54 +959,6 @@ namespace PdfSharp.Pdf
             => Internals.Catalog.Names.AddNamedDestination(destinationName, destinationPage, parameters);
 
         /// <summary>
-        /// Adds an embedded file to the document.
-        /// </summary>
-        /// <param name="name">The name used to refer and to entitle the embedded file.</param>
-        /// <param name="path">The path of the file to embed.</param>
-        [Obsolete("Use EmbeddedFilesManager.ForDocument(document).Add(embeddedFileInfo)")]
-        public void AddEmbeddedFile(string name, string path)
-        {
-            var stream = new FileStream(path, FileMode.Open);
-            AddEmbeddedFile(name, stream);
-        }
-
-        /// <summary>
-        /// This function is deprecated. TODO
-        /// Adds an embedded file to the document.
-        /// </summary>
-        /// <param name="name">The name used to refer and to entitle the embedded file.</param>
-        /// <param name="stream">The stream containing the file to embed.</param>
-        [Obsolete("Use EmbeddedFilesManager.ForDocument(document).Add(embeddedFileInfo)")]
-        public void AddEmbeddedFile(string name, Stream stream)
-        {
-            var length = (int)stream.Length;
-            var bytes = new byte[length];
-            var read = stream.Read(bytes, 0, length);
-            if (read != length)
-                throw new InvalidOperationException($"Try to read {length} bytes, but read {read} bytes.");
-
-            var efi = new EmbeddedFileInfo
-            {
-                NamesKey = name,
-                FileName = name,
-                FileType = "",
-                Description = "",
-                CreationTime = DateTimeOffset.Now,
-                ModificationTime = null,
-                Data = bytes,
-                AFRelationship = PdfAFRelationship.Unspecified
-            };
-            EmbeddedFilesManager.ForDocument(this).AddFile(efi);
-        }
-
-        /// <summary>
-        /// Flattens a document (make the fields non-editable).
-        /// </summary>
-        [Obsolete("This function does nothing useful and was removed.")]
-        public void Flatten()
-            => throw new InvalidOperationException("This function does nothing useful and was removed.");
-
-        /// <summary>
         /// TODO. Experimental, do no use.
         /// </summary>
         /// <param name="plugIn"></param>
@@ -1208,7 +1036,6 @@ namespace PdfSharp.Pdf
 
         //internal static GlobalObjectTable Gob = new GlobalObjectTable();
 
-#if true
         /// <summary>
         /// Gets the ThreadLocalStorage object. It is used for caching objects that should be created
         /// only once.
@@ -1216,7 +1043,6 @@ namespace PdfSharp.Pdf
         internal static ThreadLocalStorage Tls => tls ??= new ThreadLocalStorage();
 
         [ThreadStatic] static ThreadLocalStorage? tls;
-#endif
 
         [DebuggerDisplay("(ID={ID}, alive={IsAlive})")]
         internal class DocumentHandle(PdfDocument document)

@@ -5,15 +5,6 @@ using System.Globalization;
 using PdfSharp.Drawing;
 using PdfSharp.Internal;
 using PdfSharp.Quality;
-#if GDI
-using System.Drawing;
-using System.Drawing.Text;
-using GdiFont = System.Drawing.Font;
-#endif
-#if WPF
-using System.Windows.Markup;
-using System.Windows.Media;
-#endif
 
 namespace PdfSharp.Snippets.Font
 {

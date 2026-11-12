@@ -3,10 +3,9 @@
     Builds the solution and runs all tests with .NET 10 on Windows, Linux, or macOS.
 
 .DESCRIPTION
-    PDFsharp and MigraDoc target .NET 10 only (net10.0 and net10.0-windows).
-    On Linux and macOS, the cross-platform projects (PdfSharp-Core.slnf) are built and tested.
-    On Windows, the whole solution is built, and the tests of the GDI and WPF builds are run, too.
-    This is the same as the CI workflow in .github/workflows/ci.yml does.
+    PDFsharp and MigraDoc have one code base for Windows, Linux, and macOS, and target net10.0 only.
+    The script builds and tests the same solution on every operating system,
+    like the CI workflow in .github/workflows/ci.yml does.
 
     The script replaces the former version, which compared .NET Framework 4.6.2, .NET 6, and .NET 8
     test results in Windows and WSL side by side.
@@ -38,14 +37,18 @@ $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $resultsDirectory = Join-Path $root 'TestResults'
 
-# The solution (filter) to build and test.
-$solution = if ($IsWindows) { Join-Path $root 'PdfSharp.sln' } else { Join-Path $root 'PdfSharp-Core.slnf' }
-$testSolution = if ($IsWindows) { $solution } else { Join-Path $root 'PdfSharp-Core.slnf' }
+# The solution to build and test. It is the same on all operating systems.
+$solution = Join-Path $root 'PdfSharp.sln'
 
 $env:PDFsharpTests = if ($RunAllTests) { 'runalltests' } else { $null }
 
+# The tests need the assets. Download them once; dev/download-assets.ps1 updates them on demand.
+if (-not (Test-Path (Join-Path $root 'assets/.assets-version'))) {
+    & (Join-Path $PSScriptRoot 'download-assets.ps1')
+}
+
 if (-not $SkipBuild) {
-    # PdfSharp.BuildConfig downloads the assets if necessary and generates the version information.
+    # PdfSharp.BuildConfig generates the version information.
     dotnet build (Join-Path $root 'src/foundation/src/shared/src/PdfSharp.BuildConfig/PdfSharp.BuildConfig.csproj') -c $Config
     if ($LASTEXITCODE -ne 0) { throw 'Building PdfSharp.BuildConfig failed.' }
 
@@ -57,7 +60,7 @@ if (Test-Path $resultsDirectory) {
     Remove-Item $resultsDirectory -Recurse -Force
 }
 
-dotnet test $testSolution -c $Config --no-build --logger trx --results-directory $resultsDirectory
+dotnet test $solution -c $Config --no-build --logger trx --results-directory $resultsDirectory
 $testExitCode = $LASTEXITCODE
 
 # Summarize the failed tests of all test projects.

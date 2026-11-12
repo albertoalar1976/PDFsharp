@@ -24,16 +24,6 @@ using System;
 using System.Diagnostics;
 using System.Reflection;
 //#if CORE || GDI
-#if GDI
-using System.Drawing;
-#endif
-#if WPF
-using System.Windows;
-using System.Windows.Media;
-#endif
-#if WUI
-using Windows.UI.Xaml.Media;
-#endif
 using PdfSharp.Drawing;
 using PdfSharp.Fonts;
 using PdfSharp.Internal;
@@ -47,11 +37,7 @@ namespace PdfSharp.Snippets.Font
         const string Text = "Sphinx";
         const string Text2 = "Sphinx abc test";
         const double EmSize = 24;
-#if true
         readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.WinAnsi);
-#else
-        readonly XPdfFontOptions _fontOptions = new XPdfFontOptions(PdfFontEncoding.Unicode);
-#endif
 
         static IFontResolver fs = new SegoeWpFontResolver();
 

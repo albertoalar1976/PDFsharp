@@ -29,7 +29,6 @@ namespace PdfSharp.Fonts
                 var item = codePoints[idx];
                 if (item.GlyphIndex == 0)
                     continue;
-#if true  // #PSGFX
                 if (!CodePointsToGlyphIndices.ContainsKey(item.CodePoint))
                 {
                     CodePointsToGlyphIndices.Add(item.CodePoint, item.GlyphIndex);
@@ -44,15 +43,6 @@ namespace PdfSharp.Fonts
                     GlyphIndices[item.GlyphIndex] = null;
                     GlyphIndicesNew[item.GlyphIndex] = true;
                 }
-#else
-                if (CodePointsToGlyphIndices.ContainsKey(item.CodePoint))
-                    continue;
-
-                CodePointsToGlyphIndices.Add(item.CodePoint, item.GlyphIndex);
-                GlyphIndices[item.GlyphIndex] = default;
-                MinCodePoint = Math.Min(MinCodePoint, item.CodePoint);
-                MaxCodePoint = Math.Max(MaxCodePoint, item.CodePoint);
-#endif
             }
         }
 

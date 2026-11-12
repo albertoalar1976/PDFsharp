@@ -1,10 +1,6 @@
 ﻿// PDFsharp - A .NET library for processing PDF
 // See the LICENSE file in the solution root for more information.
 
-#if WPF
-using System.IO;
-using System.Net.Http;
-#endif
 using System.Reflection;
 using FluentAssertions;
 using PdfSharp.Diagnostics;
@@ -17,9 +13,7 @@ using PdfSharp.Pdf.IO;
 using PdfSharp.Quality;
 using PdfSharp.Snippets.Font;
 using PdfSharp.TestHelper;
-#if CORE
 using PdfSharp.Internal.Imaging;
-#endif
 using Xunit;
 
 namespace PdfSharp.Tests.Drawing
@@ -30,9 +24,7 @@ namespace PdfSharp.Tests.Drawing
         public ImageTests()
         {
             PdfSharpCore.ResetAll();
-#if CORE
             GlobalFontSettings.FontResolver = new UnitTestFontResolver();
-#endif
         }
 
         public void Dispose()
@@ -361,46 +353,6 @@ namespace PdfSharp.Tests.Drawing
             GC.WaitForFullGCComplete();
         }
 
-#if GDI
-        [Fact]
-        public void PDF_with_image_from_GDI()
-        {
-            // Create a new PDF document.
-            var document = new PdfDocument();
-
-#if DEBUG
-            // Create PDF files that are somewhat human-readable.
-            document.Options.Layout = PdfWriterLayout.Verbose;
-#endif
-
-            // Create an empty page in this document.
-            var page = document.AddPage();
-
-            // Get an XGraphics object for drawing on this page.
-            var gfx = XGraphics.FromPdfPage(page);
-
-            var imageFolder = IOUtility.GetAssetsPath("pdfsharp/images/samples/jpeg");
-            var imageFile = Path.Combine(imageFolder ?? throw new InvalidOperationException("Call Download-Assets.ps1 before running the tests."), "truecolorA.jpg");
-
-            var gdiImage = Image.FromFile(imageFile);
-            var xImage = XImage.FromGdiPlusImage(gdiImage);
-            gfx.DrawImage(xImage, new RectangleF(0f, 0f, 128f, 128f));
-
-            imageFolder = IOUtility.GetAssetsPath("pdfsharp/images/samples/png");
-            imageFile = Path.Combine(imageFolder ?? throw new InvalidOperationException("Call Download-Assets.ps1 before running the tests."), "truecolorA.png");
-
-            gdiImage = Image.FromFile(imageFile);
-            xImage = XImage.FromGdiPlusImage(gdiImage);
-            gfx.DrawImage(xImage, new RectangleF(0f, 144f, 128f, 128f));
-
-            // Save the document…
-            var filename = PdfFileUtility.GetTempPdfFullFileName("unittests/pdfsharp/drawing/images/ImageFromGDI");
-            document.Save(filename);
-            // … and start a viewer.
-            PdfFileUtility.ShowDocumentIfDebugging(filename);
-        }
-
-#endif
 
         [Fact]
         public async Task PDF_with_Image_from_http_stream()
@@ -416,12 +368,6 @@ namespace PdfSharp.Tests.Drawing
                 //await using var imageStream =
                 //    await client.GetStreamAsync("https://upload.wikimedia.org/wikipedia/commons/7/70/Example.png").ConfigureAwait(false);
 
-#if WPF
-                XImage xImage = null!;
-                // ReSharper disable once AccessToDisposedClosure
-                Action createImage = () => xImage = XImage.FromStream(imageStream);
-                createImage.Should().Throw<InvalidOperationException>();
-#else
                 var xImage = XImage.FromBitmapImageStreamThatCannotSeek(imageStream);
                 gfx.DrawImage(xImage, 100, 100, 100, 100);
 
@@ -430,7 +376,6 @@ namespace PdfSharp.Tests.Drawing
                 document.Save(filename);
                 // … and start a viewer.
                 PdfFileUtility.ShowDocumentIfDebugging(filename);
-#endif
 
             }
         }

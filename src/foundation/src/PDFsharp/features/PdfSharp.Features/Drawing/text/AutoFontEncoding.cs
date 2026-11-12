@@ -34,14 +34,9 @@ namespace PdfSharp.Features.Drawing
                     // Replace X with U.
                     if (item.CodePoint == 'X')
                     {
-#if true_
-                        var id = GlyphHelper.CodePointToGlyphIndex(args.Font, 'U');
-                        args.CodeRun.Items[idx] = new('U', 'U', id);
-#else
                         args.CodePointGlyphIndexPairs[idx].CodePoint = 'U';
                         item.CodePoint = 'U';
                         args.ReevaluateGlyphIndices = true;
-#endif
                     }
 
                     if (item.CodePoint == '\u2011')
@@ -104,15 +99,10 @@ namespace PdfSharp.Features.Drawing
                     ref var item = ref args.CodePointGlyphIndexPairs[idx];
                     if (item.CodePoint == 'X')
                     {
-#if true_
-                        var id = GlyphHelper.CodePointToGlyphIndex(args.Font, 'U');
-                        args.CodeRun.Items[idx] = new('U', 'U', id);
-#else
                         item.CodePoint = 'U';
                         //args.CodeRun.Items[idx].CodePoint = 'U';
                         //args.CodeRun.Items[idx].GlyphIndex = GlyphHelper.CodePointToGlyphIndex(args.Font, 'U');
                         args.ReevaluateGlyphIndices = true;
-#endif
                     }
 
                     //if (item.Character == '\u2011')
